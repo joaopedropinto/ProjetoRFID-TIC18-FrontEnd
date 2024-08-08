@@ -1,0 +1,11 @@
+<p-toolbar>
+    <div class="p-toolbar-group-start">
+        <p-button icon="pi pi-bars" [text]="true" [rounded]="true" (onClick)="toggleSidebar()"/>
+        <img src="assets/logo.svg" alt="Logo da Ingenico" class="logo">
+    </div>
+    <div class="p-toolbar-group-end">
+        <p-button label="Home" [link]="true"/>
+        <p-button label="Sobre" [link]="true"/>
+    </div>
+</p-toolbar>
+<app-sidebar [sidebarVisible]="sidebarVisible"></app-sidebar>
