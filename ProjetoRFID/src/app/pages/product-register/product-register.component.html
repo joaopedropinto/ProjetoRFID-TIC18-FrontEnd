@@ -1,0 +1,152 @@
+<p-card header="Cadastro de Produto">
+    <form class="form-container" [formGroup]="productForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+            <div class="inputFloatLabel">
+                <p-floatLabel>
+                    <input type="text" id="name" pInputText formControlName="name">
+                    <label for="name">Nome do produto</label>
+                </p-floatLabel>
+                <small class="error-message" *ngIf="productForm.get('name')?.errors && productForm.get('name')?.touched">
+                    * O nome do produto é obrigatório
+                </small>
+            </div>
+            <div class="inputFloatLabel">
+                <p-floatLabel>
+                    <p-dropdown 
+                    [options]="categories" 
+                    [showClear]="true"
+                    formControlName="category"/>
+                    <label for="category">Categoria</label>
+                </p-floatLabel>
+            </div>
+            <div class="inputFloatLabel">
+                <p-floatLabel>
+                    <p-inputNumber 
+                    id="weight" 
+                    suffix="kg" 
+                    [showButtons]="true"
+                    [min]="0.01"
+                    [minFractionDigits]="2"
+                    [maxFractionDigits]="3"
+                    incrementButtonClass="p-button-secondary"
+                    decrementButtonClass="p-button-secondary"
+                    formControlName="weight"/>
+                    <label for="weight">Peso do produto</label>
+                </p-floatLabel>
+                <small class="error-message" *ngIf="productForm.get('weight')?.hasError('required') && productForm.get('weight')?.touched">
+                    * O peso do produto é obrigatório
+                </small>
+                <small class="error-message" *ngIf="productForm.get('weight')?.hasError('min') && productForm.get('weight')?.touched">
+                    O peso mínimo é 0.01kg
+                </small>
+            </div>
+            <div class="inputFLoatLabel">
+                <p-floatLabel>
+                    <p-calendar 
+                    id="manufacDate" 
+                    formControlName="manufacDate" 
+                    dateFormat="dd.mm.yy" 
+                    [readonlyInput]="true" 
+                    [showIcon]="true" 
+                    [iconDisplay]="'input'"/>
+                    <label for="manufacDate">Data de fabricação</label>
+                </p-floatLabel>
+                <small class="error-message" *ngIf="productForm.get('manufacDate')?.errors && productForm.get('manufacDate')?.touched">
+                    * A data de fabricação é obrigatória
+                </small>
+            </div>
+            <div class="inputFloatLabel">
+                <p-floatLabel>
+                    <p-calendar 
+                    id="dueDate" 
+                    formControlName="dueDate" 
+                    dateFormat="dd.mm.yy" 
+                    [readonlyInput]="true" 
+                    [showIcon]="true" 
+                    [iconDisplay]="'input'"/>
+                    <label for="dueDate">Data de vencimento</label>
+                </p-floatLabel>
+                <small class="error-message" *ngIf="productForm.get('dueDate')?.errors && productForm.get('dueDate')?.touched">
+                    * A data de vencimento é obrigatória
+                </small>
+            </div>
+        </div>
+        <div class="row">
+            <div class="inputFloatLabel">
+                <p-floatLabel>
+                    <input type="text" id="unitMeasurement" formControlName="unitMeasurement" pInputText>
+                    <label for="unitMeasurement">Unidade de medida</label>
+                </p-floatLabel>
+            </div>
+            <div class="inputFloatLabel">
+                <p-floatLabel>
+                    <p-dropdown 
+                    [options]="packingTypes" 
+                    [showClear]="true"
+                    optionLabel="type"
+                    formControlName="packingType"/>
+                    <label for="packingType">Tipo de embalagem</label>
+                </p-floatLabel>
+            </div>
+            <div class="inputFloatLabel">
+                <p-floatLabel>
+                    <input type="text" pInputText formControlName="batchNumber" id="batchNumber">
+                    <label for="batchNumber">Nº de lote</label>
+                </p-floatLabel>
+            </div>
+            <div class="inputFloatLabel">
+                <p-floatLabel>
+                    <p-inputNumber 
+                    id="quantity" 
+                    mode="decimal" 
+                    [showButtons]="true" 
+                    [min]="0"
+                    incrementButtonClass="p-button-secondary"
+                    decrementButtonClass="p-button-secondary"
+                    formControlName="quantity"/>
+                    <label for="quantity">Quantidade</label>
+                </p-floatLabel>
+                <small class="error-message" *ngIf="productForm.get('quantity')?.errors && productForm.get('quantity')?.touched">
+                    * A quantidade do produto é obrigatória
+                </small>
+            </div>
+            <div class="inputFloatLabel">
+                <p-floatLabel>
+                    <p-inputNumber
+                    [showButtons]="true"
+                    mode="currency"
+                    currency="BRL"
+                    [min]="0"
+                    incrementButtonClass="p-button-secondary"
+                    decrementButtonClass="p-button-secondary"
+                    id="price"
+                    formControlName="price"/>
+                    <label for="price">Preço do produto</label>
+                </p-floatLabel>
+                <small class="error-message" *ngIf="productForm.get('price')?.hasError('required') && productForm.get('price')?.touched">
+                    * O preço do produto é obrigatório
+                </small>
+            </div>
+        </div>
+        <div class="row">
+            <div class="inputFloatLabel">
+                <p-floatLabel>
+                    <p-dropdown 
+                    [options]="suppliers" 
+                    [showClear]="true"
+                    formControlName="supplier"/>
+                    <label for="supplier">Fornecedor</label>
+                </p-floatLabel>
+            </div>
+            <div class="inputFloatLabel">
+                <p-floatLabel>
+                    <textarea id="description" class="textarea" rows="5" cols="50" pInputTextarea formControlName="description"></textarea>
+                    <label for="description">Descrição do produto</label>
+                </p-floatLabel>
+            </div>
+        </div>
+        <div class="row">
+            <button pButton type="submit" [disabled]="productForm.invalid">Cadastrar</button>
+        </div>
+    </form>
+</p-card>

@@ -23,7 +23,7 @@ export class SidebarComponent {
       label: 'Produtos',
       icon: 'pi pi-box',
       items: [
-        { label: 'Cadastrar', icon: 'pi pi-plus', routerLink: ['/produtos/adicionar'] },
+        { label: 'Cadastrar', icon: 'pi pi-plus', routerLink: ['/produtos/cadastrar'] },
         { label: 'Listar', icon: 'pi pi-list', routerLink: ['/produtos'] },
       ]
     },

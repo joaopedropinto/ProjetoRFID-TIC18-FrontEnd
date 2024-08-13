@@ -1,0 +1,60 @@
+<p-card header="Lista de Produtos">
+    <p-table
+    #table
+    [value]="products"
+    [paginator]="true"
+    [rows]="10"
+    [tableStyle]="{ 'min-width': '78rem' }">
+        <ng-template pTemplate="caption">
+            <div class="search-input">
+                <p-iconField iconPosition="left" class="input-icon">
+                    <p-inputIcon>
+                        <i class="pi pi-search"></i>
+                    </p-inputIcon>
+                    <input 
+                    type="text"
+                    pInputText
+                    (input)="table.filterGlobal($event.target, 'contains')"
+                    placeholder="Buscar">
+                </p-iconField>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 15%;">Nome</th>
+                <th style="width: 10%;">Peso</th>
+                <th style="width: 15%;">Embalagem</th>
+                <th style="width: 8%;">Quantidade</th>
+                <th style="width: 12%;">Preço</th>
+                <th style="width: 8%;">Unidade de medida</th>
+                <th style="width: 8%;">Nº de lote</th>
+                <th style="width: 5%;">Ações</th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.weight }}</td>
+                <td>{{ product.packingType }}</td>
+                <td>{{ product.quantity }}</td>
+                <td>R${{ product.price }}</td>
+                <td>{{ product.unitMeasurement }}</td>
+                <td>{{ product.batchNumber }}</td>
+                <td class="action-button-group">
+                    <p-button 
+                    icon="pi pi-ellipsis-v"
+                    [rounded]="true"
+                    [text]="true"
+                    (onClick)="menu.toggle($event)"/>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="8">Nenhum produto cadastrado.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+<p-tieredMenu #menu [model]="actions" [popup]="true" />
