@@ -46,45 +46,22 @@ export class ProductListComponent implements OnInit {
   ) { }
   
   ngOnInit(): void {
-    // this.productService.getProducts().subscribe(response => {
-    //   this.products = response;
-    // });
-
-    const product: Product = {
-      id: 123,
-      categoryId: 5,
-      supplierId: 10,
-      tagId: 7,
-      name: 'Chocolate Barra',
-      description: 'Chocolate ao leite com recheio de caramelo',
-      weight: 0.150,
-      manufacDate: new Date('2024-08-13'),
-      dueDate: new Date('2025-02-13'),
-      unitMeasurement: 'gramas',
-      packingType: 'Plástico',
-      batchNumber: 'CHOCO240813A',
-      quantity: 100,
-      price: 8.99
-    };
-    
-
-    this.products = [product];
+    this.productService.getProducts().subscribe(response => {
+      this.products = response;
+    });
 
     this.actions = [
       { 
         label: 'Visualizar', 
         icon: 'pi pi-info-circle',
-        command: (event) => this.viewProduct(product) 
       },
       { 
         label: 'Editar', 
         icon: 'pi pi-pen-to-square', 
-        command: (event) => this.editProduct(product) 
       },
       { 
         label: 'Excluir', 
         icon: 'pi pi-trash',
-        command: (event) => this.deleteProduct(product) 
       }
     ];
   }

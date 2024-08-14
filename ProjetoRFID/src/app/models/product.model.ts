@@ -1,8 +1,8 @@
 export interface Product {
     id?: number;
-    categoryId?: number;
-    supplierId?: number;
-    tagId?: number;
+    idCategory?: number;
+    idSupplier?: number;
+    idTag?: number;
     name: string;
     description?: string;
     weight: number;
