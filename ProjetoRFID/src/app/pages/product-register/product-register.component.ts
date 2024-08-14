@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -11,6 +11,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
 import { Product } from '../../models/product.model';
 import { ProductService } from '../../services/product/product.service';
+import { CategoryService } from '../../services/category/category.service';
+import { Category } from '../../models/category.model';
 
 @Component({
   selector: 'app-product-register',
@@ -31,12 +33,13 @@ import { ProductService } from '../../services/product/product.service';
   templateUrl: './product-register.component.html',
   styleUrl: './product-register.component.css'
 })
-export class ProductRegisterComponent {
+export class ProductRegisterComponent implements OnInit {
 
   productForm!: FormGroup;
 
-  categories: string[] = [];
   suppliers: string[] = [];
+
+  categories!: Category[];
 
   packingTypes = [
     { type: 'Plástico' }, 
@@ -46,7 +49,11 @@ export class ProductRegisterComponent {
     { type: 'A vácuo' }
   ];
 
-  constructor(private formBuilder: FormBuilder, private productService: ProductService) {
+  constructor(
+    private formBuilder: FormBuilder, 
+    private productService: ProductService,
+    private categoryService: CategoryService
+  ) {
     this.productForm = this.formBuilder.group({
       name: [null, [Validators.required]],
       category: [null],
@@ -60,6 +67,12 @@ export class ProductRegisterComponent {
       batchNumber: [null],
       quantity: [null, [Validators.required, Validators.min(0)]],
       price: [null, [Validators.required, Validators.min(0.01)]],
+    })
+  }
+
+  ngOnInit(): void {
+    this.categoryService.getCategories().subscribe(response => {
+       this.categories = response;
     })
   }
 
