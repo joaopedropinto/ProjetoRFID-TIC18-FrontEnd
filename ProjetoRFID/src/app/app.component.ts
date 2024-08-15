@@ -3,7 +3,8 @@ import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './shared/header/header.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { DividerModule } from 'primeng/divider';
-import { ListaProdutosComponent } from './lista-produtos/lista-produtos.component';
+import { ProductsReadComponent } from './pages/products-read/products-read.component';
+import { ModalDetailingComponent } from './shared/modal-detailing/modal-detailing.component';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,8 @@ import { ListaProdutosComponent } from './lista-produtos/lista-produtos.componen
     HeaderComponent,
     FooterComponent,
     DividerModule,
-    ListaProdutosComponent
+    ProductsReadComponent,
+    ModalDetailingComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
