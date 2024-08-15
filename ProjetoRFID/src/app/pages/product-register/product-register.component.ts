@@ -50,14 +50,6 @@ export class ProductRegisterComponent implements OnInit {
     'A vácuo'
   ];
 
-  // packingTypes = [
-  //   { type: 'Plástico' }, 
-  //   { type: 'Enlatado' }, 
-  //   { type: 'Papel e papelão' }, 
-  //   { type: 'Vidro' } , 
-  //   { type: 'A vácuo' }
-  // ];
-
   constructor(
     private formBuilder: FormBuilder, 
     private productService: ProductService,
