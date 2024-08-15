@@ -2,8 +2,8 @@ export interface Product {
     id?: number;
     idCategory?: number;
     idSupplier?: number;
-    idTag?: number;
     name: string;
+    rfidTag?: string;
     description?: string;
     weight: number;
     manufacDate: Date;

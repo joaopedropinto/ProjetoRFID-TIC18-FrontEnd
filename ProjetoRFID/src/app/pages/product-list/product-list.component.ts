@@ -13,11 +13,13 @@ import { MenuItem } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
   imports: [
+    CommonModule,
     CardModule,
     TableModule,
     IconFieldModule,
@@ -48,6 +50,7 @@ export class ProductListComponent implements OnInit {
   ngOnInit(): void {
     this.productService.getProducts().subscribe(response => {
       this.products = response;
+      console.log(this.products);
     });
 
     this.actions = [
@@ -57,7 +60,8 @@ export class ProductListComponent implements OnInit {
       },
       { 
         label: 'Editar', 
-        icon: 'pi pi-pen-to-square', 
+        icon: 'pi pi-pen-to-square',
+        routerLink: '/produto/editar'
       },
       { 
         label: 'Excluir', 

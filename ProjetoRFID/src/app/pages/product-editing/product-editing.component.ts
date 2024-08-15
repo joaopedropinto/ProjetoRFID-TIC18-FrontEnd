@@ -77,7 +77,8 @@ export class ProductEditingComponent implements OnInit {
       this.productForm.get('name')?.setValue(productResponse.name);
       this.productForm.get('category')?.setValue(productResponse.idCategory);
       this.productForm.get('supplier')?.setValue(productResponse.idSupplier);
-      this.productForm.get('tag')?.setValue(productResponse.idTag);
+      // this.productForm.get('tag')?.setValue(productResponse.idTag);
+      this.productForm.get('tag')?.setValue(productResponse.rfidTag);
       this.productForm.get('description')?.setValue(productResponse.description);
       this.productForm.get('weight')?.setValue(productResponse.weight);
       this.productForm.get('manufacDate')?.setValue(productResponse.manufacDate);

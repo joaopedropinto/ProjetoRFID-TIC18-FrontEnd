@@ -57,4 +57,10 @@
         </ng-template>
     </p-table>
 </p-card>
-<p-tieredMenu #menu [model]="actions" [popup]="true" />
+<p-tieredMenu #menu [model]="actions" [popup]="true">
+    <!-- <ng-template pTemplate="item" let-item>
+        <li *ngIf="!item.items">
+            <a [routerLink]="item.routerLink + '/' + products[index].id">{{ item.label }}</a>
+        </li>
+    </ng-template> -->
+</p-tieredMenu>

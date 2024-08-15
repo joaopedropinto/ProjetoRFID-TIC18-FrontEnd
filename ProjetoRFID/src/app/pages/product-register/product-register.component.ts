@@ -88,7 +88,7 @@ export class ProductRegisterComponent implements OnInit {
       name: this.productForm.get('name')?.value,
       idCategory: this.productForm.get('category')?.value.id,
       idSupplier: this.productForm.get('supplier')?.value.id,
-      idTag: this.productForm.get('tag')?.value, 
+      rfidTag: this.productForm.get('tag')?.value,
       description: this.productForm.get('description')?.value,
       weight: this.productForm.get('weight')?.value,
       manufacDate: this.productForm.get('manufacDate')?.value.toISOString(),
