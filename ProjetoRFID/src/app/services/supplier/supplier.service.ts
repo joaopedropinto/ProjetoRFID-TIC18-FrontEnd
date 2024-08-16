@@ -16,4 +16,8 @@ export class SupplierService {
   getSuppliers(): Observable<Supplier[]> {
     return this.http.get<Supplier[]>(`${this.apiUrl}/Supplier`);
   }
+
+  getSupplierById(id: number): Observable<Supplier> {
+    return this.http.get<Supplier>(`${this.apiUrl}/Supplier/${id}`);
+  }
 }

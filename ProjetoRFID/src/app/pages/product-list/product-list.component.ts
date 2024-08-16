@@ -40,6 +40,8 @@ export class ProductListComponent implements OnInit {
   products!: Product[];
 
   actions!: MenuItem[];
+
+  selectedProduct!: Product;
   
   constructor(
     private productService: ProductService,
@@ -61,13 +63,21 @@ export class ProductListComponent implements OnInit {
       { 
         label: 'Editar', 
         icon: 'pi pi-pen-to-square',
-        routerLink: '/produto/editar'
       },
       { 
         label: 'Excluir', 
         icon: 'pi pi-trash',
       }
     ];
+  }
+
+  setSelectedProduct(product: Product): void {
+    this.selectedProduct = product;
+    const editAction = this.actions.find(action => action.label === 'Editar');
+
+    if (editAction && this.selectedProduct) {
+        editAction.routerLink = `/produto/editar/${product.id}`;
+    }
   }
 
   deletionConfirmation(event: Event) {

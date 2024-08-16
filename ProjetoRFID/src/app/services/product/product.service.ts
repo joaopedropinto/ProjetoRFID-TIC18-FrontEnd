@@ -26,12 +26,11 @@ export class ProductService {
   }
 
   postProduct(product: Product): Observable<Product> {
-    console.log(product);
     return this.http.post<Product>(`${this.apiUrl}/Product`, product);
   }
 
-  putProduct(id: number, product: Product): Observable<Product> {
-    return this.http.put<Product>(`${this.apiUrl}/Product/${id}`, product);
+  putProduct(product: Product): Observable<Product> {
+    return this.http.put<Product>(`${this.apiUrl}/Product`, product);
   }
 
   deleteProduct(id: number): Observable<void> {
