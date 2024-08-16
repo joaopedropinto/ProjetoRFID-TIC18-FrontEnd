@@ -67,6 +67,7 @@ export class ProductListComponent implements OnInit {
       { 
         label: 'Excluir', 
         icon: 'pi pi-trash',
+        command: () => this.deletionConfirmation(this.selectedProduct)
       }
     ];
   }
@@ -80,21 +81,19 @@ export class ProductListComponent implements OnInit {
     }
   }
 
-  deletionConfirmation(event: Event) {
+  deletionConfirmation(product: Product) {
     this.confirmationService.confirm({
-        target: event.target as EventTarget,
-        message: 'Tem certeza que deseja excluir esse produto?',
-        header: 'Confirmation',
+        message: `Tem certeza que deseja excluir ${product.name}?`,
+        header: 'Confirmação',
         icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Sim',
+        rejectLabel: 'Não',
         acceptIcon:"none",
         rejectIcon:"none",
-        rejectButtonStyleClass:"p-button-text",
+        acceptButtonStyleClass:"p-button-danger p-button-text",
         accept: () => {
-            this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
+            this.deleteProduct(this.selectedProduct);
         },
-        reject: () => {
-            this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
-        }
     });
 }
 
@@ -102,12 +101,10 @@ export class ProductListComponent implements OnInit {
     
   }
 
-  editProduct(product: Product) {
-    
-  }
-
   deleteProduct(product: Product) {
-    
+    this.productService.deleteProduct(product).subscribe(() => {
+      this.products = this.products.filter(p => p.id!== product.id);
+    })
   }
 
 }
