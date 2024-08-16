@@ -44,6 +44,8 @@ export class ProductListComponent implements OnInit {
   actions!: MenuItem[];
 
   selectedProduct!: Product;
+
+  loading: boolean = true;
   
   constructor(
     private productService: ProductService,
@@ -54,7 +56,7 @@ export class ProductListComponent implements OnInit {
   ngOnInit(): void {
     this.productService.getProducts().subscribe(response => {
       this.products = response;
-      console.log(this.products);
+      this.loading = false;
     });
 
     this.actions = [
@@ -104,9 +106,9 @@ export class ProductListComponent implements OnInit {
   }
 
   deleteProduct(product: Product) {
-    // this.productService.deleteProduct(product).subscribe(() => {
-    //   this.products = this.products.filter(p => p.id!== product.id);
-    // })
+     this.productService.deleteProduct(product).subscribe(() => {
+       this.products = this.products.filter(p => p.id!== product.id);
+     })
     this.messageService.add({severity:'secondary', summary: 'Sucesso', detail: `${product.name} excluído com sucesso!`});
   }
 
