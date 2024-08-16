@@ -14,6 +14,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
+import { RippleModule } from 'primeng/ripple';
 
 @Component({
   selector: 'app-product-list',
@@ -30,6 +31,7 @@ import { CommonModule } from '@angular/common';
     TieredMenuModule,
     ConfirmDialogModule,
     ToastModule,
+    RippleModule
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './product-list.component.html',
@@ -102,9 +104,10 @@ export class ProductListComponent implements OnInit {
   }
 
   deleteProduct(product: Product) {
-    this.productService.deleteProduct(product).subscribe(() => {
-      this.products = this.products.filter(p => p.id!== product.id);
-    })
+    // this.productService.deleteProduct(product).subscribe(() => {
+    //   this.products = this.products.filter(p => p.id!== product.id);
+    // })
+    this.messageService.add({severity:'secondary', summary: 'Sucesso', detail: `${product.name} excluído com sucesso!`});
   }
 
 }

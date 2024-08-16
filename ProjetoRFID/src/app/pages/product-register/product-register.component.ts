@@ -15,6 +15,10 @@ import { CategoryService } from '../../services/category/category.service';
 import { Category } from '../../models/category.model';
 import { Supplier } from '../../models/supplier.model';
 import { SupplierService } from '../../services/supplier/supplier.service';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { RippleModule } from 'primeng/ripple';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-register',
@@ -31,7 +35,10 @@ import { SupplierService } from '../../services/supplier/supplier.service';
     DropdownModule,
     InputNumberModule,
     ButtonModule,
+    ToastModule,
+    RippleModule,
   ],
+  providers: [MessageService],
   templateUrl: './product-register.component.html',
   styleUrl: './product-register.component.css'
 })
@@ -55,6 +62,8 @@ export class ProductRegisterComponent implements OnInit {
     private productService: ProductService,
     private categoryService: CategoryService,
     private supplierService: SupplierService,
+    private messageService: MessageService,
+    private router: Router
   ) {
     this.productForm = this.formBuilder.group({
       name: [null, [Validators.required]],
@@ -101,12 +110,13 @@ export class ProductRegisterComponent implements OnInit {
     }
 
     if(this.productForm.valid) {
-      console.log(newProduct);
       this.productService.postProduct(newProduct).subscribe(() => {
-        alert('Produto cadastrado com sucesso!'); // TODO: Implementar componente p-Toast do PrimeNG.
+        this.messageService.add({ severity:'success', summary: 'Sucesso', detail: 'Produto cadastrado com sucesso!' });
         this.productForm.reset();
+        setTimeout(() => {
+          this.router.navigate(['produtos'])
+        }, 2000);
       });
     }
-
   }
 }

@@ -176,8 +176,9 @@
             </div>
         </div>
         <div class="row">
-            <button pButton type="submit" [disabled]="productForm.invalid">Salvar</button>
-            <button pButton severity="danger" routerLink="/produtos">Cancelar</button>
+            <button pButton type="submit" [disabled]="productForm.invalid || !enableButtons">Salvar</button>
+            <button pButton severity="danger" routerLink="/produtos" [disabled]="!enableButtons">Cancelar</button>
         </div>
     </form>
 </p-card>
+<p-toast></p-toast>

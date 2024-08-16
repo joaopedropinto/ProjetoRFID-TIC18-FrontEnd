@@ -16,6 +16,8 @@ import { Supplier } from '../../models/supplier.model';
 import { CategoryService } from '../../services/category/category.service';
 import { SupplierService } from '../../services/supplier/supplier.service';
 import { Product } from '../../models/product.model';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-product-editing',
@@ -32,8 +34,10 @@ import { Product } from '../../models/product.model';
     ButtonModule,
     ReactiveFormsModule,
     FormsModule,
-    RouterLink
+    RouterLink,
+    ToastModule
   ],
+  providers: [MessageService],
   templateUrl: './product-editing.component.html',
   styleUrl: './product-editing.component.css'
 })
@@ -60,13 +64,16 @@ export class ProductEditingComponent implements OnInit {
     'A vácuo'
   ];
 
+  enableButtons: boolean = true;
+
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
     private supplierService: SupplierService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private messageService: MessageService
   ) {
     this.productForm = this.formBuilder.group({
       name: [null, [Validators.required]],
@@ -138,10 +145,12 @@ export class ProductEditingComponent implements OnInit {
     }
 
     if(this.productForm.valid) {
-      console.log(this.productForm.value);
       this.productService.putProduct(updatedProduct).subscribe(() => {
-        alert('Produto atualizado com sucesso!'); // TODO: Implementar componente p-Toast do PrimeNG.
-        this.router.navigate(['produtos'])
+        this.messageService.add({ severity:'success', summary: 'Sucesso', detail: 'Produto atualizado com sucesso!' });
+        this.enableButtons = false;
+        setTimeout(() => {
+          this.router.navigate(['produtos'])
+        }, 2000);
       });
     }
   }
