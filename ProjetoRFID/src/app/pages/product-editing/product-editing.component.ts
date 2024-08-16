@@ -1,53 +1,60 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CalendarModule } from 'primeng/calendar';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
-import { Product } from '../../models/product.model';
 import { ProductService } from '../../services/product/product.service';
-import { CategoryService } from '../../services/category/category.service';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Category } from '../../models/category.model';
 import { Supplier } from '../../models/supplier.model';
+import { CategoryService } from '../../services/category/category.service';
 import { SupplierService } from '../../services/supplier/supplier.service';
-import { ToastModule } from 'primeng/toast';
+import { Product } from '../../models/product.model';
 import { MessageService } from 'primeng/api';
-import { RippleModule } from 'primeng/ripple';
-import { Router } from '@angular/router';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
-  selector: 'app-product-register',
+  selector: 'app-product-editing',
   standalone: true,
   imports: [
-    CommonModule,
     CardModule,
     InputTextModule,
     FloatLabelModule,
     InputTextareaModule,
     CalendarModule,
-    FormsModule,
-    ReactiveFormsModule,
+    CommonModule,
     DropdownModule,
     InputNumberModule,
     ButtonModule,
-    ToastModule,
-    RippleModule,
+    ReactiveFormsModule,
+    FormsModule,
+    RouterLink,
+    ToastModule
   ],
   providers: [MessageService],
-  templateUrl: './product-register.component.html',
-  styleUrl: './product-register.component.css'
+  templateUrl: './product-editing.component.html',
+  styleUrl: './product-editing.component.css'
 })
-export class ProductRegisterComponent implements OnInit {
+export class ProductEditingComponent implements OnInit {
 
   productForm!: FormGroup;
 
+  private productId!: number;
+  productManuFacDate!: Date;
+  productDueDate!: Date;
+
+
   categories!: Category[];
   suppliers!: Supplier[];
+
+  selectedCategory: Category | undefined;
+  selectedSupplier: Supplier | undefined;
 
   packingTypes = [
     'Plástico',
@@ -57,13 +64,16 @@ export class ProductRegisterComponent implements OnInit {
     'A vácuo'
   ];
 
+  enableButtons: boolean = true;
+
   constructor(
-    private formBuilder: FormBuilder, 
     private productService: ProductService,
     private categoryService: CategoryService,
     private supplierService: SupplierService,
-    private messageService: MessageService,
-    private router: Router
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private messageService: MessageService
   ) {
     this.productForm = this.formBuilder.group({
       name: [null, [Validators.required]],
@@ -79,10 +89,12 @@ export class ProductRegisterComponent implements OnInit {
       batchNumber: [null, [Validators.required]],
       quantity: [null, [Validators.required, Validators.min(0)]],
       price: [null, [Validators.required, Validators.min(0.01)]],
-    })
-  }
+    });
+   }
 
   ngOnInit(): void {
+    this.productId = parseInt(this.route.snapshot.paramMap.get('id')!);
+
     this.categoryService.getCategories().subscribe(response => {
        this.categories = response;
     })
@@ -90,10 +102,33 @@ export class ProductRegisterComponent implements OnInit {
     this.supplierService.getSuppliers().subscribe(response => {
        this.suppliers = response;
     })
+
+    this.productService.getProductById(this.productId).subscribe(productResponse => {
+      this.categoryService.getCategoryById(productResponse.idCategory).subscribe(categoryResponse => {
+        this.selectedCategory = categoryResponse;
+      });
+
+      this.supplierService.getSupplierById(productResponse.idSupplier).subscribe(supplierResponse => {
+        this.selectedSupplier = supplierResponse;
+      });
+
+      this.productForm.get('name')?.setValue(productResponse.name);
+      this.productForm.get('tag')?.setValue(productResponse.rfidTag);
+      this.productForm.get('description')?.setValue(productResponse.description);
+      this.productForm.get('weight')?.setValue(productResponse.weight);
+      this.productForm.get('manufacDate')?.setValue(new Date(productResponse.manufacDate));
+      this.productForm.get('dueDate')?.setValue(new Date(productResponse.dueDate));
+      this.productForm.get('unitMeasurement')?.setValue(productResponse.unitMeasurement);
+      this.productForm.get('packingType')?.setValue(productResponse.packingType);
+      this.productForm.get('batchNumber')?.setValue(productResponse.batchNumber);
+      this.productForm.get('quantity')?.setValue(productResponse.quantity);
+      this.productForm.get('price')?.setValue(productResponse.price);
+    })
   }
 
-  onSubmit(): void {
-    const newProduct: Product = {
+  onSubmit() {
+    const updatedProduct: Product = {
+      id: this.productId,
       name: this.productForm.get('name')?.value,
       idCategory: this.productForm.get('category')?.value.id,
       idSupplier: this.productForm.get('supplier')?.value.id,
@@ -110,13 +145,14 @@ export class ProductRegisterComponent implements OnInit {
     }
 
     if(this.productForm.valid) {
-      this.productService.postProduct(newProduct).subscribe(() => {
-        this.messageService.add({ severity:'success', summary: 'Sucesso', detail: 'Produto cadastrado com sucesso!' });
-        this.productForm.reset();
+      this.productService.putProduct(updatedProduct).subscribe(() => {
+        this.messageService.add({ severity:'success', summary: 'Sucesso', detail: 'Produto atualizado com sucesso!' });
+        this.enableButtons = false;
         setTimeout(() => {
           this.router.navigate(['produtos'])
         }, 2000);
       });
     }
   }
+
 }

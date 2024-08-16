@@ -1,4 +1,4 @@
-<p-card header="Cadastro de Produto">
+<p-card header="Editar Produto">
     <form class="form-container" [formGroup]="productForm" (ngSubmit)="onSubmit()">
         <div class="row">
             <div class="inputFloatLabel">
@@ -15,6 +15,7 @@
                     <p-dropdown 
                     [options]="categories" 
                     [showClear]="true"
+                    [(ngModel)]="selectedCategory"
                     optionLabel="name"
                     formControlName="category"/>
                     <label for="category">Categoria</label>
@@ -156,6 +157,7 @@
                     [options]="suppliers" 
                     [showClear]="true"
                     optionLabel="name"
+                    [(ngModel)]="selectedSupplier"
                     formControlName="supplier"/>
                     <label for="supplier">Fornecedor</label>
                 </p-floatLabel>
@@ -174,7 +176,8 @@
             </div>
         </div>
         <div class="row">
-            <button pButton type="submit" [disabled]="productForm.invalid">Cadastrar</button>
+            <button pButton type="submit" [disabled]="productForm.invalid || !enableButtons">Salvar</button>
+            <button pButton severity="danger" routerLink="/produtos" [disabled]="!enableButtons">Cancelar</button>
         </div>
     </form>
 </p-card>

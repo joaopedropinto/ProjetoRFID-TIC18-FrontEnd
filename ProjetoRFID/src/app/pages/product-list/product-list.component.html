@@ -2,6 +2,7 @@
     <p-table
     #table
     [value]="products"
+    [loading]="loading"
     [paginator]="true"
     [rows]="10"
     [tableStyle]="{ 'min-width': '78rem' }">
@@ -46,15 +47,18 @@
                     icon="pi pi-ellipsis-v"
                     [rounded]="true"
                     [text]="true"
-                    (onClick)="menu.toggle($event)"/>
-                </td>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="emptymessage">
-            <tr>
-                <td colspan="8">Nenhum produto cadastrado.</td>
-            </tr>
-        </ng-template>
-    </p-table>
+                    (onClick)="setSelectedProduct(product); menu.toggle($event)">
+                </p-button>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="8">Nenhum produto cadastrado.</td>
+        </tr>
+    </ng-template>
+</p-table>
 </p-card>
-<p-tieredMenu #menu [model]="actions" [popup]="true" />
+<p-tieredMenu #menu [model]="actions" [popup]="true"/>
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>
