@@ -71,8 +71,11 @@
                     [iconDisplay]="'input'"/>
                     <label for="dueDate">Data de vencimento</label>
                 </p-floatLabel>
-                <small class="error-message" *ngIf="productForm.get('dueDate')?.errors && productForm.get('dueDate')?.touched">
+                <small class="error-message" *ngIf="productForm.get('dueDate')?.hasError('required') && productForm.get('dueDate')?.touched">
                     * A data de vencimento é obrigatória
+                </small>
+                <small class="error-message" *ngIf="productForm.get('dueDate')?.hasError('invalidDateComparison') && productForm.get('dueDate')?.touched">
+                    A data de vencimento não pode ser anterior à data de fabricação
                 </small>
             </div>
         </div>

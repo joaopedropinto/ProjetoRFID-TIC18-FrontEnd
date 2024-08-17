@@ -4,7 +4,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CalendarModule } from 'primeng/calendar';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -90,6 +90,29 @@ export class ProductRegisterComponent implements OnInit {
     this.supplierService.getSuppliers().subscribe(response => {
        this.suppliers = response;
     })
+
+    const manufacDateControl = this.productForm.get('manufacDate');
+    const dueDateControl = this.productForm.get('dueDate');
+
+    if(manufacDateControl && dueDateControl) {
+      dueDateControl.addValidators([
+        this.compareDatesValidator(manufacDateControl)
+      ]);
+      dueDateControl.updateValueAndValidity();
+    }
+
+  }
+
+  compareDatesValidator(manufacDateControl: AbstractControl): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const dueDate = control.value;
+      const manufacDate = manufacDateControl.value;
+
+      if (dueDate && manufacDate && new Date(dueDate) <= new Date(manufacDate)) {
+        return { 'invalidDateComparison': true };
+      }
+      return null;
+    };
   }
 
   onSubmit(): void {
