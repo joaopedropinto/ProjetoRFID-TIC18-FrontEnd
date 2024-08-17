@@ -15,6 +15,11 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { RippleModule } from 'primeng/ripple';
+import { DialogModule } from 'primeng/dialog';
+import { CategoryService } from '../../services/category/category.service';
+import { SupplierService } from '../../services/supplier/supplier.service';
+import { Category } from '../../models/category.model';
+import { Supplier } from '../../models/supplier.model';
 
 @Component({
   selector: 'app-product-list',
@@ -31,7 +36,8 @@ import { RippleModule } from 'primeng/ripple';
     TieredMenuModule,
     ConfirmDialogModule,
     ToastModule,
-    RippleModule
+    RippleModule,
+    DialogModule
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './product-list.component.html',
@@ -44,13 +50,21 @@ export class ProductListComponent implements OnInit {
   actions!: MenuItem[];
 
   selectedProduct!: Product;
+  selectedProductCategory!: Category;
+  selectedProductSupplier!: Supplier;
+  selectedProductDueDate!: string;
+  selectedProductManuFacDate!: string;
 
   loading: boolean = true;
+
+  visibleDialog: boolean = false;
   
   constructor(
     private productService: ProductService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private categoryService: CategoryService,
+    private supplierService: SupplierService
   ) { }
   
   ngOnInit(): void {
@@ -63,6 +77,7 @@ export class ProductListComponent implements OnInit {
       { 
         label: 'Visualizar', 
         icon: 'pi pi-info-circle',
+        command: () => this.viewProduct()
       },
       { 
         label: 'Editar', 
@@ -78,6 +93,18 @@ export class ProductListComponent implements OnInit {
 
   setSelectedProduct(product: Product): void {
     this.selectedProduct = product;
+
+    this.categoryService.getCategoryById(this.selectedProduct.idCategory).subscribe(category => {
+      this.selectedProductCategory = category;
+    });
+
+    this.supplierService.getSupplierById(this.selectedProduct.idSupplier).subscribe(supplier => {
+      this.selectedProductSupplier = supplier;
+    });
+
+    this.selectedProductDueDate = new Date(this.selectedProduct.dueDate).toLocaleDateString('pt-BR');
+    this.selectedProductManuFacDate = new Date(this.selectedProduct.manufacDate).toLocaleDateString('pt-BR');
+
     const editAction = this.actions.find(action => action.label === 'Editar');
 
     if (editAction && this.selectedProduct) {
@@ -101,8 +128,8 @@ export class ProductListComponent implements OnInit {
     });
 }
 
-  viewProduct(product: Product) {
-    
+  viewProduct() {
+    this.visibleDialog = true;
   }
 
   deleteProduct(product: Product) {
@@ -110,6 +137,11 @@ export class ProductListComponent implements OnInit {
        this.products = this.products.filter(p => p.id!== product.id);
      })
     this.messageService.add({severity:'secondary', summary: 'Sucesso', detail: `${product.name} excluído com sucesso!`});
+  }
+
+  globalFilter(table: any, event: Event) {
+    const input = event.target as HTMLInputElement;
+    table.filterGlobal(input.value, 'contains');
   }
 
 }

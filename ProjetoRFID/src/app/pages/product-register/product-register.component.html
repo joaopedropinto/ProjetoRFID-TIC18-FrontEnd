@@ -70,9 +70,10 @@
                     [iconDisplay]="'input'"/>
                     <label for="dueDate">Data de vencimento</label>
                 </p-floatLabel>
-                <small class="error-message" *ngIf="productForm.get('dueDate')?.errors && productForm.get('dueDate')?.touched">
+                <small class="error-message" *ngIf="productForm.get('dueDate')?.hasError('required') && productForm.get('dueDate')?.touched">
                     * A data de vencimento é obrigatória
                 </small>
+                
             </div>
         </div>
         <div class="row">

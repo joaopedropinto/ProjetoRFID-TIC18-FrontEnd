@@ -23,16 +23,16 @@ export class SidebarComponent {
       label: 'Produtos',
       icon: 'pi pi-box',
       items: [
-        { label: 'Cadastrar', icon: 'pi pi-plus', routerLink: ['/produtos/cadastrar'] },
-        { label: 'Listar', icon: 'pi pi-list', routerLink: ['/produtos'] },
+        { label: 'Cadastrar', icon: 'pi pi-plus', routerLink: ['/produtos/cadastrar'], command: () => { this.sidebarVisible = false } },
+        { label: 'Listar', icon: 'pi pi-list', routerLink: ['/produtos'], command: () => { this.sidebarVisible = false } },
       ]
     },
     {
       label: 'Leituras',
       icon: 'pi pi-barcode',
       items: [
-        { label: 'Nova Leitura', icon: 'pi pi-plus', routerLink: ['/leituras/realizar'] },
-        { label: 'Histórico', icon: 'pi pi-history', routerLink: ['/leituras/historico'] },
+        { label: 'Nova Leitura', icon: 'pi pi-plus', routerLink: ['/leituras/realizar'], command: () => { this.sidebarVisible = false } },
+        { label: 'Histórico', icon: 'pi pi-history', routerLink: ['/leituras/historico'], command: () => { this.sidebarVisible = false } },
       ]
     }
   ];

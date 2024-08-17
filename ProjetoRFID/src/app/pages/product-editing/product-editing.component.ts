@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -124,6 +124,28 @@ export class ProductEditingComponent implements OnInit {
       this.productForm.get('quantity')?.setValue(productResponse.quantity);
       this.productForm.get('price')?.setValue(productResponse.price);
     })
+
+    const manufacDateControl = this.productForm.get('manufacDate');
+    const dueDateControl = this.productForm.get('dueDate');
+
+    if(manufacDateControl && dueDateControl) {
+      dueDateControl.addValidators([
+        this.compareDatesValidator(manufacDateControl)
+      ]);
+      dueDateControl.updateValueAndValidity();
+    }
+  }
+
+  compareDatesValidator(manufacDateControl: AbstractControl): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const dueDate = control.value;
+      const manufacDate = manufacDateControl.value;
+
+      if (dueDate && manufacDate && new Date(dueDate) <= new Date(manufacDate)) {
+        return { 'invalidDateComparison': true };
+      }
+      return null;
+    };
   }
 
   onSubmit() {
