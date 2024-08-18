@@ -13,11 +13,19 @@ import { MenuItem } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { CommonModule } from '@angular/common';
+import { RippleModule } from 'primeng/ripple';
+import { DialogModule } from 'primeng/dialog';
+import { CategoryService } from '../../services/category/category.service';
+import { SupplierService } from '../../services/supplier/supplier.service';
+import { Category } from '../../models/category.model';
+import { Supplier } from '../../models/supplier.model';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
   imports: [
+    CommonModule,
     CardModule,
     TableModule,
     IconFieldModule,
@@ -28,6 +36,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     TieredMenuModule,
     ConfirmDialogModule,
     ToastModule,
+    RippleModule,
+    DialogModule
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './product-list.component.html',
@@ -38,85 +48,100 @@ export class ProductListComponent implements OnInit {
   products!: Product[];
 
   actions!: MenuItem[];
+
+  selectedProduct!: Product;
+  selectedProductCategory!: Category;
+  selectedProductSupplier!: Supplier;
+  selectedProductDueDate!: string;
+  selectedProductManuFacDate!: string;
+
+  loading: boolean = true;
+
+  visibleDialog: boolean = false;
   
   constructor(
     private productService: ProductService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private categoryService: CategoryService,
+    private supplierService: SupplierService
   ) { }
   
   ngOnInit(): void {
-    // this.productService.getProducts().subscribe(response => {
-    //   this.products = response;
-    // });
-
-    const product: Product = {
-      id: 123,
-      categoryId: 5,
-      supplierId: 10,
-      tagId: 7,
-      name: 'Chocolate Barra',
-      description: 'Chocolate ao leite com recheio de caramelo',
-      weight: 0.150,
-      manufacDate: new Date('2024-08-13'),
-      dueDate: new Date('2025-02-13'),
-      unitMeasurement: 'gramas',
-      packingType: 'Plástico',
-      batchNumber: 'CHOCO240813A',
-      quantity: 100,
-      price: 8.99
-    };
-    
-
-    this.products = [product];
+    this.productService.getProducts().subscribe(response => {
+      this.products = response;
+      this.loading = false;
+    });
 
     this.actions = [
       { 
         label: 'Visualizar', 
         icon: 'pi pi-info-circle',
-        command: (event) => this.viewProduct(product) 
+        command: () => this.viewProduct()
       },
       { 
         label: 'Editar', 
-        icon: 'pi pi-pen-to-square', 
-        command: (event) => this.editProduct(product) 
+        icon: 'pi pi-pen-to-square',
       },
       { 
         label: 'Excluir', 
         icon: 'pi pi-trash',
-        command: (event) => this.deleteProduct(product) 
+        command: () => this.deletionConfirmation(this.selectedProduct)
       }
     ];
   }
 
-  deletionConfirmation(event: Event) {
+  setSelectedProduct(product: Product): void {
+    this.selectedProduct = product;
+
+    this.categoryService.getCategoryById(this.selectedProduct.idCategory).subscribe(category => {
+      this.selectedProductCategory = category;
+    });
+
+    this.supplierService.getSupplierById(this.selectedProduct.idSupplier).subscribe(supplier => {
+      this.selectedProductSupplier = supplier;
+    });
+
+    this.selectedProductDueDate = new Date(this.selectedProduct.dueDate).toLocaleDateString('pt-BR');
+    this.selectedProductManuFacDate = new Date(this.selectedProduct.manufacDate).toLocaleDateString('pt-BR');
+
+    const editAction = this.actions.find(action => action.label === 'Editar');
+
+    if (editAction && this.selectedProduct) {
+        editAction.routerLink = `/produto/editar/${product.id}`;
+    }
+  }
+
+  deletionConfirmation(product: Product) {
     this.confirmationService.confirm({
-        target: event.target as EventTarget,
-        message: 'Tem certeza que deseja excluir esse produto?',
-        header: 'Confirmation',
+        message: `Tem certeza que deseja excluir ${product.name}?`,
+        header: 'Confirmação',
         icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Sim',
+        rejectLabel: 'Não',
         acceptIcon:"none",
         rejectIcon:"none",
-        rejectButtonStyleClass:"p-button-text",
+        acceptButtonStyleClass:"p-button-danger p-button-text",
         accept: () => {
-            this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
+            this.deleteProduct(this.selectedProduct);
         },
-        reject: () => {
-            this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
-        }
     });
 }
 
-  viewProduct(product: Product) {
-    
-  }
-
-  editProduct(product: Product) {
-    
+  viewProduct() {
+    this.visibleDialog = true;
   }
 
   deleteProduct(product: Product) {
-    
+     this.productService.deleteProduct(product).subscribe(() => {
+       this.products = this.products.filter(p => p.id!== product.id);
+     })
+    this.messageService.add({severity:'secondary', summary: 'Sucesso', detail: `${product.name} excluído com sucesso!`});
+  }
+
+  globalFilter(table: any, event: Event) {
+    const input = event.target as HTMLInputElement;
+    table.filterGlobal(input.value, 'contains');
   }
 
 }

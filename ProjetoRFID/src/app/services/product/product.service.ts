@@ -18,23 +18,23 @@ export class ProductService {
       .set('page', page.toString())
       .set('itemsPerPage', itemsPerPage.toString());
 
-    return this.http.get<Product[]>(`${this.apiUrl}/produtos`, { params });
+    return this.http.get<Product[]>(`${this.apiUrl}/Product`, { params });
   }
 
-  getProductById(id: number): Observable<Product> {
-    return this.http.get<Product>(`${this.apiUrl}/produtos/${id}`);
+  getProductById(id: number | string): Observable<Product> {
+    return this.http.get<Product>(`${this.apiUrl}/Product/${id}`);
   }
 
   postProduct(product: Product): Observable<Product> {
-    console.log(product);
-    return this.http.post<Product>(`${this.apiUrl}/produtos`, product);
+    return this.http.post<Product>(`${this.apiUrl}/Product`, product);
   }
 
-  putProduct(id: number, product: Product): Observable<Product> {
-    return this.http.put<Product>(`${this.apiUrl}/produtos/${id}`, product);
+  putProduct(product: Product): Observable<Product> {
+    return this.http.put<Product>(`${this.apiUrl}/Product`, product);
   }
 
-  deleteProduct(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/produtos/${id}`);
+  deleteProduct(product: Product): Observable<void> {
+    const id = product.id;
+    return this.http.delete<void>(`${this.apiUrl}/Product/${id}`);
   }
 }

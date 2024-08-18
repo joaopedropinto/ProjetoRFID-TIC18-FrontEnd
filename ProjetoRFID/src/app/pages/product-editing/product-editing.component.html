@@ -1,4 +1,4 @@
-<p-card header="Cadastro de Produto">
+<p-card header="Editar Produto">
     <form class="form-container" [formGroup]="productForm" (ngSubmit)="onSubmit()">
         <div class="row">
             <div class="inputFloatLabel">
@@ -15,6 +15,7 @@
                     <p-dropdown 
                     [options]="categories" 
                     [showClear]="true"
+                    [(ngModel)]="selectedCategory"
                     optionLabel="name"
                     formControlName="category"/>
                     <label for="category">Categoria</label>
@@ -73,7 +74,9 @@
                 <small class="error-message" *ngIf="productForm.get('dueDate')?.hasError('required') && productForm.get('dueDate')?.touched">
                     * A data de vencimento é obrigatória
                 </small>
-                
+                <small class="error-message" *ngIf="productForm.get('dueDate')?.hasError('invalidDateComparison') && productForm.get('dueDate')?.touched">
+                    A data de vencimento não pode ser anterior à data de fabricação
+                </small>
             </div>
         </div>
         <div class="row">
@@ -144,7 +147,7 @@
         <div class="row">
             <div class="inputFloatLabel">
                 <p-floatLabel>
-                    <input type="text" pInputText id="tagCode" formControlName="tag">
+                    <input type="text" pInputText id="tagCode" formControlName="tag" [readOnly]="true"/>
                     <label for="tagCode">Código da tag</label>
                 </p-floatLabel>
                 <small class="error-message" *ngIf="productForm.get('tag')?.errors && productForm.get('tag')?.touched">
@@ -157,6 +160,7 @@
                     [options]="suppliers" 
                     [showClear]="true"
                     optionLabel="name"
+                    [(ngModel)]="selectedSupplier"
                     formControlName="supplier"/>
                     <label for="supplier">Fornecedor</label>
                 </p-floatLabel>
@@ -175,7 +179,8 @@
             </div>
         </div>
         <div class="row">
-            <button pButton type="submit" [disabled]="productForm.invalid">Cadastrar</button>
+            <button pButton type="submit" [disabled]="productForm.invalid || !enableButtons">Salvar</button>
+            <button pButton severity="danger" routerLink="/produtos" [disabled]="!enableButtons">Cancelar</button>
         </div>
     </form>
 </p-card>

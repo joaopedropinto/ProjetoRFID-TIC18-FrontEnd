@@ -2,9 +2,12 @@
     <p-table
     #table
     [value]="products"
+    dataKey="id"
+    [loading]="loading"
     [paginator]="true"
     [rows]="10"
-    [tableStyle]="{ 'min-width': '78rem' }">
+    [tableStyle]="{ 'min-width': '78rem' }"
+    [globalFilterFields]="['name', 'packingType', 'unitMeasurement', 'batchNumber']">
         <ng-template pTemplate="caption">
             <div class="search-input">
                 <p-iconField iconPosition="left" class="input-icon">
@@ -14,7 +17,7 @@
                     <input 
                     type="text"
                     pInputText
-                    (input)="table.filterGlobal($event.target, 'contains')"
+                    (input)="globalFilter(table, $event)"
                     placeholder="Buscar">
                 </p-iconField>
             </div>
@@ -29,7 +32,6 @@
                 <th style="width: 8%;">Unidade de medida</th>
                 <th style="width: 8%;">Nº de lote</th>
                 <th style="width: 5%;">Ações</th>
-
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-product>
@@ -46,8 +48,9 @@
                     icon="pi pi-ellipsis-v"
                     [rounded]="true"
                     [text]="true"
-                    (onClick)="menu.toggle($event)"/>
-                </td>
+                    (onClick)="setSelectedProduct(product); menu.toggle($event)">
+                </p-button>
+            </td>
             </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">
@@ -57,4 +60,28 @@
         </ng-template>
     </p-table>
 </p-card>
-<p-tieredMenu #menu [model]="actions" [popup]="true" />
+<p-tieredMenu #menu [model]="actions" [popup]="true"/>
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>
+<p-dialog
+header="Detalhes do produto"
+[(visible)]="visibleDialog"
+[modal]="true"
+[draggable]="false"
+[resizable]="false"
+[style]="{ width: '35vw' }">
+    <ul class="productDetails" *ngIf="selectedProduct">
+        <li><b>Nome: </b>{{ selectedProduct.name }}</li>
+        <li><b>Categoria: </b>{{ selectedProductCategory.name }}</li>
+        <li><b>Peso: </b>{{ selectedProduct.weight }}</li>
+        <li><b>Embalagem: </b>{{ selectedProduct.packingType }}</li>
+        <li><b>Quantidade: </b>{{ selectedProduct.quantity }}</li>
+        <li><b>Preço: </b>R${{ selectedProduct.price }}</li>
+        <li><b>Unidade de medida: </b>{{ selectedProduct.unitMeasurement }}</li>
+        <li><b>Nº de lote: </b>{{ selectedProduct.batchNumber }}</li>
+        <li><b>Data de fabricação: </b>{{ selectedProductManuFacDate }}</li>
+        <li><b>Date de vencimento: </b>{{ selectedProductDueDate }}</li>
+        <li><b>Fornecedor: </b>{{ selectedProductSupplier.name }}</li>
+        <li><b>Descrição: </b>{{ selectedProduct.description }}</li>
+    </ul>
+</p-dialog>
