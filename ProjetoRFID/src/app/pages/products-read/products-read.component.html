@@ -1,21 +1,13 @@
 <p-card header="Lista de Produtos">
-    <p-table
-    #table
-    [value]="products"
-    [paginator]="true"
-    [rows]="10"
-    [tableStyle]="{ 'min-width': '78rem' }">
+    <p-table #table [value]="products" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '78rem' }">
         <ng-template pTemplate="caption">
             <div class="search-input">
                 <p-iconField iconPosition="left" class="input-icon">
                     <p-inputIcon>
                         <i class="pi pi-search"></i>
                     </p-inputIcon>
-                    <input 
-                    type="text"
-                    pInputText
-                    (input)="table.filterGlobal($event.target, 'contains')"
-                    placeholder="Buscar">
+                    <input type="text" pInputText (input)="table.filterGlobal($event.target, 'contains')"
+                        placeholder="Buscar">
                 </p-iconField>
             </div>
         </ng-template>
@@ -42,12 +34,7 @@
                 <td>{{ product.unitMeasurement }}</td>
                 <td>{{ product.batchNumber }}</td>
                 <td>
-                    <button 
-                        type="button" 
-                        pButton 
-                        pRipple 
-                        icon="pi pi-ellipsis-v" 
-                        (click)="viewProduct(product)">
+                    <button type="button" pButton pRipple icon="pi pi-ellipsis-v" (click)="viewProduct(product)">
                     </button>
                 </td>
             </tr>
@@ -64,14 +51,40 @@
 <!-- Modal -->
 <div *ngIf="isModalOpen" class="overlay" (click)="closeModal()"></div>
 <div *ngIf="isModalOpen" class="modal">
-  <h1>teste</h1> 
-  <h3>{{ selectedProduct.name }}</h3>
-  <p>Peso: {{ selectedProduct.weight }}</p>
-  <p>Embalagem: {{ selectedProduct.packingType }}</p>
-  <p>Quantidade: {{ selectedProduct.quantity }}</p>
-  <p>Preço: R${{ selectedProduct.price      }}</p>
-  <p>Unidade de medida: {{ selectedProduct.unitMeasurement }}</p>
-  <p>Nº de lote: {{ selectedProduct.batchNumber }}</p>
-  
-  <button pButton type="button" label="Fechar" (click)="closeModal()"></button>
+    <p-table [tableStyle]="{ 'min-width': '95rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <td>Nome</td>
+                <td>Id</td>
+                <td>Id|Categoria</td>
+                <td>Id|Fornecedor</td>
+                <td>Etiqueta</td>
+                <td>Descrição</td>
+                <td>Peso</td>
+                <td>Fabricacao</td>
+                <td>Validade</td>
+                <td>Und/Medida</td>
+                <td>Embalagem</td>
+                <td>Lote</td>
+                <td>Quantidade</td>
+                <td>Preço</td>
+            </tr>
+            <tr>
+                <td>{{selectedProduct.name}}</td>
+                <td>{{selectedProduct.id}}</td>
+                <td>{{selectedProduct.categoryId}}</td>
+                <td>{{selectedProduct.supplierId}}</td>
+                <td>{{selectedProduct.tagId}}</td>
+                <td>{{selectedProduct.description}}</td>
+                <td>{{selectedProduct.weight}}</td>
+                <td>{{selectedProduct.manufacDate}}</td>
+                <td>{{selectedProduct.dueDate}}</td>
+                <td>{{selectedProduct.unitMeasurement}}</td>
+                <td>{{selectedProduct.packingType}}</td>
+                <td>{{selectedProduct.batchNumber}}</td>
+                <td>{{selectedProduct.quantity}}</td>
+                <td>{{selectedProduct.price}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
 </div>

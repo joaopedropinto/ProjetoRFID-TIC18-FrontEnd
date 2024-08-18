@@ -26,3 +26,9 @@
     width: 100vw;
     z-index: 10;
   }
+  tr, td{
+    padding: .7em;
+  margin: 0;
+  /*border: 1px solid #ccc;*/
+  text-align: center;
+  }
