@@ -3,6 +3,8 @@ import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './shared/header/header.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { DividerModule } from 'primeng/divider';
+import { ProductsReadComponent } from './pages/products-read/products-read.component';
+import { ModalDetailingComponent } from './shared/modal-detailing/modal-detailing.component';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +13,9 @@ import { DividerModule } from 'primeng/divider';
     RouterOutlet,
     HeaderComponent,
     FooterComponent,
-    DividerModule
+    DividerModule,
+    ProductsReadComponent,
+    ModalDetailingComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

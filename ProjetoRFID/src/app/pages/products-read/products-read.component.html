@@ -1,0 +1,90 @@
+<p-card header="Lista de Produtos">
+    <p-table #table [value]="products" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '78rem' }">
+        <ng-template pTemplate="caption">
+            <div class="search-input">
+                <p-iconField iconPosition="left" class="input-icon">
+                    <p-inputIcon>
+                        <i class="pi pi-search"></i>
+                    </p-inputIcon>
+                    <input type="text" pInputText (input)="table.filterGlobal($event.target, 'contains')"
+                        placeholder="Buscar">
+                </p-iconField>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 15%;">Nome</th>
+                <th style="width: 10%;">Peso</th>
+                <th style="width: 15%;">Embalagem</th>
+                <th style="width: 8%;">Quantidade</th>
+                <th style="width: 12%;">Preço</th>
+                <th style="width: 8%;">Unidade de medida</th>
+                <th style="width: 8%;">Nº de lote</th>
+                <th style="width: 5%;">Ações</th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.weight }}</td>
+                <td>{{ product.packingType }}</td>
+                <td>{{ product.quantity }}</td>
+                <td>R${{ product.price }}</td>
+                <td>{{ product.unitMeasurement }}</td>
+                <td>{{ product.batchNumber }}</td>
+                <td>
+                    <button type="button" pButton pRipple icon="pi pi-ellipsis-v" (click)="viewProduct(product)">
+                    </button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="8">Nenhum produto cadastrado.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+<p-tieredMenu #menu [model]="actions" [popup]="true" />
+
+<!-- Modal -->
+<div *ngIf="isModalOpen" class="overlay" (click)="closeModal()"></div>
+<div *ngIf="isModalOpen" class="modal">
+    <p-table [tableStyle]="{ 'min-width': '95rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <td>Nome</td>
+                <td>Id</td>
+                <td>Id|Categoria</td>
+                <td>Id|Fornecedor</td>
+                <td>Etiqueta</td>
+                <td>Descrição</td>
+                <td>Peso</td>
+                <td>Fabricacao</td>
+                <td>Validade</td>
+                <td>Und/Medida</td>
+                <td>Embalagem</td>
+                <td>Lote</td>
+                <td>Quantidade</td>
+                <td>Preço</td>
+            </tr>
+            <tr>
+                <td>{{selectedProduct.name}}</td>
+                <td>{{selectedProduct.id}}</td>
+                <td>{{selectedProduct.categoryId}}</td>
+                <td>{{selectedProduct.supplierId}}</td>
+                <td>{{selectedProduct.tagId}}</td>
+                <td>{{selectedProduct.description}}</td>
+                <td>{{selectedProduct.weight}}</td>
+                <td>{{selectedProduct.manufacDate}}</td>
+                <td>{{selectedProduct.dueDate}}</td>
+                <td>{{selectedProduct.unitMeasurement}}</td>
+                <td>{{selectedProduct.packingType}}</td>
+                <td>{{selectedProduct.batchNumber}}</td>
+                <td>{{selectedProduct.quantity}}</td>
+                <td>{{selectedProduct.price}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
