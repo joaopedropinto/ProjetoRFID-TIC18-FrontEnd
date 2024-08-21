@@ -48,8 +48,6 @@ export class Products {
   }
 
   getProducts() {
-    console.log(this );
-    
     return Promise.resolve(this.getProductsData());
   }
 };

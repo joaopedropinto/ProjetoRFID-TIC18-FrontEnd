@@ -40,7 +40,7 @@ import { elementAt } from 'rxjs';
 export class ProductsReadComponent implements OnInit {
   
   isModalOpen = false;
-  products!: Product[];
+  products!: any[];
   selectedProduct: any = [];
   actions!: MenuItem[];
   mostrar: boolean = true;
