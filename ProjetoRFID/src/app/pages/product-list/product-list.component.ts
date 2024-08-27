@@ -132,6 +132,10 @@ export class ProductListComponent implements OnInit {
     this.visibleDialog = true;
   }
 
+  closeModal() {
+    this.visibleDialog = false;
+  }
+
   deleteProduct(product: Product) {
      this.productService.deleteProduct(product).subscribe(() => {
        this.products = this.products.filter(p => p.id!== product.id);

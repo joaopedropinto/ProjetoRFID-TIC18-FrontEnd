@@ -71,6 +71,7 @@ header="Detalhes do produto"
 [resizable]="false"
 [style]="{ width: '35vw' }">
     <ul class="productDetails" *ngIf="selectedProduct">
+        <li><b>RFID: </b>{{ selectedProduct.rfidTag }}</li>
         <li><b>Nome: </b>{{ selectedProduct.name }}</li>
         <li><b>Categoria: </b>{{ selectedProductCategory.name }}</li>
         <li><b>Peso: </b>{{ selectedProduct.weight }}</li>
@@ -84,4 +85,7 @@ header="Detalhes do produto"
         <li><b>Fornecedor: </b>{{ selectedProductSupplier.name }}</li>
         <li><b>Descrição: </b>{{ selectedProduct.description }}</li>
     </ul>
+    <div class="confirmDialogButton">
+        <p-button (onClick)="closeModal()">OK</p-button>
+    </div>
 </p-dialog>
