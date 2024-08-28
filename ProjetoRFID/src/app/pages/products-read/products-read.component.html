@@ -2,6 +2,10 @@
     <p-table #table [value]="products" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '78rem' }">
         <ng-template pTemplate="caption">
             <div class="search-input">
+                <button type="button" [rounded]="true" pButton pRipple icon="pi pi-refresh" severity="secondary" [raised]="true" [text]="true" iconPosition="left">
+                </button>
+                <button type="button" [rounded]="true" pButton pRipple icon="pi pi-history" severity="secondary" [raised]="true" [text]="true" iconPosition="left">
+                </button>
                 <p-iconField iconPosition="left" class="input-icon">
                     <p-inputIcon>
                         <i class="pi pi-search"></i>
@@ -34,7 +38,7 @@
                 <td>{{ product.unitMeasurement }}</td>
                 <td>{{ product.batchNumber }}</td>
                 <td>
-                    <button type="button" pButton pRipple icon="pi pi-ellipsis-v" (click)="viewProduct(product)">
+                    <button type="button" [rounded]="true" pButton pRipple icon="pi pi-search" severity="secondary" [raised]="true" [text]="true" (click)="viewProduct(product)">
                     </button>
                 </td>
             </tr>
@@ -54,20 +58,20 @@
     <p-table [tableStyle]="{ 'min-width': '95rem' }">
         <ng-template pTemplate="header">
             <tr>
-                <td>Nome</td>
-                <td>Id</td>
-                <td>Id|Categoria</td>
-                <td>Id|Fornecedor</td>
-                <td>Etiqueta</td>
-                <td>Descrição</td>
-                <td>Peso</td>
-                <td>Fabricacao</td>
-                <td>Validade</td>
-                <td>Und/Medida</td>
-                <td>Embalagem</td>
-                <td>Lote</td>
-                <td>Quantidade</td>
-                <td>Preço</td>
+                <th>Nome</th>
+                <th>Id</th>
+                <th>Id|Categoria</th>
+                <th>Id|Fornecedor</th>
+                <th>Etiqueta</th>
+                <th>Descrição</th>
+                <th>Peso</th>
+                <th>Fabricacao</th>
+                <th>Validade</th>
+                <th>Und/Medida</th>
+                <th>Embalagem</th>
+                <th>Lote</th>
+                <th>Quantidade</th>
+                <th>Preço</th>
             </tr>
             <tr>
                 <td>{{selectedProduct.name}}</td>
@@ -87,4 +91,6 @@
             </tr>
         </ng-template>
     </p-table>
+    <hr>
+    <p-button label="Ok" [raised]="true" severity="secondary" (click)="closeModal()"/>
 </div>
