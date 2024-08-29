@@ -1,7 +1,7 @@
 export interface Product {
-    id?: number;
-    idCategory: number;
-    idSupplier: number;
+    id?: string;
+    idCategory: string;
+    idSupplier: string;
     name: string;
     rfidTag?: string;
     description?: string;
