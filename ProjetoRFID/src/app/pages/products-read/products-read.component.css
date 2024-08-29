@@ -1,29 +1,18 @@
 .search-input {
   display: flex;
-  margin-left: 72vw;
-  justify-items: left;
+  flex-direction: row;
+  justify-content:space-between;
   gap: 1vw;
+}
+div.lateral-buttons{
+  display: flex;
+  gap: 2vb;
+}
+.search-input p-iconField{
+justify-self: right;
 }
 .input-icon {
   gap: 1vw;
-}
-.modal {
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px #333;
-  min-width: fit-content;
-  position: fixed;
-  left: 50%;
-  padding-top: 5vh;
-  padding-left: 5vb;
-  padding-right: 2vb;
-  padding-bottom: 1vw;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 11;
-  max-width: 90vw;
-  text-align: left;
-  justify-items: right;
 }
 .overlay {
   background: #000;
@@ -45,4 +34,7 @@ text-align: left;
   display: flex;
   flex-direction: row-reverse;
   margin-top: 2.5rem;
+}
+.p-table{
+  width: 100%;
 }

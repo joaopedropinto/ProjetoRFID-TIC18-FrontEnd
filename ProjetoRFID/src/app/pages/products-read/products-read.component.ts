@@ -16,6 +16,8 @@ import { ModalDetailingComponent } from '../../shared/modal-detailing/modal-deta
 import { CommonModule } from '@angular/common';
 import { Product } from '../../models/product.model';
 import { Dialog, DialogModule } from 'primeng/dialog';
+import { Route, Router } from '@angular/router';
+import { routes } from '../../app.routes';
 @Component({
   selector: 'app-products-read',
   standalone: true,
@@ -48,10 +50,9 @@ export class ProductsReadComponent implements OnInit {
   selectedProduct: any = [];
   actions!: MenuItem[];
   mostrar: boolean = true;
-  constructor(
-    private Products: Products,
+  constructor(private Products: Products,private router: Router
   ) { }
-
+  
   ngOnInit(): void {
     this.Products.getProducts().then((data) => {
       console.log(data);
@@ -102,5 +103,22 @@ export class ProductsReadComponent implements OnInit {
   closeModal() {
     this.visibleDialog = false; // Fecha o modal
     this.selectedProduct = null;
+  }
+  
+  globalFilter(table: any, event: Event) {
+    const input = event.target as HTMLInputElement;
+    table.filterGlobal(input.value, 'contains');
+  }
+  
+  recarregarPagina() {
+    // Define o delay em milissegundos (2000 ms = 2 segundos)
+    const delay = 500;
+    // Adiciona um delay antes de recarregar a rota
+    setTimeout(() => {
+      const currentUrl = this.router.url;
+      this.router.navigate([currentUrl]).then(() => {
+        console.log("Página Recarregada");
+      });
+    }, delay);
   }
 }

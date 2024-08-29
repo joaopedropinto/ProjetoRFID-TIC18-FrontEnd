@@ -33,7 +33,7 @@ export class Products {
         unitMeasurement: 'gramas',
         packingType: 'Plástico',
         batchNumber: 'CHOCO240813A',
-        quantity: 100,
+        quantity: 90,
         price: 8.99
       }
     ];
