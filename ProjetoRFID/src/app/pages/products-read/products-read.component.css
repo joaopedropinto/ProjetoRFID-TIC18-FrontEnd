@@ -8,17 +8,19 @@
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 8px #333;
-  min-width: 320px;
+  min-width: fit-content;
   position: fixed;
   left: 50%;
-  padding-top: 1vh;
-  padding-left: 0.1vw;
-  padding-right: 0.1vw;
-  padding-bottom: 0.5vw;
+  padding-top: 5vh;
+  padding-left: 5vb;
+  padding-right: 2vb;
+  padding-bottom: 1vw;
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 11;
   max-width: 90vw;
+  text-align: left;
+  justify-items: right;
 }
 .overlay {
   background: #000;
@@ -36,9 +38,8 @@ margin: 0;
 /*border: 1px solid #ccc;*/
 text-align: left;
 }
-div.modal th{
-  text-align: center;
-}
-div.modal p-button{
-  margin-left: 40vw;
+.confirmDialogButton {
+  display: flex;
+  flex-direction: row-reverse;
+  margin-top: 2.5rem;
 }

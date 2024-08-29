@@ -15,6 +15,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ModalDetailingComponent } from '../../shared/modal-detailing/modal-detailing.component';
 import { CommonModule } from '@angular/common';
 import { Product } from '../../models/product.model';
+import { Dialog, DialogModule } from 'primeng/dialog';
 @Component({
   selector: 'app-products-read',
   standalone: true,
@@ -30,14 +31,16 @@ import { Product } from '../../models/product.model';
     ConfirmDialogModule,
     ToastModule,
     ModalDetailingComponent,
-    CommonModule
+    CommonModule,
+    DialogModule
   ],
   providers: [ConfirmationService, MessageService, Products],
   templateUrl: './products-read.component.html',
   styleUrl: './products-read.component.css'
 })
 export class ProductsReadComponent implements OnInit {
-
+  
+  visibleDialog: boolean = false;
   FormatedManufacDate: any;
   FormatedDueDate: any;
   isModalOpen = false;
@@ -93,11 +96,11 @@ export class ProductsReadComponent implements OnInit {
     this.FormatedDueDate = this.formatDate(this.selectedProduct.dueDate.toDateString());
     console.log(this.FormatedManufacDate) // verificando se a  a data de fabricação foi selecionada e formatada
     console.log(this.FormatedDueDate) // verificando se a  a data de validade foi selecionada e formatada
-    this.isModalOpen = true;  // Abre o modal
+    this.visibleDialog = true; // Abre o modal
   }
 
   closeModal() {
-    this.isModalOpen = false;  // Fecha o modal
+    this.visibleDialog = false; // Fecha o modal
     this.selectedProduct = null;
   }
 }
