@@ -1,6 +1,7 @@
-<p-card header="Lista de Produtos">
+<p-card header="Produtos Lidos">
   <p-table
     #table
+    [globalFilterFields]="['name', 'packingType', 'unitMeasurement', 'batchNumber']"
     [value]="products"
     [paginator]="true"
     [rows]="10"
@@ -8,16 +9,19 @@
   >
     <ng-template pTemplate="caption">
       <div class="search-input">
+        <div class="lateral-buttons">
+        <p-button [rounded]="true" severity="secondary" [raised] = "true"  (onClick)="recarregarPagina()">Recarregar</p-button>
+        <p-button [rounded]="true" severity="primary" [raised] = "true"  (onClick)="closeModal()">Salvar</p-button>
+        </div>
         <p-iconField iconPosition="left" class="input-icon">
           <p-inputIcon>
             <i class="pi pi-search"></i>
           </p-inputIcon>
-          <input
+          <input 
             type="text"
             pInputText
-            (input)="table.filterGlobal($event.target, 'contains')"
-            placeholder="Buscar"
-          />
+            (input)="globalFilter(table, $event)"
+            placeholder="Buscar">
         </p-iconField>
       </div>
     </ng-template>
@@ -47,7 +51,14 @@
             type="button"
             pButton
             pRipple
-            icon="pi pi-ellipsis-v"
+            pTooltip="Visualizar"
+            tooltipPosition="bottom"
+            showDelay="1000" 
+            hideDelay="300"
+            icon="pi pi-eye"
+            [rounded]="true"
+            text="true"
+            severity="secondary"
             (click)="viewProduct(product)"
           ></button>
         </td>
