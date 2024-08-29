@@ -2,10 +2,6 @@
     <p-table #table [value]="products" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '78rem' }">
         <ng-template pTemplate="caption">
             <div class="search-input">
-                <button type="button" [rounded]="true" pButton pRipple icon="pi pi-refresh" severity="secondary" [raised]="true" [text]="true" iconPosition="left">
-                </button>
-                <button type="button" [rounded]="true" pButton pRipple icon="pi pi-history" severity="secondary" [raised]="true" [text]="true" iconPosition="left">
-                </button>
                 <p-iconField iconPosition="left" class="input-icon">
                     <p-inputIcon>
                         <i class="pi pi-search"></i>
@@ -25,7 +21,6 @@
                 <th style="width: 8%;">Unidade de medida</th>
                 <th style="width: 8%;">Nº de lote</th>
                 <th style="width: 5%;">Ações</th>
-
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-product>
@@ -38,7 +33,7 @@
                 <td>{{ product.unitMeasurement }}</td>
                 <td>{{ product.batchNumber }}</td>
                 <td>
-                    <button type="button" [rounded]="true" pButton pRipple icon="pi pi-search" severity="secondary" [raised]="true" [text]="true" (click)="viewProduct(product)">
+                    <button type="button" pButton pRipple icon="pi pi-ellipsis-v" (click)="viewProduct(product)">
                     </button>
                 </td>
             </tr>

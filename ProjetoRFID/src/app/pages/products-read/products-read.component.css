@@ -1,51 +1,37 @@
 .search-input {
-    display: flex;
-    margin-left: 72vw;
-    justify-items: left;
-    gap: 1vw;
-  }
+  display: flex;
+}
 .input-icon {
-    gap: 1vw;
+  margin-left: auto;
 }
 .modal {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px #333;
-    min-width: 320px;
-    position: fixed;
-    left: 50%;
-    padding: 2vw;
-    padding-bottom: 0.5vw;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 11;
-    max-width: 90vw;
-  }
-  .overlay {
-    background: #000;
-    height: 100vh;
-    left: 0;
-    opacity: 0.5;
-    position: fixed;
-    top: 0;
-    width: 100vw;
-    z-index: 10;
-  }
-  tr, td, th{
-    padding: .7em;
-  margin: 0;
-  /*border: 1px solid #ccc;*/
-  text-align: center;
-  }
-  hr {
-    display: block;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-    margin-left: auto;
-    margin-right: auto;
-    border-style: inset;
-    border-width: 1px;
-  }
-  div.modal p-button{
-    margin-left: 40vw;
-  }
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #333;
+  min-width: 320px;
+  position: fixed;
+  left: 50%;
+  padding: 24px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 11;
+}
+.overlay {
+  background: #000;
+  height: 100vh;
+  left: 0;
+  opacity: 0.5;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 10;
+}
+tr, td{
+  padding: .7em;
+margin: 0;
+/*border: 1px solid #ccc;*/
+text-align: center;
+}
+div.modal p-button{
+  margin-left: 40vw;
+}
