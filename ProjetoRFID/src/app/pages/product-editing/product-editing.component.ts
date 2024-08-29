@@ -45,7 +45,7 @@ export class ProductEditingComponent implements OnInit {
 
   productForm!: FormGroup;
 
-  private productId!: number;
+  private productId!: string;
   productManuFacDate!: Date;
   productDueDate!: Date;
 
@@ -93,7 +93,7 @@ export class ProductEditingComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.productId = parseInt(this.route.snapshot.paramMap.get('id')!);
+    this.productId = this.route.snapshot.paramMap.get('id')!;
 
     this.categoryService.getCategories().subscribe(response => {
        this.categories = response;

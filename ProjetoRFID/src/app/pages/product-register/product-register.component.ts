@@ -132,6 +132,8 @@ export class ProductRegisterComponent implements OnInit {
       price: this.productForm.get('price')?.value,
     }
 
+    console.log(newProduct);
+
     if(this.productForm.valid) {
       this.productService.postProduct(newProduct).subscribe(() => {
         this.messageService.add({ severity:'success', summary: 'Sucesso', detail: 'Produto cadastrado com sucesso!' });
