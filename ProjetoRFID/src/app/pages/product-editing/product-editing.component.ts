@@ -45,7 +45,7 @@ export class ProductEditingComponent implements OnInit {
 
   productForm!: FormGroup;
 
-  private productId!: number;
+  private productId!: string;
   productManuFacDate!: Date;
   productDueDate!: Date;
 
@@ -79,7 +79,6 @@ export class ProductEditingComponent implements OnInit {
       name: [null, [Validators.required]],
       category: [null, [Validators.required]],
       supplier: [null, [Validators.required]],
-      tag: [null, [Validators.required]],
       description: [null, [Validators.required]],
       weight: [null, [Validators.required, Validators.min(0.01)]],
       manufacDate: [null, [Validators.required]],
@@ -93,7 +92,7 @@ export class ProductEditingComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.productId = parseInt(this.route.snapshot.paramMap.get('id')!);
+    this.productId = this.route.snapshot.paramMap.get('id')!;
 
     this.categoryService.getCategories().subscribe(response => {
        this.categories = response;
@@ -113,7 +112,6 @@ export class ProductEditingComponent implements OnInit {
       });
 
       this.productForm.get('name')?.setValue(productResponse.name);
-      this.productForm.get('tag')?.setValue(productResponse.rfidTag);
       this.productForm.get('description')?.setValue(productResponse.description);
       this.productForm.get('weight')?.setValue(productResponse.weight);
       this.productForm.get('manufacDate')?.setValue(new Date(productResponse.manufacDate));
@@ -154,7 +152,6 @@ export class ProductEditingComponent implements OnInit {
       name: this.productForm.get('name')?.value,
       idCategory: this.productForm.get('category')?.value.id,
       idSupplier: this.productForm.get('supplier')?.value.id,
-      rfidTag: this.productForm.get('tag')?.value,
       description: this.productForm.get('description')?.value,
       weight: this.productForm.get('weight')?.value,
       manufacDate: this.productForm.get('manufacDate')?.value.toISOString(),
