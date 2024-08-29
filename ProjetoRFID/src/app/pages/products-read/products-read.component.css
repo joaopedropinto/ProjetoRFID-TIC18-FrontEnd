@@ -1,8 +1,11 @@
 .search-input {
   display: flex;
+  margin-left: 72vw;
+  justify-items: left;
+  gap: 1vw;
 }
 .input-icon {
-  margin-left: auto;
+  gap: 1vw;
 }
 .modal {
   background: #fff;
@@ -11,10 +14,12 @@
   min-width: 320px;
   position: fixed;
   left: 50%;
-  padding: 24px;
+  padding: 2vw;
+  padding-bottom: 0.5vw;
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 11;
+  max-width: 90vw;
 }
 .overlay {
   background: #000;
@@ -26,11 +31,20 @@
   width: 100vw;
   z-index: 10;
 }
-tr, td{
+tr, td, th{
   padding: .7em;
 margin: 0;
 /*border: 1px solid #ccc;*/
 text-align: center;
+}
+hr {
+  display: block;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  margin-left: auto;
+  margin-right: auto;
+  border-style: inset;
+  border-width: 1px;
 }
 div.modal p-button{
   margin-left: 40vw;

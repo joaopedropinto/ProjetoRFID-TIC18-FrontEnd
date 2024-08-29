@@ -29,7 +29,7 @@ export class Products {
         description: 'Chocolate ao leite com recheio de caramelo',
         weight: 0.150,
         manufacDate: new Date('2024-08-13'),
-        dueDate: new Date('2025-02-13'),
+        dueDate: new Date('2026-02-13'),
         unitMeasurement: 'gramas',
         packingType: 'Plástico',
         batchNumber: 'CHOCO240813A',

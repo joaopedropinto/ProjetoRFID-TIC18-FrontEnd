@@ -2,6 +2,8 @@
     <p-table #table [value]="products" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '78rem' }">
         <ng-template pTemplate="caption">
             <div class="search-input">
+                <button type="button" [rounded]="true" pButton pRipple icon="pi pi-refresh" severity="secondary" [raised]="true" [text]="true" iconPosition="left"></button>
+                <button type="button" [rounded]="true" pButton pRipple icon="pi pi-history" severity="secondary" [raised]="true" [text]="true" iconPosition="left"></button>
                 <p-iconField iconPosition="left" class="input-icon">
                     <p-inputIcon>
                         <i class="pi pi-search"></i>
@@ -33,8 +35,7 @@
                 <td>{{ product.unitMeasurement }}</td>
                 <td>{{ product.batchNumber }}</td>
                 <td>
-                    <button type="button" pButton pRipple icon="pi pi-ellipsis-v" (click)="viewProduct(product)">
-                    </button>
+                <button type="button" [rounded]="true" pButton pRipple icon="pi pi-eye" severity="secondary" [raised]="true" [text]="true" (click)="viewProduct(product)"></button>
                 </td>
             </tr>
         </ng-template>
@@ -76,8 +77,8 @@
                 <td>{{selectedProduct.tagId}}</td>
                 <td>{{selectedProduct.description}}</td>
                 <td>{{selectedProduct.weight}}</td>
-                <td>{{selectedProduct.manufacDate}}</td>
-                <td>{{selectedProduct.dueDate}}</td>
+                <td>{{FormatedManufacDate}}</td>
+                <td>{{FormatedDueDate}}</td>
                 <td>{{selectedProduct.unitMeasurement}}</td>
                 <td>{{selectedProduct.packingType}}</td>
                 <td>{{selectedProduct.batchNumber}}</td>
