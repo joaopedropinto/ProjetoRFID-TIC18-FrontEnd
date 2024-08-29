@@ -147,15 +147,6 @@
         <div class="row">
             <div class="inputFloatLabel">
                 <p-floatLabel>
-                    <input type="text" pInputText id="tagCode" formControlName="tag" [readOnly]="true"/>
-                    <label for="tagCode">Código da tag</label>
-                </p-floatLabel>
-                <small class="error-message" *ngIf="productForm.get('tag')?.errors && productForm.get('tag')?.touched">
-                    * O código da tag do produto é obrigatório
-                </small>
-            </div>
-            <div class="inputFloatLabel">
-                <p-floatLabel>
                     <p-dropdown 
                     [options]="suppliers" 
                     [showClear]="true"
