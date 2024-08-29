@@ -1,34 +1,45 @@
 .search-input {
-    display: flex;
+  display: flex;
 }
 .input-icon {
-    margin-left: auto;
+  margin-left: auto;
 }
 .modal {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px #333;
-    min-width: 320px;
-    position: fixed;
-    left: 50%;
-    padding: 24px;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 11;
-  }
-  .overlay {
-    background: #000;
-    height: 100vh;
-    left: 0;
-    opacity: 0.5;
-    position: fixed;
-    top: 0;
-    width: 100vw;
-    z-index: 10;
-  }
-  tr, td{
-    padding: .7em;
-  margin: 0;
-  /*border: 1px solid #ccc;*/
-  text-align: center;
-  }
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #333;
+  min-width: fit-content;
+  position: fixed;
+  left: 50%;
+  padding-top: 5vh;
+  padding-left: 5vb;
+  padding-right: 2vb;
+  padding-bottom: 1vw;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 11;
+  max-width: 90vw;
+  text-align: left;
+  justify-items: right;
+}
+.overlay {
+  background: #000;
+  height: 100vh;
+  left: 0;
+  opacity: 0.5;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 10;
+}
+tr, td, th{
+padding: .7em;
+margin: 0;
+/*border: 1px solid #ccc;*/
+text-align: left;
+}
+.confirmDialogButton {
+  display: flex;
+  flex-direction: row-reverse;
+  margin-top: 2.5rem;
+}
