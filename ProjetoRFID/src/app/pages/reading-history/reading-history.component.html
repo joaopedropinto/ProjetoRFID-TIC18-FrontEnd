@@ -1,0 +1,40 @@
+<p-card header="Histórico de Leituras">
+    <p-table
+    #table
+    [value]="readings"
+    [paginator]="true"
+    [rows]="10">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 50%;">
+                    Data e Hora
+                </th>
+                <th style="width: 25%;">
+                    Quant. de Produtos
+                </th>
+                <th style="width: 5%;">Ações</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-readout>
+            <tr>
+                <td>{{ formatDateTime(readout.readoutDate) }}</td>
+                <td>{{ readout.tags.length }}</td>
+                <td>
+                    <p-button 
+                    icon="pi pi-eye"
+                    [rounded]="true"
+                    [text]="true"
+                    pTooltip="Visualizar"
+                    tooltipPosition="bottom"
+                    (onClick)="setSelectedReadout(readout);"
+                    />
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="3">Nenhuma leitura encontrada.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
