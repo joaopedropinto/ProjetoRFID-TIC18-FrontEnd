@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
+import { ReadProductsService } from '../../services/read-service/read-products.service';
 import { Products } from '../../services/read-service/Products.service';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
@@ -50,14 +51,15 @@ export class ProductsReadComponent implements OnInit {
   selectedProduct: any = [];
   actions!: MenuItem[];
   mostrar: boolean = true;
-  constructor(private Products: Products,private router: Router
+  constructor(private Products: ReadProductsService,private router: Router
   ) { }
   
   ngOnInit(): void {
-    this.Products.getProducts().then((data) => {
-      console.log(data);
-      this.products = data;
+    this.Products.getProductsByTagRfids().subscribe((response) => {
+      this.products = response;
+      console.log(this.products)
     });
+    console.log(this.products)
   }
   formatDate(dateString: String): string {
     // Regex para extrair o dia, mês e ano da string
