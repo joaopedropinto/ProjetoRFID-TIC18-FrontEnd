@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Product } from '../../models/product.model';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +13,18 @@ export class ReadProductsService {
 
   constructor(private http: HttpClient) { }
 
-  getProductsByTagRfids(page: number = 1, itemsPerPage: number = 10): Observable<Product[]> {
+  getProductsByTagRfids(page: number = 1, itemsPerPage: number = 10): Observable<{ products: Product[], notFoundResponses: any[] }> {
     const params = new HttpParams()
       .set('page', page.toString())
       .set('itemsPerPage', itemsPerPage.toString());
 
-    return this.http.get<Product[]>(`${this.apiUrl}/Product/get-products-by-rfids`, { params });
+    return this.http.get<{ products: Product[], notFoundResponses: any[] }>(`${this.apiUrl}/Product/get-products-by-rfids`, { params })
+      .pipe(
+        map(response => {
+          const products = response.products || [];
+          const notFoundResponses = response.notFoundResponses || [];
+          return { products, notFoundResponses };
+        })
+      );
   }
 }

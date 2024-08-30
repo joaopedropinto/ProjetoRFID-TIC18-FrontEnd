@@ -18,6 +18,11 @@ import { Product } from '../../models/product.model';
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { Route, Router } from '@angular/router';
 import { routes } from '../../app.routes';
+
+interface ProductResponse {
+  products: any[];
+  notFoundResponses: any[];
+}
 @Component({
   selector: 'app-products-read',
   standalone: true,
@@ -50,15 +55,14 @@ export class ProductsReadComponent implements OnInit {
   selectedProduct: any = [];
   actions!: MenuItem[];
   mostrar: boolean = true;
-  constructor(private Products: ReadProductsService,private router: Router
-  ) { }
-  
+  constructor(private Products: ReadProductsService, private router: Router) { }
+
   ngOnInit(): void {
-    this.Products.getProductsByTagRfids().subscribe((response) => {
-      this.products = response;
-      console.log(this.products)
+    this.Products.getProductsByTagRfids().subscribe((response: ProductResponse) => {
+      this.products = response.products;
+      console.log(this.products);
     });
-    console.log(this.products)
+    console.log(this.products);
   }
   formatDate(dateString: String): string {
     // Regex para extrair o dia, mês e ano da string
