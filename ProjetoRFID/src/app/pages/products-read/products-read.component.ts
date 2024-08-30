@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { ReadProductsService } from '../../services/read-service/read-products.service';
-import { Products } from '../../services/read-service/Products.service';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
@@ -37,7 +36,7 @@ import { routes } from '../../app.routes';
     CommonModule,
     DialogModule
   ],
-  providers: [ConfirmationService, MessageService, Products],
+  providers: [ConfirmationService, MessageService],
   templateUrl: './products-read.component.html',
   styleUrl: './products-read.component.css'
 })
