@@ -10,8 +10,22 @@
     <ng-template pTemplate="caption">
       <div class="search-input">
         <div class="lateral-buttons">
-        <p-button [rounded]="true" severity="secondary" [raised] = "true"  (onClick)="recarregarPagina()">Recarregar</p-button>
-        <p-button [rounded]="true" severity="primary" [raised] = "true"  (onClick)="closeModal()">Salvar</p-button>
+          <p-button 
+            [rounded]="true" 
+            severity="secondary" 
+            [raised]="true"  
+            (onClick)="recarregarPagina()"
+          >
+            Recarregar
+          </p-button>
+          <p-button 
+            [rounded]="true" 
+            severity="primary" 
+            [raised]="true"  
+            (onClick)="closeModal()"
+          >
+            Salvar
+          </p-button>
         </div>
         <p-iconField iconPosition="left" class="input-icon">
           <p-inputIcon>
@@ -21,7 +35,8 @@
             type="text"
             pInputText
             (input)="globalFilter(table, $event)"
-            placeholder="Buscar">
+            placeholder="Buscar"
+          >
         </p-iconField>
       </div>
     </ng-template>
@@ -71,31 +86,34 @@
     </ng-template>
   </p-table>
 </p-card>
+
 <p-tieredMenu #menu [model]="actions" [popup]="true" />
+
 <p-dialog
-header="Detalhes do produto"
-[(visible)]="visibleDialog"
-[modal]="true"
-[draggable]="false"
-[resizable]="false"
-[style]="{ width: '40vw' }">
-    <ul class="productDetails" *ngIf="selectedProduct">
-        <li><b>Nome: </b>{{ selectedProduct.name }}</li>
-        <li><b>Id: </b>{{ selectedProduct.id }}</li>
-        <li><b>Id|Categoria: </b>{{selectedProduct.categoryId}}</li>
-        <li><b>Id|Fornecedor: </b>{{selectedProduct.supplierId}}</li>
-        <li><b>Etiqueta: </b>{{selectedProduct.tagId}}</li>
-        <li><b>Descrição: </b>{{selectedProduct.description}}</li>
-        <li><b>Peso: </b>{{ selectedProduct.weight }}</li>
-        <li><b>Data de fabricação: </b>{{ FormatedManufacDate }}</li>
-        <li><b>Data de validade: </b>{{ FormatedDueDate }}</li>
-        <li><b>Unid/Medida: </b>{{ selectedProduct.unitMeasurement }}</li>
-        <li><b>Embalagem: </b>{{ selectedProduct.packingType }}</li>
-        <li><b>Lote: </b>{{ selectedProduct.batchNumber }}</li>
-        <li><b>Quantidade: </b>{{ selectedProduct.quantity }}</li>
-        <li><b>Preço: </b>R${{ selectedProduct.price }}</li>
-    </ul>
-    <div class="confirmDialogButton">
-        <p-button (onClick)="closeModal()">OK</p-button>
-    </div>
+  header="Detalhes do produto"
+  [(visible)]="visibleDialog"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '40vw' }"
+>
+  <ul class="productDetails" *ngIf="selectedProduct">
+    <li><b>Nome: </b>{{ selectedProduct.name }}</li>
+    <li><b>Id: </b>{{ selectedProduct.id }}</li>
+    <li><b>Id|Categoria: </b>{{ selectedProduct.idCategory }}</li>
+    <li><b>Id|Fornecedor: </b>{{ selectedProduct.idSupplier }}</li>
+    <li><b>Etiqueta: </b>{{ selectedProduct.rfidTag }}</li>
+    <li><b>Descrição: </b>{{ selectedProduct.description }}</li>
+    <li><b>Peso: </b>{{ selectedProduct.weight }}</li>
+    <li><b>Data de fabricação: </b>{{ FormatedManufacDate }}</li>
+    <li><b>Data de validade: </b>{{ FormatedDueDate }}</li>
+    <li><b>Unid/Medida: </b>{{ selectedProduct.unitMeasurement }}</li>
+    <li><b>Embalagem: </b>{{ selectedProduct.packingType }}</li>
+    <li><b>Lote: </b>{{ selectedProduct.batchNumber }}</li>
+    <li><b>Quantidade: </b>{{ selectedProduct.quantity }}</li>
+    <li><b>Preço: </b>R${{ selectedProduct.price }}</li>
+  </ul>
+  <div class="confirmDialogButton">
+    <p-button (onClick)="closeModal()">OK</p-button>
+  </div>
 </p-dialog>

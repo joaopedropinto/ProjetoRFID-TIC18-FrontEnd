@@ -23,7 +23,24 @@ export class ReadProductsService {
         map(response => {
           const products = response.products || [];
           const notFoundResponses = response.notFoundResponses || [];
-          return { products, notFoundResponses };
+          const adaptedProducts: Product[] = notFoundResponses.map(tag => ({
+            id: undefined,  
+            idCategory: 'unknown', 
+            idSupplier: 'unknown', 
+            name: tag.message,
+            rfidTag: tag.rfidTag,
+            description: '',
+            weight: 0,
+            manufacDate: new Date(), 
+            dueDate: new Date(), 
+            unitMeasurement: '', 
+            packingType: '', 
+            batchNumber: '', 
+            quantity: 0,
+            price: 0
+          }));
+          const allProducts = [...products, ...adaptedProducts];
+          return { products: allProducts, notFoundResponses };
         })
       );
   }
