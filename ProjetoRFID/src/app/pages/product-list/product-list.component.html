@@ -10,6 +10,13 @@
     [globalFilterFields]="['name', 'packingType', 'unitMeasurement', 'batchNumber']">
         <ng-template pTemplate="caption">
             <div class="search-input">
+                <p-button 
+                label="Novo Produto"
+                icon="pi pi-plus"
+                [rounded]="true"
+                [text]="true"
+                routerLink='/produtos/cadastrar'>
+                </p-button>
                 <p-iconField iconPosition="left" class="input-icon">
                     <p-inputIcon>
                         <i class="pi pi-search"></i>
@@ -20,7 +27,9 @@
                     (input)="globalFilter(table, $event)"
                     placeholder="Buscar">
                 </p-iconField>
+                
             </div>
+          
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
