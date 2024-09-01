@@ -22,11 +22,8 @@ export class SidebarComponent {
     {
       label: 'Produtos',
       icon: 'pi pi-box',
-      items: [
-        { label: 'Cadastrar', icon: 'pi pi-plus', routerLink: ['/produtos/cadastrar'], command: () => { this.sidebarVisible = false } },
-        { label: 'Listar', icon: 'pi pi-list', routerLink: ['/produtos'], command: () => { this.sidebarVisible = false } },
-      ]
-    },
+      routerLink: ['/produtos'],
+      command: () => { this.sidebarVisible = false } },
     {
       label: 'Leituras',
       icon: 'pi pi-barcode',
