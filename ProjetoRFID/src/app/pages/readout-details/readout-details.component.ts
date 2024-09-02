@@ -17,6 +17,7 @@ import { RippleModule } from 'primeng/ripple';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-readout-details',
@@ -31,7 +32,8 @@ import { IconFieldModule } from 'primeng/iconfield';
     RippleModule,
     InputTextModule,
     InputIconModule,
-    IconFieldModule
+    IconFieldModule,
+    TooltipModule
   ],
   templateUrl: './readout-details.component.html',
   styleUrl: './readout-details.component.css'
