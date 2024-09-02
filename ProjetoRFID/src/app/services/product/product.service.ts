@@ -25,6 +25,11 @@ export class ProductService {
     return this.http.get<Product>(`${this.apiUrl}/Product/${id}`);
   }
 
+  getProductByRfid(rfid: string): Observable<Product> {
+    const params = new HttpParams().set('RfidTag', rfid);
+    return this.http.get<Product>(`${this.apiUrl}/Product/get-product-by-rfid`, { params });
+  }
+
   postProduct(product: Product): Observable<Product> {
     return this.http.post<Product>(`${this.apiUrl}/Product`, product);
   }

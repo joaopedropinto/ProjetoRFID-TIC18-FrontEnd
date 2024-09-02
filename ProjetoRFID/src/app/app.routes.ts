@@ -4,6 +4,7 @@ import { ProductRegisterComponent } from './pages/product-register/product-regis
 import { ProductsReadComponent} from './pages/products-read/products-read.component';
 import { Routes } from '@angular/router';
 import { ReadingHistoryComponent } from './pages/reading-history/reading-history.component';
+import { ReadoutDetailsComponent } from './pages/readout-details/readout-details.component';
 
 export const routes: Routes = [
     { path: 'produtos/cadastrar', component: ProductRegisterComponent },
@@ -11,4 +12,5 @@ export const routes: Routes = [
     { path: 'produto/editar/:id', component: ProductEditingComponent },
     { path: 'leituras/realizar', component: ProductsReadComponent},
     { path: 'leituras/historico', component: ReadingHistoryComponent },
+    { path: 'leituras/historico/:id', component: ReadoutDetailsComponent },
 ];
