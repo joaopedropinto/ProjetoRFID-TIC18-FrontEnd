@@ -1,0 +1,20 @@
+.productDetails {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.75rem;
+}
+
+.confirmDialogButton {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-top: 2.5rem;
+}
+
+.search-input {
+    display: flex;
+}
+
+.input-icon {
+    margin-left: auto;
+}

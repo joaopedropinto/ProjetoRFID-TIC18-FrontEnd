@@ -8,6 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { DatePipe } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reading-history',
@@ -36,7 +37,8 @@ export class ReadingHistoryComponent implements OnInit {
   
   constructor(
     private readingService: ReadingService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private router: Router
   ) { }
   
   ngOnInit(): void {
@@ -48,6 +50,7 @@ export class ReadingHistoryComponent implements OnInit {
 
   setSelectedReadout(readout: Readout) {
     this.selectedReadout = readout;
+    this.router.navigate([`leituras/historico/${this.selectedReadout.id}`]);
   }
 
   formatDateTime(date: Date) {

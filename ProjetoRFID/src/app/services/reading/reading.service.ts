@@ -16,4 +16,8 @@ export class ReadingService {
   getAllReadings(): Observable<Readout[]> {
     return this.http.get<Readout[]>(`${this.apiUrl}/Readout`);
   }
+
+  getReadoutById(id: string): Observable<Readout> {
+    return this.http.get<Readout>(`${this.apiUrl}/Readout/${id}`);
+  }
 }
