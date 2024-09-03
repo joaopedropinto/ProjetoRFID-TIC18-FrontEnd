@@ -17,6 +17,9 @@ import { CommonModule } from '@angular/common';
 import { Product } from '../../models/product.model';
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { Router } from '@angular/router';
+import { formatDate } from '@angular/common';
+import { Message } from 'primeng/api';
+import { MessagesModule } from 'primeng/messages';
 
 @Component({
   selector: 'app-products-read',
@@ -34,14 +37,17 @@ import { Router } from '@angular/router';
     ToastModule,
     ModalDetailingComponent,
     CommonModule,
-    DialogModule
+    DialogModule,
+    MessagesModule
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './products-read.component.html',
   styleUrls: ['./products-read.component.css']
 })
 export class ProductsReadComponent implements OnInit {
-  
+  messages: Message[] = [];
+  NonProductTags: string[] = [];
+  History: String[] = [];
   visibleDialog: boolean = false;
   FormatedManufacDate: string = '';
   FormatedDueDate: string = '';
@@ -59,35 +65,39 @@ export class ProductsReadComponent implements OnInit {
       console.log(this.products);
     });
   }
-
-  formatDate(dateString: string): string {
-    // Regex para extrair o dia, mês e ano da string
-    const regex = /(\d{2})\/(\d{2})\/(\d{4})/;
-    const match = dateString.match(regex);
-
-    if (!match) {
-      throw new Error("Formato de data inválido");
-    }
-    const day = match[1];
-    const month = match[2];
-    const year = match[3];
-
-    return `${day}/${month}/${year}`;
-  }
-
+  
   viewProduct(product: Product) {
     console.log("viewProduct Processes");
     this.selectedProduct = product;
     console.log(this.selectedProduct); // verificando se o produto foi selecionado
     if (this.selectedProduct) {
-      this.FormatedManufacDate = this.formatDate(this.selectedProduct.manufacDate.toDateString());
-      this.FormatedDueDate = this.formatDate(this.selectedProduct.dueDate.toDateString());
+      this.FormatedManufacDate = this.selectedProduct.manufacDate.toString();
+      this.FormatedDueDate = this.selectedProduct.dueDate.toString();
     }
     console.log(this.FormatedManufacDate); // verificando se a data de fabricação foi selecionada e formatada
     console.log(this.FormatedDueDate); // verificando se a data de validade foi selecionada e formatada
     this.visibleDialog = true; // Abre o modal
   }
+  saveHistory(){
+    this.products.forEach(async product => {
+      let verify = await this.productsService.getProductsByTag(product.rfidTag!);
+      if(verify == '200'){
+        this.History.push(product.rfidTag!);
+      }
+      if(verify != '200'){
+        this.NonProductTags.push(product.rfidTag!);
+      }
+    });
+    console.log("Tags com items: ",this.History);
+    console.log("Tags sem items: ",this.NonProductTags);
+    console.log(this.NonProductTags.length);
+    if(this.NonProductTags.length != 0){
+      this.enviarReadout(this.History);
+    }else{
+      this.Message();
+    }
 
+  }
   closeModal() {
     this.visibleDialog = false; // Fecha o modal
     this.selectedProduct = null;
@@ -103,10 +113,32 @@ export class ProductsReadComponent implements OnInit {
     const delay = 500;
     // Adiciona um delay antes de recarregar a rota
     setTimeout(() => {
-      const currentUrl = this.router.url;
-      this.router.navigate([currentUrl]).then(() => {
+      // Obtém a URL atual
+    const currentUrl = this.router.url;
+    // Navega para a rota 'refresh' (navega para a mesma rota e então recarrega)
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate([currentUrl]);
         console.log("Página Recarregada");
       });
     }, delay);
   }
+  enviarReadout(tag_list: String[]) {
+    const readoutDate = new Date().toISOString(); // Data atual formatada como ISO string
+    const tags = tag_list; // Substitua pelas tags reais
+    this.productsService.postReadout(readoutDate, tags)
+      .subscribe({
+        next: (response) => {
+          console.log('Sucesso:', response);
+        },
+        error: (error) => {
+          console.error('Erro:', error);
+        }
+      });
+  }
+  Message() {
+    
+    this.messages = [
+      { severity: 'error', detail: `Não foi possivel salvar a leitura alguma tag apresenta um produto não cadastrado`}
+    ];
+}
 }

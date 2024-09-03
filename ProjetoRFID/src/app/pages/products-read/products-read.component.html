@@ -1,29 +1,16 @@
+<div class="card">
+  <p-messages [(value)]="messages" [enableService]="false" />
+</div>
 <p-card header="Produtos Lidos">
-  <p-table
-    #table
-    [globalFilterFields]="['name', 'packingType', 'unitMeasurement', 'batchNumber']"
-    [value]="products"
-    [paginator]="true"
-    [rows]="10"
-    [tableStyle]="{ 'min-width': '78rem' }"
-  >
+  <p-table #table [globalFilterFields]="['name', 'packingType', 'unitMeasurement', 'batchNumber']" [value]="products"
+    [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '78rem' }">
     <ng-template pTemplate="caption">
       <div class="search-input">
         <div class="lateral-buttons">
-          <p-button 
-            [rounded]="true" 
-            severity="secondary" 
-            [raised]="true"  
-            (onClick)="recarregarPagina()"
-          >
+          <p-button [rounded]="true" severity="secondary" [raised]="true" (onClick)="recarregarPagina()">
             Recarregar
           </p-button>
-          <p-button 
-            [rounded]="true" 
-            severity="primary" 
-            [raised]="true"  
-            (onClick)="closeModal()"
-          >
+          <p-button [rounded]="true" severity="primary" [raised]="true" (onClick)="saveHistory()">
             Salvar
           </p-button>
         </div>
@@ -31,12 +18,7 @@
           <p-inputIcon>
             <i class="pi pi-search"></i>
           </p-inputIcon>
-          <input 
-            type="text"
-            pInputText
-            (input)="globalFilter(table, $event)"
-            placeholder="Buscar"
-          >
+          <input type="text" pInputText (input)="globalFilter(table, $event)" placeholder="Buscar">
         </p-iconField>
       </div>
     </ng-template>
@@ -62,20 +44,9 @@
         <td>{{ product.unitMeasurement }}</td>
         <td>{{ product.batchNumber }}</td>
         <td>
-          <button
-            type="button"
-            pButton
-            pRipple
-            pTooltip="Visualizar"
-            tooltipPosition="bottom"
-            showDelay="1000" 
-            hideDelay="300"
-            icon="pi pi-eye"
-            [rounded]="true"
-            text="true"
-            severity="secondary"
-            (click)="viewProduct(product)"
-          ></button>
+          <button type="button" pButton pRipple pTooltip="Visualizar" tooltipPosition="bottom" showDelay="1000"
+            hideDelay="300" icon="pi pi-eye" [rounded]="true" text="true" severity="secondary"
+            (click)="viewProduct(product)"></button>
         </td>
       </tr>
     </ng-template>
@@ -89,30 +60,26 @@
 
 <p-tieredMenu #menu [model]="actions" [popup]="true" />
 
-<p-dialog
-  header="Detalhes do produto"
-  [(visible)]="visibleDialog"
-  [modal]="true"
-  [draggable]="false"
-  [resizable]="false"
-  [style]="{ width: '40vw' }"
->
-  <ul class="productDetails" *ngIf="selectedProduct">
-    <li><b>Nome: </b>{{ selectedProduct.name }}</li>
-    <li><b>Id: </b>{{ selectedProduct.id }}</li>
-    <li><b>Id|Categoria: </b>{{ selectedProduct.idCategory }}</li>
-    <li><b>Id|Fornecedor: </b>{{ selectedProduct.idSupplier }}</li>
-    <li><b>Etiqueta: </b>{{ selectedProduct.rfidTag }}</li>
-    <li><b>Descrição: </b>{{ selectedProduct.description }}</li>
-    <li><b>Peso: </b>{{ selectedProduct.weight }}</li>
-    <li><b>Data de fabricação: </b>{{ FormatedManufacDate }}</li>
-    <li><b>Data de validade: </b>{{ FormatedDueDate }}</li>
-    <li><b>Unid/Medida: </b>{{ selectedProduct.unitMeasurement }}</li>
-    <li><b>Embalagem: </b>{{ selectedProduct.packingType }}</li>
-    <li><b>Lote: </b>{{ selectedProduct.batchNumber }}</li>
-    <li><b>Quantidade: </b>{{ selectedProduct.quantity }}</li>
-    <li><b>Preço: </b>R${{ selectedProduct.price }}</li>
-  </ul>
+<p-dialog header="Detalhes do produto" [(visible)]="visibleDialog" [modal]="true" [draggable]="false"
+  [resizable]="false" [style]="{ width: '40vw' }">
+  <table>
+    <td class="productDetails" *ngIf="selectedProduct">
+      <tr><b>Nome: </b>{{ selectedProduct.name }}</tr>
+      <tr><b>Id: </b>{{ selectedProduct.id }}</tr>
+      <tr><b>Id|Categoria: </b>{{ selectedProduct.idCategory }}</tr>
+      <tr><b>Id|Fornecedor: </b>{{ selectedProduct.idSupplier }}</tr>
+      <tr><b>Etiqueta: </b>{{ selectedProduct.rfidTag }}</tr>
+      <tr><b>Descrição: </b>{{ selectedProduct.description }}</tr>
+      <tr><b>Peso: </b>{{ selectedProduct.weight }}</tr>
+      <tr><b>Data de fabricação: </b>{{ FormatedManufacDate | date: 'dd/MM/yyyy' }}</tr>
+      <tr><b>Data de validade: </b>{{ FormatedDueDate | date: 'dd/MM/yyyy' }}</tr>
+      <tr><b>Unid/Medida: </b>{{ selectedProduct.unitMeasurement }}</tr>
+      <tr><b>Embalagem: </b>{{ selectedProduct.packingType }}</tr>
+      <tr><b>Lote: </b>{{ selectedProduct.batchNumber }}</tr>
+      <tr><b>Quantidade: </b>{{ selectedProduct.quantity }}</tr>
+      <tr><b>Preço: </b>R${{ selectedProduct.price }}</tr>
+    </td>
+  </table>
   <div class="confirmDialogButton">
     <p-button (onClick)="closeModal()">OK</p-button>
   </div>

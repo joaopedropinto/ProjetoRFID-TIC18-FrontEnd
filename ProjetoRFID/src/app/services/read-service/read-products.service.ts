@@ -3,6 +3,8 @@ import { environment } from '../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Product } from '../../models/product.model';
 import { map, Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { of, firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -44,4 +46,31 @@ export class ReadProductsService {
         })
       );
   }
+  async getProductsByTag(tag: string): Promise<string> {
+    try {
+      const result = await firstValueFrom(
+        this.http.get(`${this.apiUrl}/Product/get-product-by-rfid?RfidTag=${tag}`)
+          .pipe(
+            map(() => '200'),  // Em caso de sucesso, retorna "OK"
+            catchError((error) => {
+              console.error('Ocorreu um erro ao buscar o produto:', error);
+              return tag; // Em caso de erro, retorna a tag
+            })
+          )
+      );
+      return result;
+    } catch (error) {
+      console.error('Erro na requisição:', error);
+      return tag; // Em caso de erro, retorna a tag
+    }
+  }
+  postReadout(readoutDate: string, tags: String[]): Observable<any> {
+    const body = {
+      readoutDate: readoutDate,
+      tags: tags
+    };
+
+    return this.http.post(`${this.apiUrl}/Readout`, body);
+  }
 }
+
