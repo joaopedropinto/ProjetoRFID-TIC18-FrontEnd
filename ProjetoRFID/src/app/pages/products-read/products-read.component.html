@@ -63,22 +63,21 @@
 <p-dialog header="Detalhes do produto" [(visible)]="visibleDialog" [modal]="true" [draggable]="false"
   [resizable]="false" [style]="{ width: '40vw' }">
   <table>
-    <td class="productDetails" *ngIf="selectedProduct">
-      <tr><b>Nome: </b>{{ selectedProduct.name }}</tr>
-      <tr><b>Id: </b>{{ selectedProduct.id }}</tr>
-      <tr><b>Id|Categoria: </b>{{ selectedProduct.idCategory }}</tr>
-      <tr><b>Id|Fornecedor: </b>{{ selectedProduct.idSupplier }}</tr>
-      <tr><b>Etiqueta: </b>{{ selectedProduct.rfidTag }}</tr>
-      <tr><b>Descrição: </b>{{ selectedProduct.description }}</tr>
-      <tr><b>Peso: </b>{{ selectedProduct.weight }}</tr>
-      <tr><b>Data de fabricação: </b>{{ FormatedManufacDate | date: 'dd/MM/yyyy' }}</tr>
-      <tr><b>Data de validade: </b>{{ FormatedDueDate | date: 'dd/MM/yyyy' }}</tr>
-      <tr><b>Unid/Medida: </b>{{ selectedProduct.unitMeasurement }}</tr>
-      <tr><b>Embalagem: </b>{{ selectedProduct.packingType }}</tr>
-      <tr><b>Lote: </b>{{ selectedProduct.batchNumber }}</tr>
-      <tr><b>Quantidade: </b>{{ selectedProduct.quantity }}</tr>
-      <tr><b>Preço: </b>R${{ selectedProduct.price }}</tr>
-    </td>
+    <ul class="productDetails" *ngIf="selectedProduct">
+      <li><b>RFID: </b>{{ selectedProduct.rfidTag }}</li>
+      <li><b>Nome: </b>{{ selectedProduct.name }}</li>
+      <li><b>Categoria: </b>{{ selectedProductCategory.name }}</li>
+      <li><b>Peso: </b>{{ selectedProduct.weight }}</li>
+      <li><b>Embalagem: </b>{{ selectedProduct.packingType }}</li>
+      <li><b>Quantidade: </b>{{ selectedProduct.quantity }}</li>
+      <li><b>Preço: </b>R${{ selectedProduct.price }}</li>
+      <li><b>Unidade de medida: </b>{{ selectedProduct.unitMeasurement }}</li>
+      <li><b>Nº de lote: </b>{{ selectedProduct.batchNumber }}</li>
+      <li><b>Data de fabricação: </b>{{ selectedProductManuFacDate }}</li>
+      <li><b>Date de vencimento: </b>{{ selectedProductDueDate }}</li>
+      <li><b>Fornecedor: </b>{{ selectedProductSupplier.name }}</li>
+      <li><b>Descrição: </b>{{ selectedProduct.description }}</li>
+    </ul>
   </table>
   <div class="confirmDialogButton">
     <p-button (onClick)="closeModal()">OK</p-button>

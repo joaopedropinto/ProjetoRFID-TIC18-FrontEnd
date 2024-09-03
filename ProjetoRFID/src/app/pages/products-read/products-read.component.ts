@@ -20,6 +20,10 @@ import { Router } from '@angular/router';
 import { formatDate } from '@angular/common';
 import { Message } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
+import { Category } from '../../models/category.model';
+import { Supplier } from '../../models/supplier.model';
+import { CategoryService } from '../../services/category/category.service';
+import { SupplierService } from '../../services/supplier/supplier.service';
 
 @Component({
   selector: 'app-products-read',
@@ -52,12 +56,22 @@ export class ProductsReadComponent implements OnInit {
   FormatedManufacDate: string = '';
   FormatedDueDate: string = '';
   isModalOpen = false;
-  products: Product[] = [];
+  products!: Product[];
   selectedProduct: Product | null = null;
   actions!: MenuItem[];
   mostrar: boolean = true;
 
-  constructor(private productsService: ReadProductsService, private router: Router) { }
+  selectedProductCategory!: Category;
+  selectedProductSupplier!: Supplier;
+  selectedProductDueDate!: string;
+  selectedProductManuFacDate!: string;
+
+  constructor(
+    private productsService: ReadProductsService,
+    private router: Router,
+    private categoryService: CategoryService,
+    private supplierService: SupplierService
+  ) { }
 
   ngOnInit(): void {
     this.productsService.getProductsByTagRfids().subscribe(response => {
@@ -67,15 +81,25 @@ export class ProductsReadComponent implements OnInit {
   }
   
   viewProduct(product: Product) {
-    console.log("viewProduct Processes");
     this.selectedProduct = product;
-    console.log(this.selectedProduct); // verificando se o produto foi selecionado
-    if (this.selectedProduct) {
-      this.FormatedManufacDate = this.selectedProduct.manufacDate.toString();
-      this.FormatedDueDate = this.selectedProduct.dueDate.toString();
-    }
-    console.log(this.FormatedManufacDate); // verificando se a data de fabricação foi selecionada e formatada
-    console.log(this.FormatedDueDate); // verificando se a data de validade foi selecionada e formatada
+    console.log(product);
+    console.log(this.selectedProduct);
+    
+    this.categoryService.getCategoryById(this.selectedProduct.idCategory).subscribe(response => {
+      this.selectedProductCategory = response;
+    });
+
+    this.supplierService.getSupplierById(this.selectedProduct.idSupplier).subscribe(response => {
+      this.selectedProductSupplier = response;
+    });
+
+    this.selectedProductDueDate = new Date(this.selectedProduct.dueDate).toLocaleDateString('pt-BR');
+    this.selectedProductManuFacDate = new Date(this.selectedProduct.manufacDate).toLocaleDateString('pt-BR');
+    
+    // if (this.selectedProduct) {
+    //   this.FormatedManufacDate = this.selectedProduct.manufacDate.toString();
+    //   this.FormatedDueDate = this.selectedProduct.dueDate.toString();
+    // }
     this.visibleDialog = true; // Abre o modal
   }
   async saveHistory() {
@@ -109,7 +133,6 @@ export class ProductsReadComponent implements OnInit {
   
   closeModal() {
     this.visibleDialog = false; // Fecha o modal
-    this.selectedProduct = null;
   }
   
   globalFilter(table: any, event: Event) {
