@@ -78,25 +78,28 @@ export class ProductsReadComponent implements OnInit {
     console.log(this.FormatedDueDate); // verificando se a data de validade foi selecionada e formatada
     this.visibleDialog = true; // Abre o modal
   }
-  saveHistory(){
+  saveHistory() {
     this.products.forEach(async product => {
       let verify = await this.productsService.getProductsByTag(product.rfidTag!);
-      if(verify == '200'){
+      if (verify === '200') {
         this.History.push(product.rfidTag!);
-      }
-      if(verify != '200'){
+      } else {
         this.NonProductTags.push(product.rfidTag!);
       }
     });
-    console.log("Tags com items: ",this.History);
-    console.log("Tags sem items: ",this.NonProductTags);
+  
+    console.log("Tags com items: ", this.History);
+    console.log("Tags sem items: ", this.NonProductTags);
     console.log(this.NonProductTags.length);
-    if(this.NonProductTags.length != 0){
-      this.enviarReadout(this.History);
-    }else{
-      this.Message();
+  
+    if (this.NonProductTags.length !== 0) {
+      this.Message();  
     }
-
+  
+   
+    if (this.History.length > 0) {
+      this.enviarReadout(this.History);
+    }
   }
   closeModal() {
     this.visibleDialog = false; // Fecha o modal
@@ -136,9 +139,21 @@ export class ProductsReadComponent implements OnInit {
       });
   }
   Message() {
-    
-    this.messages = [
-      { severity: 'error', detail: `Não foi possivel salvar a leitura alguma tag apresenta um produto não cadastrado`}
-    ];
-}
-}
+    if (this.NonProductTags.length > 0) {
+      const tagsNaoEncontradas = this.NonProductTags.join(', '); 
+      this.messages = [
+        { 
+          severity: 'error', 
+          detail: `Não foi possível salvar a leitura. As seguintes tags apresentam produtos não cadastrados: ${tagsNaoEncontradas}`
+        }
+      ];
+    } else {
+      this.messages = [
+        { 
+          severity: 'error', 
+          detail: `Não foi possível salvar a leitura. Alguma tag apresenta um produto não cadastrado.`
+        }
+      ];
+  
+  
+}}}
