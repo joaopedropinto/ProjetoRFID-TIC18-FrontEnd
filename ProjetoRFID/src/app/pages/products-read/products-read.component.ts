@@ -78,8 +78,12 @@ export class ProductsReadComponent implements OnInit {
     console.log(this.FormatedDueDate); // verificando se a data de validade foi selecionada e formatada
     this.visibleDialog = true; // Abre o modal
   }
-  saveHistory() {
-    this.products.forEach(async product => {
+  async saveHistory() {
+    
+    this.History = [];
+    this.NonProductTags = [];
+    
+    const promises = this.products.map(async product => {
       let verify = await this.productsService.getProductsByTag(product.rfidTag!);
       if (verify === '200') {
         this.History.push(product.rfidTag!);
@@ -87,20 +91,22 @@ export class ProductsReadComponent implements OnInit {
         this.NonProductTags.push(product.rfidTag!);
       }
     });
+      
+    await Promise.all(promises);
   
-    console.log("Tags com items: ", this.History);
-    console.log("Tags sem items: ", this.NonProductTags);
+    console.log("Tags com itens: ", this.History);
+    console.log("Tags sem itens: ", this.NonProductTags);
     console.log(this.NonProductTags.length);
-  
+      
     if (this.NonProductTags.length !== 0) {
       this.Message();  
     }
-  
-   
-    if (this.History.length > 0) {
+      
+    if (this.NonProductTags.length === 0 && this.History.length > 0) {
       this.enviarReadout(this.History);
     }
   }
+  
   closeModal() {
     this.visibleDialog = false; // Fecha o modal
     this.selectedProduct = null;
