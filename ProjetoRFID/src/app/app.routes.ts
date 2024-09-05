@@ -7,6 +7,7 @@ import { ReadingHistoryComponent } from './pages/reading-history/reading-history
 import { ReadoutDetailsComponent } from './pages/readout-details/readout-details.component';
 
 export const routes: Routes = [
+    { path: '', redirectTo: 'produtos', pathMatch: 'full' },
     { path: 'produtos/cadastrar', component: ProductRegisterComponent },
     { path: 'produtos', component: ProductListComponent},
     { path: 'produto/editar/:id', component: ProductEditingComponent },
