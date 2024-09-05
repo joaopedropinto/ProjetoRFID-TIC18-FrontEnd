@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SidebarModule } from 'primeng/sidebar';
 import { ButtonModule } from 'primeng/button';
 import { PanelMenuModule } from 'primeng/panelmenu';
@@ -17,20 +17,26 @@ import { MenuItem } from 'primeng/api';
 })
 export class SidebarComponent {
   @Input() sidebarVisible!: boolean;
+  @Output() hideSidebarEvent = new EventEmitter<boolean>();
 
   items: MenuItem[] = [
     {
       label: 'Produtos',
       icon: 'pi pi-box',
       routerLink: ['/produtos'],
-      command: () => { this.sidebarVisible = false } },
+      command: () => { this.hideSidebar() } },
     {
       label: 'Leituras',
       icon: 'pi pi-barcode',
       items: [
-        { label: 'Nova Leitura', icon: 'pi pi-plus', routerLink: ['/leituras/realizar'], command: () => { this.sidebarVisible = false } },
-        { label: 'Histórico', icon: 'pi pi-history', routerLink: ['/leituras/historico'], command: () => { this.sidebarVisible = false } },
+        { label: 'Nova Leitura', icon: 'pi pi-plus', routerLink: ['/leituras/realizar'], command: () => { this.hideSidebar() } },
+        { label: 'Histórico', icon: 'pi pi-history', routerLink: ['/leituras/historico'], command: () => { this.hideSidebar() } },
       ]
     }
   ];
+
+  hideSidebar(): void {
+    this.sidebarVisible = false;
+    this.hideSidebarEvent.emit(this.sidebarVisible);
+  }
 }

@@ -20,4 +20,8 @@ export class HeaderComponent {
   toggleSidebar(): void {
     this.sidebarVisible =! this.sidebarVisible;
   }
+
+  hideSidebar(visible: boolean): void {
+    this.sidebarVisible = visible;
+  }
 }
