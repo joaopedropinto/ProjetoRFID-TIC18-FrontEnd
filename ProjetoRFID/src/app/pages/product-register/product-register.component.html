@@ -1,6 +1,16 @@
 <p-card header="Cadastro de Produto">
     <form class="form-container" [formGroup]="productForm" (ngSubmit)="onSubmit()">
         <div class="row">
+            <!-- Campo de Código da Tag RFID movido para o início -->
+            <div class="inputFloatLabel">
+                <p-floatLabel>
+                    <input type="text" pInputText id="tagCode" formControlName="tag">
+                    <label for="tagCode">Código da tag</label>
+                </p-floatLabel>
+                <small class="error-message" *ngIf="productForm.get('tag')?.errors && productForm.get('tag')?.touched">
+                    * O código da tag do produto é obrigatório
+                </small>
+            </div>
             <div class="inputFloatLabel">
                 <p-floatLabel>
                     <input type="text" id="name" pInputText formControlName="name">
@@ -44,7 +54,7 @@
                     O peso mínimo é 0.01kg
                 </small>
             </div>
-            <div class="inputFLoatLabel">
+            <div class="inputFloatLabel">
                 <p-floatLabel>
                     <p-calendar 
                     id="manufacDate" 
@@ -73,7 +83,6 @@
                 <small class="error-message" *ngIf="productForm.get('dueDate')?.hasError('required') && productForm.get('dueDate')?.touched">
                     * A data de vencimento é obrigatória
                 </small>
-                
             </div>
         </div>
         <div class="row">
@@ -142,15 +151,6 @@
             </div>
         </div>
         <div class="row">
-            <div class="inputFloatLabel">
-                <p-floatLabel>
-                    <input type="text" pInputText id="tagCode" formControlName="tag">
-                    <label for="tagCode">Código da tag</label>
-                </p-floatLabel>
-                <small class="error-message" *ngIf="productForm.get('tag')?.errors && productForm.get('tag')?.touched">
-                    * O código da tag do produto é obrigatório
-                </small>
-            </div>
             <div class="inputFloatLabel">
                 <p-floatLabel>
                     <p-dropdown 
