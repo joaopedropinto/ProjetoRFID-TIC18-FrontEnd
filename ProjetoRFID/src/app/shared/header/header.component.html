@@ -4,4 +4,4 @@
         <img src="assets/logo.svg" alt="Logo da Ingenico" class="logo">
     </div>
 </p-toolbar>
-<app-sidebar [sidebarVisible]="sidebarVisible"></app-sidebar>
+<app-sidebar [sidebarVisible]="sidebarVisible" (hideSidebarEvent)="hideSidebar($event)"></app-sidebar>
