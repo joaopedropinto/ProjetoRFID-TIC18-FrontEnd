@@ -1,0 +1,86 @@
+<p-card header="Detalhes da leitura">
+    <p-table
+    #table
+    [value]="products"
+    [paginator]="true"
+    [rows]="10"
+    [tableStyle]="{ 'min-width': '78rem' }"
+    [globalFilterFields]="['name', 'packingType', 'unitMeasurement', 'batchNumber']"
+    >
+    <ng-template pTemplate="caption">
+        <div class="search-input">
+            <p-iconField iconPosition="left" class="input-icon">
+                <p-inputIcon>
+                    <i class="pi pi-search"></i>
+                </p-inputIcon>
+                <input 
+                type="text"
+                pInputText
+                (input)="globalFilter(table, $event)"
+                placeholder="Buscar">
+            </p-iconField>
+        </div>
+    </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 15%;">Nome</th>
+                <th style="width: 10%;">Peso</th>
+                <th style="width: 15%;">Embalagem</th>
+                <th style="width: 8%;">Quantidade</th>
+                <th style="width: 12%;">Preço</th>
+                <th style="width: 8%;">Unidade de medida</th>
+                <th style="width: 8%;">Nº de lote</th>
+                <th style="width: 5%;">Ações</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.weight }}</td>
+                <td>{{ product.packingType }}</td>
+                <td>{{ product.quantity }}</td>
+                <td>R${{ product.price }}</td>
+                <td>{{ product.unitMeasurement }}</td>
+                <td>{{ product.batchNumber }}</td>
+                <td class="action-button-group">
+                    <p-button 
+                    icon="pi pi-eye"
+                    [rounded]="true"
+                    [text]="true"
+                    (onClick)="setSelectedProduct(product); openModal()"
+                    pTooltip="Visualizar"
+                    />
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <ng-template pTemplate="footer">
+        <button pButton severity="primary" routerLink="/leituras/historico">Voltar</button>
+    </ng-template>
+</p-card>
+<p-dialog
+header="Detalhes do produto"
+[(visible)]="visibleDialog"
+[modal]="true"
+[draggable]="false"
+[resizable]="false"
+[style]="{ width: '40vw' }">
+    <ul class="productDetails" *ngIf="selectedProduct">
+        <li><b>RFID: </b>{{ selectedProduct.rfidTag }}</li>
+        <li><b>Nome: </b>{{ selectedProduct.name }}</li>
+        <li><b>Categoria: </b>{{ selectedProductCategory.name }}</li>
+        <li><b>Peso: </b>{{ selectedProduct.weight }}</li>
+        <li><b>Embalagem: </b>{{ selectedProduct.packingType }}</li>
+        <li><b>Quantidade: </b>{{ selectedProduct.quantity }}</li>
+        <li><b>Preço: </b>R${{ selectedProduct.price }}</li>
+        <li><b>Unidade de medida: </b>{{ selectedProduct.unitMeasurement }}</li>
+        <li><b>Nº de lote: </b>{{ selectedProduct.batchNumber }}</li>
+        <li><b>Data de fabricação: </b>{{ selectedProductManuFacDate }}</li>
+        <li><b>Date de vencimento: </b>{{ selectedProductDueDate }}</li>
+        <li><b>Fornecedor: </b>{{ selectedProductSupplier.name }}</li>
+        <li><b>Descrição: </b>{{ selectedProduct.description }}</li>
+    </ul>
+    <div class="confirmDialogButton">
+        <p-button (onClick)="closeModal()">OK</p-button>
+    </div>
+</p-dialog>

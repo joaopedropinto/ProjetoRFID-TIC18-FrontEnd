@@ -1,0 +1,56 @@
+.search-input {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1vw;
+}
+
+div.lateral-buttons {
+  display: flex;
+  gap: 2vb;
+}
+
+.search-input p-iconField {
+  justify-self: right;
+}
+
+.input-icon {
+  gap: 1vw;
+}
+
+.overlay {
+  background: #000;
+  height: 100vh;
+  left: 0;
+  opacity: 0.5;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 10;
+}
+
+tr,
+td,
+th {
+  padding: .7em;
+  margin: 0;
+  /*border: 1px solid #ccc;*/
+  text-align: left;
+}
+
+.confirmDialogButton {
+  display: flex;
+  flex-direction: row-reverse;
+  margin-top: 2.5rem;
+}
+
+.p-table {
+  width: 100%;
+}
+
+.productDetails {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.75rem;
+}
