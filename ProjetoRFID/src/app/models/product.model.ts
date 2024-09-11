@@ -13,4 +13,8 @@ export interface Product {
     batchNumber?: string;
     quantity: number;
     price: number;
+    height: number;
+    width: number;
+    length: number;
+    volume: number;
 }
