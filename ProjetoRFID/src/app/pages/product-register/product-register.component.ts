@@ -79,6 +79,9 @@ export class ProductRegisterComponent implements OnInit {
       batchNumber: [null, [Validators.required]],
       quantity: [null, [Validators.required, Validators.min(0)]],
       price: [null, [Validators.required, Validators.min(0.01)]],
+      height : [null, [Validators.required, Validators.min(0.01)]],
+      width : [null, [Validators.required, Validators.min(0.01)]],
+      length : [null, [Validators.required, Validators.min(0.01)]],
     })
   }
 
@@ -130,6 +133,9 @@ export class ProductRegisterComponent implements OnInit {
       batchNumber: this.productForm.get('batchNumber')?.value,
       quantity: this.productForm.get('quantity')?.value,
       price: this.productForm.get('price')?.value,
+      height: this.productForm.get('heigth')?.value,
+      width: this.productForm.get('width')?.value,
+      length: this.productForm.get('length')?.value
     }
 
     console.log(newProduct);
