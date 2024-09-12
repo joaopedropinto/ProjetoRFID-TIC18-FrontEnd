@@ -14,7 +14,7 @@ export class CategoryService {
   constructor(private http: HttpClient) { }
 
    getCategories(): Observable<Category[]> {
-     return this.http.get<Category[]>(`${this.apiUrl}/Category`);
+     return this.http.get<Category[]>(`${this.apiUrl}/Category/active`);
    }
 
    getCategoryById(id: string) :Observable<Category> {
