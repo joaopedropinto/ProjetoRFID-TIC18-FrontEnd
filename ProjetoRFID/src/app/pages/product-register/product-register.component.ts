@@ -135,7 +135,8 @@ export class ProductRegisterComponent implements OnInit {
       price: this.productForm.get('price')?.value,
       height: this.productForm.get('heigth')?.value,
       width: this.productForm.get('width')?.value,
-      length: this.productForm.get('length')?.value
+      length: this.productForm.get('length')?.value,
+      volume: this.productForm.get('length')?.value
     }
 
     console.log(newProduct);
