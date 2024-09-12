@@ -142,13 +142,18 @@
         <div class="row">
             <div class="inputFloatLabel">
                 <p-floatLabel>
-                    <input type="text" id="unitMeasurement" formControlName="unitMeasurement" pInputText>
+                    <p-dropdown 
+                        [options]="unitsOfMeasurement" 
+                        [showClear]="true"
+                        formControlName="unitMeasurement">
+                    </p-dropdown>
                     <label for="unitMeasurement">Unidade de medida</label>
                 </p-floatLabel>
                 <small class="error-message" *ngIf="productForm.get('unitMeasurement')?.errors && productForm.get('unitMeasurement')?.touched">
                     * A unidade de medida é obrigatória
                 </small>
             </div>
+            
             <div class="inputFloatLabel">
                 <p-floatLabel>
                     <p-dropdown 

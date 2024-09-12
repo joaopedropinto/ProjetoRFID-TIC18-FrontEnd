@@ -56,6 +56,14 @@ export class ProductRegisterComponent implements OnInit {
     'Vidro',
     'A vácuo'
   ];
+  unitsOfMeasurement = [
+    { label: 'Kg', value: 'Kg' },
+    { label: 'Litros', value: 'Litros' },
+    { label: 'Unidades', value: 'Unidades' },
+    { label: 'Caixas', value: 'Caixas' }
+  ];
+  
+
 
   constructor(
     private formBuilder: FormBuilder, 
@@ -135,7 +143,8 @@ export class ProductRegisterComponent implements OnInit {
       price: this.productForm.get('price')?.value,
       height: this.productForm.get('heigth')?.value,
       width: this.productForm.get('width')?.value,
-      length: this.productForm.get('length')?.value
+      length: this.productForm.get('length')?.value,
+      volume: this.productForm.get('heigth')?.value * this.productForm.get('width')?.value * this.productForm.get('length')?.value
     }
 
     console.log(newProduct);
