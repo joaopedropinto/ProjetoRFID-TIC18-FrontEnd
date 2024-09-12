@@ -14,7 +14,7 @@ export class SupplierService {
   constructor(private http: HttpClient) { }
 
   getSuppliers(): Observable<Supplier[]> {
-    return this.http.get<Supplier[]>(`${this.apiUrl}/Supplier`);
+    return this.http.get<Supplier[]>(`${this.apiUrl}/Supplier/active`);
   }
 
   getSupplierById(id: string): Observable<Supplier> {

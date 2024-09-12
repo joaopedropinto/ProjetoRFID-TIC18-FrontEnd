@@ -161,6 +161,10 @@ export class ProductEditingComponent implements OnInit {
       batchNumber: this.productForm.get('batchNumber')?.value,
       quantity: this.productForm.get('quantity')?.value,
       price: this.productForm.get('price')?.value,
+      height: this.productForm.get('height')?.value,
+      width: this.productForm.get('width')?.value,
+      length: this.productForm.get('length')?.value,
+      volume: this.productForm.get('height')?.value * this.productForm.get('width')?.value * this.productForm.get('length')?.value
     }
 
     if(this.productForm.valid) {
