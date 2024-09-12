@@ -39,7 +39,11 @@ export class ReadProductsService {
             packingType: '', 
             batchNumber: '', 
             quantity: 0,
-            price: 0
+            price: 0,
+            height: 0,
+            width: 0,
+            length: 0,
+            volume: 0
           }));
           const allProducts = [...products, ...adaptedProducts];
           return { products: allProducts, notFoundResponses };
