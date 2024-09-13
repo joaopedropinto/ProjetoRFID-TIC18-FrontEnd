@@ -147,8 +147,6 @@ export class ProductRegisterComponent implements OnInit {
       volume: this.productForm.get('height')?.value * this.productForm.get('width')?.value * this.productForm.get('length')?.value
     }
 
-    console.log(newProduct);
-
     if(this.productForm.valid) {
       this.productService.postProduct(newProduct).subscribe(() => {
         this.messageService.add({ severity:'success', summary: 'Sucesso', detail: 'Produto cadastrado com sucesso!' });
