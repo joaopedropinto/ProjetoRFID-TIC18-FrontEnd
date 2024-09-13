@@ -32,6 +32,12 @@ export class SidebarComponent {
         { label: 'Nova Leitura', icon: 'pi pi-plus', routerLink: ['/leituras/realizar'], command: () => { this.hideSidebar() } },
         { label: 'Histórico', icon: 'pi pi-history', routerLink: ['/leituras/historico'], command: () => { this.hideSidebar() } },
       ]
+    },
+    {
+      label: 'Embalagens',
+      icon: 'pi pi-inbox',
+      routerLink: ['/embalagens/cadastrar'],
+      command: () => { this.hideSidebar() }
     }
   ];
 
