@@ -89,8 +89,7 @@
                     <p-inputNumber
                     [showButtons]="true"
                     suffix="cm"
-                    [min]="0"
-                    [min]="0.01"
+                    [min]="0.1"
                     [minFractionDigits]="1"
                     [maxFractionDigits]="2"
                     incrementButtonClass="p-button-secondary"
@@ -107,8 +106,7 @@
                     <p-inputNumber
                     [showButtons]="true"
                     suffix="cm"
-                    [min]="0"
-                    [min]="0.01"
+                    [min]="0.1"
                     [minFractionDigits]="1"
                     [maxFractionDigits]="2"
                     incrementButtonClass="p-button-secondary"
@@ -120,13 +118,12 @@
                 <small class="error-message" *ngIf="productForm.get('width')?.hasError('required') && productForm.get('width')?.touched">
                     * A largura do produto é obrigatório
                 </small>
-                <div class="inputFloatLabel"></div>
+            <div class="inputFloatLabel"></div>
                 <p-floatLabel>
                     <p-inputNumber
                     [showButtons]="true"
                     suffix="cm"
-                    [min]="0"
-                    [min]="0.01"
+                    [min]="0.1"
                     [minFractionDigits]="1"
                     [maxFractionDigits]="2"
                     incrementButtonClass="p-button-secondary"
@@ -142,13 +139,18 @@
         <div class="row">
             <div class="inputFloatLabel">
                 <p-floatLabel>
-                    <input type="text" id="unitMeasurement" formControlName="unitMeasurement" pInputText>
+                    <p-dropdown 
+                        [options]="unitsOfMeasurement" 
+                        [showClear]="true"
+                        formControlName="unitMeasurement">
+                    </p-dropdown>
                     <label for="unitMeasurement">Unidade de medida</label>
                 </p-floatLabel>
                 <small class="error-message" *ngIf="productForm.get('unitMeasurement')?.errors && productForm.get('unitMeasurement')?.touched">
                     * A unidade de medida é obrigatória
                 </small>
             </div>
+            
             <div class="inputFloatLabel">
                 <p-floatLabel>
                     <p-dropdown 
