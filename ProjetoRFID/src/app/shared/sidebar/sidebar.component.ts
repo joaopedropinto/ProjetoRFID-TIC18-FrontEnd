@@ -21,6 +21,12 @@ export class SidebarComponent {
 
   items: MenuItem[] = [
     {
+      label: 'Embalagens',
+      icon: 'pi pi-inbox',
+      routerLink: ['/embalagens/cadastrar'],
+      command: () => { this.hideSidebar() }
+    },
+    {
       label: 'Produtos',
       icon: 'pi pi-box',
       routerLink: ['/produtos'],
@@ -33,12 +39,7 @@ export class SidebarComponent {
         { label: 'Histórico', icon: 'pi pi-history', routerLink: ['/leituras/historico'], command: () => { this.hideSidebar() } },
       ]
     },
-    {
-      label: 'Embalagens',
-      icon: 'pi pi-inbox',
-      routerLink: ['/embalagens/cadastrar'],
-      command: () => { this.hideSidebar() }
-    }
+    
   ];
 
   hideSidebar(): void {
