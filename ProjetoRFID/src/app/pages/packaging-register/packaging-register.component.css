@@ -1,0 +1,22 @@
+.error-message {
+    color: #ff0000;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-content: space-around;
+    gap: 25px;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.inputFloatLabel {
+    display: flex;
+    flex-direction: column;
+}

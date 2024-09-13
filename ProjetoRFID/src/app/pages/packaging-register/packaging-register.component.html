@@ -1,0 +1,19 @@
+<p-card header="Cadastro de Embalagem">
+    <form class="form-container" [formGroup]="packagingForm" (ngSubmit)="postPackaging()">
+        <div class="row">
+            <div class="inputFloatLabel">
+                <p-floatLabel>
+                    <input pInputText id="name" formControlName="name">
+                    <label for="name">Tipo de embalagem</label>
+                </p-floatLabel>
+                <small class="error-message" *ngIf="packagingForm.get('name')?.hasError('required') && packagingForm.get('name')?.touched">
+                    * O nome do tipo de embalagem é obrigatório
+                </small>
+            </div>
+        </div>
+        <div class="row">
+            <button pButton type="submit" [disabled]="packagingForm.invalid">Cadastrar</button>
+        </div>
+    </form>
+</p-card>
+<p-toast></p-toast>
