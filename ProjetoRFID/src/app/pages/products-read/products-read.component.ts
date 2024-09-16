@@ -60,6 +60,7 @@ export class ProductsReadComponent implements OnInit {
   selectedProduct: Product | null = null;
   actions!: MenuItem[];
   mostrar: boolean = true;
+  loading: boolean = false;
 
   selectedProductCategory!: Category;
   selectedProductSupplier!: Supplier;
@@ -141,19 +142,23 @@ export class ProductsReadComponent implements OnInit {
   }
   
   recarregarPagina() {
+    this.loading = true; // Ativa a animação de carregamento
+  
     // Define o delay em milissegundos (2000 ms = 2 segundos)
     const delay = 500;
     // Adiciona um delay antes de recarregar a rota
     setTimeout(() => {
       // Obtém a URL atual
-    const currentUrl = this.router.url;
-    // Navega para a rota 'refresh' (navega para a mesma rota e então recarrega)
-    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      const currentUrl = this.router.url;
+      // Navega para a rota 'refresh' (navega para a mesma rota e então recarrega)
+      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
         this.router.navigate([currentUrl]);
         console.log("Página Recarregada");
+        this.loading = false; // Desativa a animação de carregamento
       });
     }, delay);
   }
+  
   enviarReadout(tag_list: String[]) {
     const readoutDate = new Date().toISOString(); // Data atual formatada como ISO string
     const tags = tag_list; // Substitua pelas tags reais

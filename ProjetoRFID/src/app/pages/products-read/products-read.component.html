@@ -8,7 +8,9 @@
       <div class="search-input">
         <div class="lateral-buttons">
           <p-button [rounded]="true" severity="secondary" [raised]="true" (onClick)="recarregarPagina()">
-            Recarregar
+            Nova leitura
+            <!-- Adicione a animação de carregamento aqui -->
+            <span *ngIf="loading" class="loading-spinner"></span>
           </p-button>
           <p-button [rounded]="true" severity="primary" [raised]="true" (onClick)="saveHistory()">
             Salvar
