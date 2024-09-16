@@ -161,6 +161,7 @@ export class ProductsReadComponent implements OnInit {
       .subscribe({
         next: (response) => {
           console.log('Sucesso:', response);
+          this.ToastMessages();
         },
         error: (error) => {
           console.error('Erro:', error);
@@ -183,6 +184,14 @@ export class ProductsReadComponent implements OnInit {
           detail: `Não foi possível salvar a leitura. Alguma tag apresenta um produto não cadastrado.`
         }
       ];
-  
-  
-}}}
+  }}
+  ToastMessages() {
+    this.messages = [
+      { 
+        severity: 'success', 
+        detail: `Leitura salva com sucesso no histórico.`
+      }
+    ];
+  }
+
+}

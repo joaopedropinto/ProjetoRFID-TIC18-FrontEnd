@@ -56,6 +56,14 @@ export class ProductRegisterComponent implements OnInit {
     'Vidro',
     'A vácuo'
   ];
+  unitsOfMeasurement = [
+    { label: 'Kg', value: 'Kg' },
+    { label: 'Litros', value: 'Litros' },
+    { label: 'Unidades', value: 'Unidades' },
+    { label: 'Caixas', value: 'Caixas' }
+  ];
+  
+
 
   constructor(
     private formBuilder: FormBuilder, 
@@ -79,6 +87,9 @@ export class ProductRegisterComponent implements OnInit {
       batchNumber: [null, [Validators.required]],
       quantity: [null, [Validators.required, Validators.min(0)]],
       price: [null, [Validators.required, Validators.min(0.01)]],
+      height : [null, [Validators.required, Validators.min(0.1)]],
+      width : [null, [Validators.required, Validators.min(0.1)]],
+      length : [null, [Validators.required, Validators.min(0.1)]],
     })
   }
 
@@ -130,9 +141,11 @@ export class ProductRegisterComponent implements OnInit {
       batchNumber: this.productForm.get('batchNumber')?.value,
       quantity: this.productForm.get('quantity')?.value,
       price: this.productForm.get('price')?.value,
+      height: this.productForm.get('height')?.value,
+      width: this.productForm.get('width')?.value,
+      length: this.productForm.get('length')?.value,
+      volume: this.productForm.get('height')?.value * this.productForm.get('width')?.value * this.productForm.get('length')?.value
     }
-
-    console.log(newProduct);
 
     if(this.productForm.valid) {
       this.productService.postProduct(newProduct).subscribe(() => {

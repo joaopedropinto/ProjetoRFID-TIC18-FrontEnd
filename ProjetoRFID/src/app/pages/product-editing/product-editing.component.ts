@@ -63,6 +63,12 @@ export class ProductEditingComponent implements OnInit {
     'Vidro',
     'A vácuo'
   ];
+  unitsOfMeasurement = [
+    { label: 'Kg', value: 'Kg' },
+    { label: 'Litros', value: 'Litros' },
+    { label: 'Unidades', value: 'Unidades' },
+    { label: 'Caixas', value: 'Caixas' }
+  ];
 
   enableButtons: boolean = true;
 
@@ -88,6 +94,9 @@ export class ProductEditingComponent implements OnInit {
       batchNumber: [null, [Validators.required]],
       quantity: [null, [Validators.required, Validators.min(0)]],
       price: [null, [Validators.required, Validators.min(0.01)]],
+      height : [null, [Validators.required, Validators.min(0.1)]],
+      width : [null, [Validators.required, Validators.min(0.1)]],
+      length : [null, [Validators.required, Validators.min(0.1)]],
     });
    }
 
@@ -121,7 +130,10 @@ export class ProductEditingComponent implements OnInit {
       this.productForm.get('batchNumber')?.setValue(productResponse.batchNumber);
       this.productForm.get('quantity')?.setValue(productResponse.quantity);
       this.productForm.get('price')?.setValue(productResponse.price);
-    })
+      this.productForm.get('height')?.setValue(productResponse.height);
+      this.productForm.get('width')?.setValue(productResponse.width);
+      this.productForm.get('length')?.setValue(productResponse.length);
+      this.productForm.get('volume')?.setValue(productResponse.height * productResponse.width * productResponse.length);})
 
     const manufacDateControl = this.productForm.get('manufacDate');
     const dueDateControl = this.productForm.get('dueDate');
@@ -161,17 +173,22 @@ export class ProductEditingComponent implements OnInit {
       batchNumber: this.productForm.get('batchNumber')?.value,
       quantity: this.productForm.get('quantity')?.value,
       price: this.productForm.get('price')?.value,
+      height: this.productForm.get('height')?.value, 
+      width: this.productForm.get('width')?.value,
+      length: this.productForm.get('length')?.value,
+      volume: this.productForm.get('height')?.value * this.productForm.get('width')?.value * this.productForm.get('length')?.value // Corrige o cálculo do volume
     }
-
-    if(this.productForm.valid) {
+  
+    if (this.productForm.valid) {
       this.productService.putProduct(updatedProduct).subscribe(() => {
-        this.messageService.add({ severity:'success', summary: 'Sucesso', detail: 'Produto atualizado com sucesso!' });
+        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Produto atualizado com sucesso!' });
         this.enableButtons = false;
         setTimeout(() => {
-          this.router.navigate(['produtos'])
+          this.router.navigate(['produtos']);
         }, 2000);
       });
     }
   }
+  
 
 }

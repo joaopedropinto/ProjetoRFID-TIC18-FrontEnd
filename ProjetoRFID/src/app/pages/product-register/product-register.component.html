@@ -84,17 +84,73 @@
                     * A data de vencimento é obrigatória
                 </small>
             </div>
+            <div class="inputFloatLabel"></div>
+                <p-floatLabel>
+                    <p-inputNumber
+                    [showButtons]="true"
+                    suffix="cm"
+                    [min]="0.1"
+                    [minFractionDigits]="1"
+                    [maxFractionDigits]="2"
+                    incrementButtonClass="p-button-secondary"
+                    decrementButtonClass="p-button-secondary"
+                    id="height"
+                    formControlName="height"/>
+                    <label for="height">Altura do produto</label>
+                </p-floatLabel>
+                <small class="error-message" *ngIf="productForm.get('height')?.hasError('required') && productForm.get('height')?.touched">
+                    * A altura do produto é obrigatório
+                </small>
+            <div class="inputFloatLabel"></div>
+                <p-floatLabel>
+                    <p-inputNumber
+                    [showButtons]="true"
+                    suffix="cm"
+                    [min]="0.1"
+                    [minFractionDigits]="1"
+                    [maxFractionDigits]="2"
+                    incrementButtonClass="p-button-secondary"
+                    decrementButtonClass="p-button-secondary"
+                    id="width"
+                    formControlName="width"/>
+                    <label for="width">Largura do produto</label>
+                </p-floatLabel>
+                <small class="error-message" *ngIf="productForm.get('width')?.hasError('required') && productForm.get('width')?.touched">
+                    * A largura do produto é obrigatório
+                </small>
+            <div class="inputFloatLabel"></div>
+                <p-floatLabel>
+                    <p-inputNumber
+                    [showButtons]="true"
+                    suffix="cm"
+                    [min]="0.1"
+                    [minFractionDigits]="1"
+                    [maxFractionDigits]="2"
+                    incrementButtonClass="p-button-secondary"
+                    decrementButtonClass="p-button-secondary"
+                    id="length"
+                    formControlName="length"/>
+                    <label for="length">Comprimento do produto</label>
+                </p-floatLabel>
+                <small class="error-message" *ngIf="productForm.get('length')?.hasError('required') && productForm.get('length')?.touched">
+                    * O comprimento do produto é obrigatório
+                </small>
         </div>
         <div class="row">
             <div class="inputFloatLabel">
                 <p-floatLabel>
-                    <input type="text" id="unitMeasurement" formControlName="unitMeasurement" pInputText>
+                    <p-dropdown 
+                        [options]="unitsOfMeasurement" 
+                        [showClear]="true"
+                        formControlName="unitMeasurement">
+                    </p-dropdown>
                     <label for="unitMeasurement">Unidade de medida</label>
                 </p-floatLabel>
                 <small class="error-message" *ngIf="productForm.get('unitMeasurement')?.errors && productForm.get('unitMeasurement')?.touched">
                     * A unidade de medida é obrigatória
                 </small>
             </div>
+            
             <div class="inputFloatLabel">
                 <p-floatLabel>
                     <p-dropdown 
