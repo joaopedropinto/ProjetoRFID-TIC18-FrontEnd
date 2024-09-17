@@ -2,6 +2,14 @@
     color: #ff0000;
 }
 
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+}
+
 .form-container {
     display: flex;
     flex-direction: column;
@@ -13,10 +21,19 @@
 .row {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 1rem;
 }
 
 .inputFloatLabel {
     display: flex;
     flex-direction: column;
+}
+
+button {
+    display: flex;
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
+    justify-content: center;
 }
