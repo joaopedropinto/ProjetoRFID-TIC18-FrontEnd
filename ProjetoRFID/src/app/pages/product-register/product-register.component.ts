@@ -20,6 +20,7 @@ import { MessageService } from 'primeng/api';
 import { RippleModule } from 'primeng/ripple';
 import { Router } from '@angular/router';
 import { PackagingService } from '../../services/packaging/packaging.service'; // Importação do novo serviço
+import { Packaging } from '../../models/packaging.model';
 
 @Component({
   selector: 'app-product-register',
@@ -49,7 +50,7 @@ export class ProductRegisterComponent implements OnInit {
 
   categories!: Category[];
   suppliers!: Supplier[];
-  packingTypes: string[] = []; 
+  packages!: Packaging[]; // Adicionado novo atributo
 
   unitsOfMeasurement = [
     { label: 'Kg', value: 'Kg' },
@@ -77,7 +78,7 @@ export class ProductRegisterComponent implements OnInit {
       manufacDate: [null, [Validators.required]],
       dueDate: [null, [Validators.required]],
       unitMeasurement: [null, [Validators.required]],
-      packingType: [null, [Validators.required]],
+      packages: [null, [Validators.required]],
       batchNumber: [null, [Validators.required]],
       quantity: [null, [Validators.required, Validators.min(0)]],
       price: [null, [Validators.required, Validators.min(0.01)]],
@@ -97,7 +98,7 @@ export class ProductRegisterComponent implements OnInit {
     });
 
     this.packagingService.getPackagingTypes().subscribe(response => {
-      this.packingTypes = response; 
+      this.packages = response; 
     });
 
     const manufacDateControl = this.productForm.get('manufacDate');
@@ -134,7 +135,7 @@ export class ProductRegisterComponent implements OnInit {
       manufacDate: this.productForm.get('manufacDate')?.value.toISOString(),
       dueDate: this.productForm.get('dueDate')?.value.toISOString(),
       unitMeasurement: this.productForm.get('unitMeasurement')?.value,
-      packingType: this.productForm.get('packingType')?.value,
+      idPackaging: this.productForm.get('packages')?.value.id,
       batchNumber: this.productForm.get('batchNumber')?.value,
       quantity: this.productForm.get('quantity')?.value,
       price: this.productForm.get('price')?.value,
@@ -143,7 +144,7 @@ export class ProductRegisterComponent implements OnInit {
       length: this.productForm.get('length')?.value,
       volume: this.productForm.get('height')?.value * this.productForm.get('width')?.value * this.productForm.get('length')?.value
     }
-
+    console.log(newProduct);
     if (this.productForm.valid) {
       this.productService.postProduct(newProduct).subscribe(() => {
         this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Produto cadastrado com sucesso!' });

@@ -154,10 +154,11 @@
             <div class="inputFloatLabel">
                 <p-floatLabel>
                     <p-dropdown 
-                    [options]="packingTypes" 
+                    [options]="packages" 
+                    optionLabel="name"
                     [showClear]="true"
-                    formControlName="packingType"/>
-                    <label for="packingType">Tipo de embalagem</label>
+                    formControlName="packages"/>
+                    <label for="packages">Tipo de embalagem</label>
                 </p-floatLabel>
                 <small class="error-message" *ngIf="productForm.get('packingType')?.errors && productForm.get('packingType')?.touched">
                     * O tipo de embalagem é obrigatório

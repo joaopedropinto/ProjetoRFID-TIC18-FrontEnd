@@ -18,14 +18,9 @@ export class PackagingService {
     return this.http.post<Packaging>(`${this.apiUrl}/Packaging`, packaging);
   }
 
-  getPackagingTypes(): Observable<string[]> {
-    return this.http.get<Packaging[]>(`${this.apiUrl}/Packaging`, { params: { type: 'name' } })
-      .pipe(
-        map(packagings => packagings
-          
-          .map(p => p.name)        // Extrai o nome
-          .filter((name): name is string => name !== undefined) // Filtra valores undefined
-        )
-      );
+  getPackagingTypes(): Observable<Packaging[]> {
+    return this.http.get<Packaging[]>(`${this.apiUrl}/Packaging`)
+   
+   
   }
 }
