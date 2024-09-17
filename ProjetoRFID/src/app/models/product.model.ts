@@ -2,7 +2,7 @@ export interface Product {
     id?: string;
     idCategory: string;
     idSupplier: string;
-    idPackaging?: string;
+    idPackaging: string;
     name: string;
     rfidTag?: string;
     description?: string;

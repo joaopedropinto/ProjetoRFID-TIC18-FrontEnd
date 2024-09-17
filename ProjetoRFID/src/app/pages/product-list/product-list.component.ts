@@ -20,6 +20,8 @@ import { CategoryService } from '../../services/category/category.service';
 import { SupplierService } from '../../services/supplier/supplier.service';
 import { Category } from '../../models/category.model';
 import { Supplier } from '../../models/supplier.model';
+import { PackagingService } from '../../services/packaging/packaging.service';
+import { Packaging } from '../../models/packaging.model';
 
 @Component({
   selector: 'app-product-list',
@@ -54,6 +56,7 @@ export class ProductListComponent implements OnInit {
   selectedProductSupplier!: Supplier;
   selectedProductDueDate!: string;
   selectedProductManuFacDate!: string;
+  selectedProductPackaging!: Packaging;
 
   loading: boolean = true;
 
@@ -64,13 +67,16 @@ export class ProductListComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private categoryService: CategoryService,
-    private supplierService: SupplierService
+    private supplierService: SupplierService,
+    private packagingService: PackagingService
   ) { }
   
   ngOnInit(): void {
     this.productService.returnAllActiveProducts().subscribe(response => {
       this.products = response;
       this.loading = false;
+
+      console.log('Produtos carregados:', this.products);
     });
 
     this.actions = [
@@ -93,7 +99,7 @@ export class ProductListComponent implements OnInit {
 
   setSelectedProduct(product: Product): void {
     this.selectedProduct = product;
-
+    
     this.categoryService.getCategoryById(this.selectedProduct.idCategory).subscribe(category => {
       this.selectedProductCategory = category;
     });
@@ -101,6 +107,10 @@ export class ProductListComponent implements OnInit {
     this.supplierService.getSupplierById(this.selectedProduct.idSupplier).subscribe(supplier => {
       this.selectedProductSupplier = supplier;
     });
+    this.packagingService.getPackagingById(this.selectedProduct.idPackaging).subscribe(packaging => {
+      this.selectedProductPackaging = packaging;
+    });
+    
 
     this.selectedProductDueDate = new Date(this.selectedProduct.dueDate).toLocaleDateString('pt-BR');
     this.selectedProductManuFacDate = new Date(this.selectedProduct.manufacDate).toLocaleDateString('pt-BR');
@@ -110,6 +120,7 @@ export class ProductListComponent implements OnInit {
     if (editAction && this.selectedProduct) {
         editAction.routerLink = `/produto/editar/${product.id}`;
     }
+    
   }
 
   deletionConfirmation(product: Product) {

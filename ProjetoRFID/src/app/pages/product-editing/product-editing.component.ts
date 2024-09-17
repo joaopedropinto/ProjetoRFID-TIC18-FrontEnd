@@ -164,6 +164,7 @@ export class ProductEditingComponent implements OnInit {
       name: this.productForm.get('name')?.value,
       idCategory: this.productForm.get('category')?.value.id,
       idSupplier: this.productForm.get('supplier')?.value.id,
+      idPackaging: this.productForm.get('packingType')?.value.id,
       description: this.productForm.get('description')?.value,
       weight: this.productForm.get('weight')?.value,
       manufacDate: this.productForm.get('manufacDate')?.value.toISOString(),

@@ -20,7 +20,9 @@ export class PackagingService {
 
   getPackagingTypes(): Observable<Packaging[]> {
     return this.http.get<Packaging[]>(`${this.apiUrl}/Packaging`)
-   
-   
+  }
+
+  getPackagingById(id: string) :Observable<Packaging> {
+    return this.http.get<Packaging>(`${this.apiUrl}/Packaging/${id}`);
   }
 }

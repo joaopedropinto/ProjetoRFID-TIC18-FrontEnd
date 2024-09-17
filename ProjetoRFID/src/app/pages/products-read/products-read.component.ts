@@ -24,6 +24,8 @@ import { Category } from '../../models/category.model';
 import { Supplier } from '../../models/supplier.model';
 import { CategoryService } from '../../services/category/category.service';
 import { SupplierService } from '../../services/supplier/supplier.service';
+import { Packaging } from '../../models/packaging.model';
+import { PackagingService } from '../../services/packaging/packaging.service';
 
 @Component({
   selector: 'app-products-read',
@@ -51,7 +53,7 @@ import { SupplierService } from '../../services/supplier/supplier.service';
 export class ProductsReadComponent implements OnInit {
   messages: Message[] = [];
   NonProductTags: string[] = [];
-  History: String[] = [];
+  History: string[] = []; // Alterado de String[] para string[]
   visibleDialog: boolean = false;
   FormatedManufacDate: string = '';
   FormatedDueDate: string = '';
@@ -65,25 +67,28 @@ export class ProductsReadComponent implements OnInit {
   selectedProductCategory!: Category;
   selectedProductSupplier!: Supplier;
   selectedProductDueDate!: string;
+  selectedProductPackaging!: Packaging;
   selectedProductManuFacDate!: string;
 
   constructor(
     private productsService: ReadProductsService,
     private router: Router,
     private categoryService: CategoryService,
-    private supplierService: SupplierService
+    private supplierService: SupplierService,
+    private packagingService: PackagingService
   ) { }
 
   ngOnInit(): void {
     this.productsService.getProductsByTagRfids().subscribe(response => {
       this.products = response.products;
       console.log(this.products);
+      
     });
   }
   
   viewProduct(product: Product) {
     this.selectedProduct = product;
-    console.log(product);
+  
     console.log(this.selectedProduct);
     
     this.categoryService.getCategoryById(this.selectedProduct.idCategory).subscribe(response => {
@@ -93,6 +98,11 @@ export class ProductsReadComponent implements OnInit {
     this.supplierService.getSupplierById(this.selectedProduct.idSupplier).subscribe(response => {
       this.selectedProductSupplier = response;
     });
+    
+    this.packagingService.getPackagingById(this.selectedProduct.idPackaging).subscribe(response => {
+      this.selectedProductPackaging = response; 
+    });
+
 
     this.selectedProductDueDate = new Date(this.selectedProduct.dueDate).toLocaleDateString('pt-BR');
     this.selectedProductManuFacDate = new Date(this.selectedProduct.manufacDate).toLocaleDateString('pt-BR');
@@ -159,9 +169,9 @@ export class ProductsReadComponent implements OnInit {
     }, delay);
   }
   
-  enviarReadout(tag_list: String[]) {
+  enviarReadout(tag_list: string[]) {  // Use string[] em vez de String[]
     const readoutDate = new Date().toISOString(); // Data atual formatada como ISO string
-    const tags = tag_list; // Substitua pelas tags reais
+    const tags = tag_list; // tags já é do tipo string[]
     this.productsService.postReadout(readoutDate, tags)
       .subscribe({
         next: (response) => {
@@ -173,6 +183,7 @@ export class ProductsReadComponent implements OnInit {
         }
       });
   }
+  
   Message() {
     if (this.NonProductTags.length > 0) {
       const tagsNaoEncontradas = this.NonProductTags.join(', '); 
@@ -189,7 +200,9 @@ export class ProductsReadComponent implements OnInit {
           detail: `Não foi possível salvar a leitura. Alguma tag apresenta um produto não cadastrado.`
         }
       ];
-  }}
+    }
+  }
+
   ToastMessages() {
     this.messages = [
       { 
@@ -200,3 +213,4 @@ export class ProductsReadComponent implements OnInit {
   }
 
 }
+
