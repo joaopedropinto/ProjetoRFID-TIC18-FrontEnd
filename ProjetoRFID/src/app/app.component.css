@@ -15,3 +15,13 @@ body {
 .content {
     flex: 1;
 }
+
+.page {
+    display: flex;
+    height: 100vh;
+    flex: 1;
+}
+
+.sidebar {
+    display: flex;
+}

@@ -1,7 +1,10 @@
 <div class="container">
     <app-header></app-header>
-    <div class="content">
-        <router-outlet></router-outlet>
+    <div class="page">
+        <app-sidebar class="sidebar"></app-sidebar>
+        <div class="content">
+            <router-outlet></router-outlet>
+        </div>
     </div>
     <app-footer></app-footer>
 </div>
