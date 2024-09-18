@@ -13,15 +13,16 @@ body {
 }
 
 .content {
-    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .page {
     display: flex;
-    height: 100vh;
     flex: 1;
 }
 
 .sidebar {
     display: flex;
+    flex-direction: column;
 }
