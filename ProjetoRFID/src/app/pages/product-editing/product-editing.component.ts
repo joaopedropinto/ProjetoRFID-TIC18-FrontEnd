@@ -54,6 +54,7 @@ export class ProductEditingComponent implements OnInit {
 
   categories!: Category[];
   suppliers!: Supplier[];
+  packages!: Packaging[];
 
   selectedCategory: Category | undefined;
   selectedSupplier: Supplier | undefined;
@@ -76,6 +77,7 @@ export class ProductEditingComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
+    private packagingService: PackagingService, 
     private messageService: MessageService
   ) {
     this.productForm = this.formBuilder.group({
@@ -102,7 +104,7 @@ export class ProductEditingComponent implements OnInit {
 
     this.categoryService.getCategories().subscribe(response => {
        this.categories = response;
-    })
+    });
 
     this.supplierService.getSuppliers().subscribe(response => {
        this.suppliers = response;

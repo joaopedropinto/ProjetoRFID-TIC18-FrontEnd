@@ -18,6 +18,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { TooltipModule } from 'primeng/tooltip';
+import { PackagingService } from '../../services/packaging/packaging.service';
 
 @Component({
   selector: 'app-readout-details',
@@ -55,7 +56,8 @@ export class ReadoutDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private categoryService: CategoryService,
     private supplierService: SupplierService,
-    private readingService: ReadingService
+    private readingService: ReadingService,
+    private packagingService: PackagingService
   ) { }
 
   ngOnInit(): void {
@@ -67,6 +69,10 @@ export class ReadoutDetailsComponent implements OnInit {
         for(let tag of this.readout.tags) {
           this.productsService.getProductByRfid(tag).subscribe(product => {
             this.products.push(product);
+
+            this.packagingService.getPackagingById(product.idPackaging).subscribe(packaging => {
+              product.packingType = packaging.name;
+            });
           });
         }
       });
