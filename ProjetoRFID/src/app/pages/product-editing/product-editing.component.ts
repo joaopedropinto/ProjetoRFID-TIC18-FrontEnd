@@ -18,6 +18,8 @@ import { SupplierService } from '../../services/supplier/supplier.service';
 import { Product } from '../../models/product.model';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { PackagingService } from '../../services/packaging/packaging.service'; 
+import { Packaging } from '../../models/packaging.model';
 
 @Component({
   selector: 'app-product-editing',
@@ -52,17 +54,12 @@ export class ProductEditingComponent implements OnInit {
 
   categories!: Category[];
   suppliers!: Supplier[];
+  packages!: Packaging[];
 
   selectedCategory: Category | undefined;
   selectedSupplier: Supplier | undefined;
 
-  packingTypes = [
-    'Plástico',
-    'Enlatado',
-    'Papel e papelão',
-    'Vidro',
-    'A vácuo'
-  ];
+ 
   unitsOfMeasurement = [
     { label: 'Kg', value: 'Kg' },
     { label: 'Litros', value: 'Litros' },
@@ -79,6 +76,7 @@ export class ProductEditingComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
+    private packagingService: PackagingService, 
     private messageService: MessageService
   ) {
     this.productForm = this.formBuilder.group({
@@ -90,7 +88,8 @@ export class ProductEditingComponent implements OnInit {
       manufacDate: [null, [Validators.required]],
       dueDate: [null, [Validators.required]],
       unitMeasurement: [null, [Validators.required]],
-      packingType: [null, [Validators.required]],
+      idPackaging: [null, [Validators.required]],
+      //packingType: [null, [Validators.required]],
       batchNumber: [null, [Validators.required]],
       quantity: [null, [Validators.required, Validators.min(0)]],
       price: [null, [Validators.required, Validators.min(0.01)]],
@@ -105,11 +104,14 @@ export class ProductEditingComponent implements OnInit {
 
     this.categoryService.getCategories().subscribe(response => {
        this.categories = response;
-    })
+    });
 
     this.supplierService.getSuppliers().subscribe(response => {
        this.suppliers = response;
-    })
+    });
+    this.packagingService.getPackagingTypes().subscribe(response => {
+      this.packages = response; 
+    });
 
     this.productService.getProductById(this.productId).subscribe(productResponse => {
       this.categoryService.getCategoryById(productResponse.idCategory).subscribe(categoryResponse => {
@@ -126,7 +128,8 @@ export class ProductEditingComponent implements OnInit {
       this.productForm.get('manufacDate')?.setValue(new Date(productResponse.manufacDate));
       this.productForm.get('dueDate')?.setValue(new Date(productResponse.dueDate));
       this.productForm.get('unitMeasurement')?.setValue(productResponse.unitMeasurement);
-      this.productForm.get('packingType')?.setValue(productResponse.packingType);
+      this.productForm.get('idPackaging')?.setValue(productResponse.idPackaging);
+      //this.productForm.get('packingType')?.setValue(productResponse.packingType);
       this.productForm.get('batchNumber')?.setValue(productResponse.batchNumber);
       this.productForm.get('quantity')?.setValue(productResponse.quantity);
       this.productForm.get('price')?.setValue(productResponse.price);
@@ -170,7 +173,7 @@ export class ProductEditingComponent implements OnInit {
       manufacDate: this.productForm.get('manufacDate')?.value.toISOString(),
       dueDate: this.productForm.get('dueDate')?.value.toISOString(),
       unitMeasurement: this.productForm.get('unitMeasurement')?.value,
-      packingType: this.productForm.get('packingType')?.value,
+      //packingType: this.productForm.get('packingType')?.value,
       batchNumber: this.productForm.get('batchNumber')?.value,
       quantity: this.productForm.get('quantity')?.value,
       price: this.productForm.get('price')?.value,
