@@ -1,11 +1,14 @@
-/* O footer será fixado ao rodapé da página */
-.footer {
-    background-color: #f8f8f8;
-    padding: 10px;
-    text-align: center;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
+.footer-content {
+    display: flex;
+    background-color: #1b458975;
+    color: #fff;
+    justify-content: center;
 }
 
+.footer-section {
+    padding: 2px;
+}
+
+.footer-section h2 {
+    font-size: 14px;
+}

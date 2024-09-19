@@ -12,10 +12,11 @@
     flex-direction: column;
     row-gap: 0.75rem;
 }
-div.lateral-buttons{
+
+div.lateral-buttons {
     display: flex;
     gap: 2vb;
-  }
+}
 
 .confirmDialogButton {
     display: flex;

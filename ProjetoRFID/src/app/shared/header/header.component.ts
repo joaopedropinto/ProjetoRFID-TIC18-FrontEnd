@@ -15,13 +15,5 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-  sidebarVisible: boolean = false;
-
-  toggleSidebar(): void {
-    this.sidebarVisible =! this.sidebarVisible;
-  }
-
-  hideSidebar(visible: boolean): void {
-    this.sidebarVisible = visible;
-  }
+  
 }

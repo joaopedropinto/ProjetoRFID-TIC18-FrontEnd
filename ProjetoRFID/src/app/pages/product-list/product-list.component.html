@@ -1,107 +1,86 @@
-<p-card header="Lista de Produtos">
-    <p-table
-    #table
-    [value]="products"
-    dataKey="id"
-    [loading]="loading"
-    [paginator]="true"
-    [rows]="10"
-    [tableStyle]="{ 'min-width': '78rem' }"
-    [globalFilterFields]="['name', 'packingType', 'unitMeasurement', 'batchNumber']">
-        <ng-template pTemplate="caption">
-            <div class="search-input">
-                <div class="lateral-buttons">
-                <p-button 
-                    label="Novo Produto"
-                    icon="pi pi-plus"
-                    [rounded]="true" 
-                    [raised]="true"
-                    severity="primary"
-                    routerLink='/produtos/cadastrar'>
-                </p-button>
+<div class="container">
+    <p-card header="Lista de Produtos">
+        <p-table #table [value]="products" dataKey="id" [loading]="loading" [paginator]="true" [rows]="10"
+            [tableStyle]="{ 'min-width': '78rem' }"
+            [globalFilterFields]="['name', 'packingType', 'unitMeasurement', 'batchNumber']">
+            <ng-template pTemplate="caption">
+                <div class="search-input">
+                    <div class="lateral-buttons">
+                        <p-button label="Novo Produto" icon="pi pi-plus" [rounded]="true" [raised]="true"
+                            severity="primary" routerLink='/produtos/cadastrar'>
+                        </p-button>
+                    </div>
+                    <p-iconField iconPosition="left" class="input-icon">
+                        <p-inputIcon>
+                            <i class="pi pi-search"></i>
+                        </p-inputIcon>
+                        <input type="text" pInputText (input)="globalFilter(table, $event)" placeholder="Buscar">
+                    </p-iconField>
+
                 </div>
-                <p-iconField iconPosition="left" class="input-icon">
-                    <p-inputIcon>
-                        <i class="pi pi-search"></i>
-                    </p-inputIcon>
-                    <input 
-                    type="text"
-                    pInputText
-                    (input)="globalFilter(table, $event)"
-                    placeholder="Buscar">
-                </p-iconField>
-                
-            </div>
-          
-        </ng-template>
-        <ng-template pTemplate="header">
-            <tr>
-                <th style="width: 15%;">Nome</th>
-                <th style="width: 10%;">Peso</th>
-                <th style="width: 15%;">Embalagem</th>
-                <th style="width: 8%;">Quantidade</th>
-                <th style="width: 12%;">Preço</th>
-                <th style="width: 8%;">Unidade de medida</th>
-                <th style="width: 8%;">Nº de lote</th>
-                <th style="width: 5%;">Ações</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-product>
-            <tr>
-                <td>{{ product.name }}</td>
-                <td>{{ product.weight }}</td>
-                <td>{{ product.packingType }}</td>
-                <td>{{ product.quantity }}</td>
-                <td>R${{ product.price }}</td>
-                <td>{{ product.unitMeasurement }}</td>
-                <td>{{ product.batchNumber }}</td>
-                <td class="action-button-group">
-                    <p-button 
-                    icon="pi pi-ellipsis-v"
-                    [rounded]="true"
-                    [text]="true"
-                    (onClick)="setSelectedProduct(product); menu.toggle($event)">
-                </p-button>
-            </td>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="emptymessage">
-            <tr>
-                <td colspan="8">Nenhum produto cadastrado.</td>
-            </tr>
-        </ng-template>
-    </p-table>
-</p-card>
-<p-tieredMenu #menu [model]="actions" [popup]="true"/>
-<p-confirmDialog></p-confirmDialog>
-<p-toast></p-toast>
-<p-dialog
-header="Detalhes do produto"
-[(visible)]="visibleDialog"
-[modal]="true"
-[draggable]="false"
-[resizable]="false"
-[style]="{ width: '40vw' }">
-    <ul class="productDetails" *ngIf="selectedProduct">
-        <li><b>RFID: </b>{{ selectedProduct.rfidTag }}</li>
-        <li><b>Nome: </b>{{ selectedProduct.name }}</li>
-        <li><b>Categoria: </b>{{ selectedProductCategory.name }}</li>
-        <li><b>Peso: </b>{{ selectedProduct.weight }}</li>
-        <li><b>Embalagem: </b>{{ selectedProductPackaging.name }}</li>
-        <li><b>Quantidade: </b>{{ selectedProduct.quantity }}</li>
-        <li><b>Preço: </b>R${{ selectedProduct.price }}</li>
-        <li><b>Unidade de medida: </b>{{ selectedProduct.unitMeasurement }}</li>
-        <li><b>Altura: </b>{{ selectedProduct.height }}</li>
-        <li><b>Largura: </b>{{ selectedProduct.width }}</li>
-        <li><b>Comprimento: </b>{{ selectedProduct.length }}</li>
-        <li><b>Volume: </b>{{ selectedProduct.volume }}</li>
-        <li><b>Nº de lote: </b>{{ selectedProduct.batchNumber }}</li>
-        <li><b>Data de fabricação: </b>{{ selectedProductManuFacDate }}</li>
-        <li><b>Date de vencimento: </b>{{ selectedProductDueDate }}</li>
-        <li><b>Fornecedor: </b>{{ selectedProductSupplier.name }}</li>
-        <li><b>Descrição: </b>{{ selectedProduct.description }}</li>
-    </ul>
-    <div class="confirmDialogButton">
-        <p-button (onClick)="closeModal()">OK</p-button>
-    </div>
-</p-dialog>
+
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 15%;">Nome</th>
+                    <th style="width: 10%;">Peso</th>
+                    <th style="width: 15%;">Embalagem</th>
+                    <th style="width: 8%;">Quantidade</th>
+                    <th style="width: 12%;">Preço</th>
+                    <th style="width: 8%;">Unidade de medida</th>
+                    <th style="width: 8%;">Nº de lote</th>
+                    <th style="width: 5%;">Ações</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product>
+                <tr>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.weight }}</td>
+                    <td>{{ product.packingType }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>R${{ product.price }}</td>
+                    <td>{{ product.unitMeasurement }}</td>
+                    <td>{{ product.batchNumber }}</td>
+                    <td class="action-button-group">
+                        <p-button icon="pi pi-ellipsis-v" [rounded]="true" [text]="true"
+                            (onClick)="setSelectedProduct(product); menu.toggle($event)">
+                        </p-button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="8">Nenhum produto cadastrado.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-card>
+    <p-tieredMenu #menu [model]="actions" [popup]="true" />
+    <p-confirmDialog></p-confirmDialog>
+    <p-toast></p-toast>
+    <p-dialog header="Detalhes do produto" [(visible)]="visibleDialog" [modal]="true" [draggable]="false"
+        [resizable]="false" [style]="{ width: '40vw' }">
+        <ul class="productDetails" *ngIf="selectedProduct">
+            <li><b>RFID: </b>{{ selectedProduct.rfidTag }}</li>
+            <li><b>Nome: </b>{{ selectedProduct.name }}</li>
+            <li><b>Categoria: </b>{{ selectedProductCategory.name }}</li>
+            <li><b>Peso: </b>{{ selectedProduct.weight }}</li>
+            <li><b>Embalagem: </b>{{ selectedProductPackaging.name }}</li>
+            <li><b>Quantidade: </b>{{ selectedProduct.quantity }}</li>
+            <li><b>Preço: </b>R${{ selectedProduct.price }}</li>
+            <li><b>Unidade de medida: </b>{{ selectedProduct.unitMeasurement }}</li>
+            <li><b>Altura: </b>{{ selectedProduct.height }}</li>
+            <li><b>Largura: </b>{{ selectedProduct.width }}</li>
+            <li><b>Comprimento: </b>{{ selectedProduct.length }}</li>
+            <li><b>Volume: </b>{{ selectedProduct.volume }}</li>
+            <li><b>Nº de lote: </b>{{ selectedProduct.batchNumber }}</li>
+            <li><b>Data de fabricação: </b>{{ selectedProductManuFacDate }}</li>
+            <li><b>Date de vencimento: </b>{{ selectedProductDueDate }}</li>
+            <li><b>Fornecedor: </b>{{ selectedProductSupplier.name }}</li>
+            <li><b>Descrição: </b>{{ selectedProduct.description }}</li>
+        </ul>
+        <div class="confirmDialogButton">
+            <p-button (onClick)="closeModal()">OK</p-button>
+        </div>
+    </p-dialog>
+</div>

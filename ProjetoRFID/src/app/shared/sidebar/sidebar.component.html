@@ -1,6 +1,3 @@
-<p-sidebar [(visible)]="sidebarVisible" (onHide)="hideSidebar()">
-    <ng-template pTemplate="header">
-        <img src="assets/logo.svg" alt="Logo da Ingenico">
-    </ng-template>
+<p-card class="card">
     <p-panelMenu [model]="items" [multiple]="true" styleClass="w-full md:w-20rem" />
-</p-sidebar>
+</p-card>
