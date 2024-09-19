@@ -81,16 +81,18 @@ export class ProductsReadComponent implements OnInit {
   ngOnInit(): void {
     this.productsService.getProductsByTagRfids().subscribe(response => {
       this.products = response.products;
-      console.log(this.products);
-      
+
+      for(let product of this.products) {
+        this.packagingService.getPackagingById(product.idPackaging).subscribe(packaging => {
+          product.packingType = packaging.name;
+        });
+      }
     });
   }
   
   viewProduct(product: Product) {
     this.selectedProduct = product;
   
-    console.log(this.selectedProduct);
-    
     this.categoryService.getCategoryById(this.selectedProduct.idCategory).subscribe(response => {
       this.selectedProductCategory = response;
     });
@@ -106,12 +108,8 @@ export class ProductsReadComponent implements OnInit {
 
     this.selectedProductDueDate = new Date(this.selectedProduct.dueDate).toLocaleDateString('pt-BR');
     this.selectedProductManuFacDate = new Date(this.selectedProduct.manufacDate).toLocaleDateString('pt-BR');
-    
-    // if (this.selectedProduct) {
-    //   this.FormatedManufacDate = this.selectedProduct.manufacDate.toString();
-    //   this.FormatedDueDate = this.selectedProduct.dueDate.toString();
-    // }
-    this.visibleDialog = true; // Abre o modal
+
+    this.visibleDialog = true;
   }
   async saveHistory() {
     
@@ -129,10 +127,6 @@ export class ProductsReadComponent implements OnInit {
       
     await Promise.all(promises);
   
-    console.log("Tags com itens: ", this.History);
-    console.log("Tags sem itens: ", this.NonProductTags);
-    console.log(this.NonProductTags.length);
-      
     if (this.NonProductTags.length !== 0) {
       this.Message();  
     }
@@ -143,7 +137,7 @@ export class ProductsReadComponent implements OnInit {
   }
   
   closeModal() {
-    this.visibleDialog = false; // Fecha o modal
+    this.visibleDialog = false;
   }
   
   globalFilter(table: any, event: Event) {
@@ -152,26 +146,22 @@ export class ProductsReadComponent implements OnInit {
   }
   
   recarregarPagina() {
-    this.loading = true; // Ativa a animação de carregamento
+    this.loading = true;
   
-    // Define o delay em milissegundos (2000 ms = 2 segundos)
     const delay = 500;
-    // Adiciona um delay antes de recarregar a rota
     setTimeout(() => {
-      // Obtém a URL atual
       const currentUrl = this.router.url;
-      // Navega para a rota 'refresh' (navega para a mesma rota e então recarrega)
       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
         this.router.navigate([currentUrl]);
         console.log("Página Recarregada");
-        this.loading = false; // Desativa a animação de carregamento
+        this.loading = false;
       });
     }, delay);
   }
   
-  enviarReadout(tag_list: string[]) {  // Use string[] em vez de String[]
-    const readoutDate = new Date().toISOString(); // Data atual formatada como ISO string
-    const tags = tag_list; // tags já é do tipo string[]
+  enviarReadout(tag_list: string[]) {
+    const readoutDate = new Date().toISOString();
+    const tags = tag_list;
     this.productsService.postReadout(readoutDate, tags)
       .subscribe({
         next: (response) => {
