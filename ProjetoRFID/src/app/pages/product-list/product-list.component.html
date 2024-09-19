@@ -35,10 +35,10 @@
             <ng-template pTemplate="body" let-product>
                 <tr>
                     <td>{{ product.name }}</td>
-                    <td>{{ product.weight }}</td>
+                    <td>{{ product.weight }} kg</td>
                     <td>{{ product.packingType }}</td>
                     <td>{{ product.quantity }}</td>
-                    <td>R${{ product.price }}</td>
+                    <td>R$ {{ product.price }}</td>
                     <td>{{ product.unitMeasurement }}</td>
                     <td>{{ product.batchNumber }}</td>
                     <td class="action-button-group">
@@ -64,15 +64,15 @@
             <li><b>RFID: </b>{{ selectedProduct.rfidTag }}</li>
             <li><b>Nome: </b>{{ selectedProduct.name }}</li>
             <li><b>Categoria: </b>{{ selectedProductCategory.name }}</li>
-            <li><b>Peso: </b>{{ selectedProduct.weight }}</li>
+            <li><b>Peso: </b>{{ selectedProduct.weight }} kg</li>
             <li><b>Embalagem: </b>{{ selectedProductPackaging.name }}</li>
             <li><b>Quantidade: </b>{{ selectedProduct.quantity }}</li>
-            <li><b>Preço: </b>R${{ selectedProduct.price }}</li>
+            <li><b>Preço: </b>R$ {{ selectedProduct.price }}</li>
             <li><b>Unidade de medida: </b>{{ selectedProduct.unitMeasurement }}</li>
-            <li><b>Altura: </b>{{ selectedProduct.height }}</li>
-            <li><b>Largura: </b>{{ selectedProduct.width }}</li>
-            <li><b>Comprimento: </b>{{ selectedProduct.length }}</li>
-            <li><b>Volume: </b>{{ selectedProduct.volume }}</li>
+            <li><b>Altura: </b>{{ selectedProduct.height }} cm</li>
+            <li><b>Largura: </b>{{ selectedProduct.width }} cm</li>
+            <li><b>Comprimento: </b>{{ selectedProduct.length }} cm</li>
+            <li><b>Volume: </b>{{ selectedProduct.volume }} cm³</li>
             <li><b>Nº de lote: </b>{{ selectedProduct.batchNumber }}</li>
             <li><b>Data de fabricação: </b>{{ selectedProductManuFacDate }}</li>
             <li><b>Date de vencimento: </b>{{ selectedProductDueDate }}</li>

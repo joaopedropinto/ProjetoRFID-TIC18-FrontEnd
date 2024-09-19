@@ -75,10 +75,10 @@ export class ProductListComponent implements OnInit {
     this.productService.returnAllActiveProducts().subscribe(response => {
       this.products = response;
       this.loading = false;
-
+      
       console.log('Produtos carregados:', this.products);
     });
-
+    
     this.actions = [
       { 
         label: 'Visualizar', 
@@ -95,6 +95,7 @@ export class ProductListComponent implements OnInit {
         command: () => this.deletionConfirmation(this.selectedProduct)
       }
     ];
+    
   }
 
   setSelectedProduct(product: Product): void {
