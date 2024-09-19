@@ -58,8 +58,7 @@ export class ProductEditingComponent implements OnInit {
 
   selectedCategory: Category | undefined;
   selectedSupplier: Supplier | undefined;
-  packages!: Packaging[];
-  
+
   unitsOfMeasurement = [
     { label: 'Kg', value: 'Kg' },
     { label: 'Litros', value: 'Litros' },
@@ -76,8 +75,7 @@ export class ProductEditingComponent implements OnInit {
     private packagingService: PackagingService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
-    private packagingService: PackagingService, 
+    private router: Router, 
     private messageService: MessageService
   ) {
     this.productForm = this.formBuilder.group({
