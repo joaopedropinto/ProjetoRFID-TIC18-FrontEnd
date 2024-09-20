@@ -1,7 +1,7 @@
 <div class="container">
     <p-card header="Lista de Produtos">
         <p-table #table [value]="products" dataKey="id" [loading]="loading" [paginator]="true" [rows]="10"
-            [tableStyle]="{ 'min-width': '78rem' }"
+            [tableStyle]="{ 'min-width': '65rem' }"
             [globalFilterFields]="['name', 'packingType', 'unitMeasurement', 'batchNumber']">
             <ng-template pTemplate="caption">
                 <div class="search-input">
@@ -22,12 +22,12 @@
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
-                    <th style="width: 15%;">Nome</th>
-                    <th style="width: 10%;">Peso</th>
-                    <th style="width: 15%;">Embalagem</th>
+                    <th style="width: 10%;">Nome</th>
+                    <th style="width: 8%;">Peso</th>
+                    <th style="width: 8%;">Embalagem</th>
                     <th style="width: 8%;">Quantidade</th>
-                    <th style="width: 12%;">Preço</th>
-                    <th style="width: 8%;">Unidade de medida</th>
+                    <th style="width: 8%;">Preço</th>
+                    <th style="width: 14%;">Unidade de medida</th>
                     <th style="width: 8%;">Nº de lote</th>
                     <th style="width: 5%;">Ações</th>
                 </tr>

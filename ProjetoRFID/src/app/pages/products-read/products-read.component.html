@@ -3,7 +3,7 @@
 </div>
 <p-card header="Produtos Lidos">
   <p-table #table [globalFilterFields]="['name', 'packingType', 'unitMeasurement', 'batchNumber']" [value]="products"
-    [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '78rem' }">
+    [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '65rem' }">
     <ng-template pTemplate="caption">
       <div class="search-input">
         <div class="lateral-buttons">
@@ -26,14 +26,14 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th style="width: 15%">Nome</th>
-        <th style="width: 10%">Peso</th>
-        <th style="width: 15%">Embalagem</th>
-        <th style="width: 8%">Quantidade</th>
-        <th style="width: 12%">Preço</th>
-        <th style="width: 8%">Unidade de medida</th>
-        <th style="width: 8%">Nº de lote</th>
-        <th style="width: 5%">Ações</th>
+        <th style="width: 10%;">Nome</th>
+        <th style="width: 8%;">Peso</th>
+        <th style="width: 8%;">Embalagem</th>
+        <th style="width: 8%;">Quantidade</th>
+        <th style="width: 8%;">Preço</th>
+        <th style="width: 14%;">Unidade de medida</th>
+        <th style="width: 8%;">Nº de lote</th>
+        <th style="width: 5%;">Ações</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-product>
