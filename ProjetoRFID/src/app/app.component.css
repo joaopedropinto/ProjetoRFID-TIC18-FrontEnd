@@ -15,6 +15,9 @@ body {
 .content {
     display: flex;
     flex-wrap: wrap;
+    margin: 1%;
+    
+    
 }
 
 .page {
