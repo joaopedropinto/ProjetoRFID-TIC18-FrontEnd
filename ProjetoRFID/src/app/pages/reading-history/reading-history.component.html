@@ -4,7 +4,7 @@
     [value]="readings"
     [paginator]="true"
     [rows]="10"
-    [tableStyle]="{ 'min-width': '162vh', 'min-height': '40vh' }">
+    [tableStyle]="{ 'min-width': '162vh', 'min-height': '40vh', 'vertical-align': 'top' }">
         <ng-template pTemplate="header">
             <tr>
                 <th style="width: 50%;">
@@ -34,7 +34,7 @@
         </ng-template>
         <ng-template pTemplate="emptymessage">
             <tr>
-                <td colspan="3">Nenhuma leitura encontrada.</td>
+                <td colspan="3" >Nenhuma leitura encontrada.</td>
             </tr>
         </ng-template>
     </p-table>
