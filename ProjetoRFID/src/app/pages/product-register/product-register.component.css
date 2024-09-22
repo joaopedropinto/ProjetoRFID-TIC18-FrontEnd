@@ -3,8 +3,8 @@
     flex-direction: column;
     justify-content: space-evenly;
     gap: 25px;
-    width: 100%;
-    max-width: 900px;
+    min-width: 162vh;
+    min-height: 40vh;
 }
 
 .row {
