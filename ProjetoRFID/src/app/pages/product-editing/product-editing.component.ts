@@ -58,6 +58,7 @@ export class ProductEditingComponent implements OnInit {
 
   selectedCategory: Category | undefined;
   selectedSupplier: Supplier | undefined;
+  selectedPackaging: Packaging | undefined;
 
   unitsOfMeasurement = [
     { label: 'Kg', value: 'Kg' },
@@ -120,6 +121,9 @@ export class ProductEditingComponent implements OnInit {
       this.supplierService.getSupplierById(productResponse.idSupplier).subscribe(supplierResponse => {
         this.selectedSupplier = supplierResponse;
       });
+      this.packagingService.getPackagingById(productResponse.idPackaging).subscribe(packagingResponse => {
+        this.selectedPackaging = packagingResponse;
+      })
 
       this.productForm.get('name')?.setValue(productResponse.name);
       this.productForm.get('description')?.setValue(productResponse.description);
