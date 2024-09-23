@@ -15,7 +15,7 @@
                 <div class="inputFloatLabel">
                     <p-floatLabel>
                         <p-dropdown [style]="{width:'100%'}" [options]="categories" [showClear]="true"
-                            optionLabel="name" formControlName="category" />
+                            optionLabel="name" formControlName="category" [(ngModel)]="selectedCategory" />
                         <label for="category">Categoria</label>
                     </p-floatLabel>
                     <small class="error-message"
@@ -50,7 +50,7 @@
                 <div class="inputFloatLabel">
                     <p-floatLabel>
                         <p-dropdown [style]="{width:'100%'}" [options]="packages" optionLabel="name" [showClear]="true"
-                            formControlName="packages" />
+                            formControlName="packages" [(ngModel)]="selectedPackaging" />
                         <label for="packages">Tipo de embalagem</label>
                     </p-floatLabel>
                     <small class="error-message"
@@ -170,7 +170,7 @@
                 <div class="inputFloatLabel">
                     <p-floatLabel>
                         <p-dropdown [style]="{width:'100%'}" [options]="suppliers" [showClear]="true" optionLabel="name"
-                            formControlName="supplier" />
+                            formControlName="supplier" [(ngModel)]="selectedSupplier"/>
                         <label for="supplier">Fornecedor</label>
                     </p-floatLabel>
                     <small class="error-message"
