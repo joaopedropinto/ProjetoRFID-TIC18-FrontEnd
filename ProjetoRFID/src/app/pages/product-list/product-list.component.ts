@@ -9,7 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { TieredMenuModule } from 'primeng/tieredmenu';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, SortEvent } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -75,8 +75,6 @@ export class ProductListComponent implements OnInit {
     this.productService.returnAllActiveProducts().subscribe(response => {
       this.products = response;
       this.loading = false;
-      
-      console.log('Produtos carregados:', this.products);
     });
     
     this.actions = [
