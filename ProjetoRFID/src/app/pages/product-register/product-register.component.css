@@ -3,8 +3,8 @@
     flex-direction: column;
     justify-content: space-evenly;
     gap: 25px;
-    min-width: 162vh;
-    min-height: 40vh;
+    width: 100%;
+    max-width: 900px;
 }
 
 .row {
@@ -26,6 +26,7 @@
 .textarea {
     resize: none;
     width: 100%;
+    
 }
 
 .full-width-input {
