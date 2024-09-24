@@ -153,7 +153,6 @@ export class ProductsReadComponent implements OnInit {
       const currentUrl = this.router.url;
       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
         this.router.navigate([currentUrl]);
-        console.log("Página Recarregada");
         this.loading = false;
       });
     }, delay);
@@ -165,11 +164,9 @@ export class ProductsReadComponent implements OnInit {
     this.productsService.postReadout(readoutDate, tags)
       .subscribe({
         next: (response) => {
-          console.log('Sucesso:', response);
           this.ToastMessages();
         },
         error: (error) => {
-          console.error('Erro:', error);
         }
       });
   }

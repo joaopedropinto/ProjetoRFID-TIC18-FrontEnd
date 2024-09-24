@@ -26,13 +26,13 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th style="width: 10%;">Nome</th>
-        <th style="width: 8%;">Peso</th>
-        <th style="width: 8%;">Embalagem</th>
-        <th style="width: 8%;">Quantidade</th>
-        <th style="width: 8%;">Preço</th>
-        <th style="width: 14%;">Unidade de medida</th>
-        <th style="width: 8%;">Nº de lote</th>
+        <th pSortableColumn="name" style="width: 10%;">Nome<p-sortIcon field="name"/></th>
+        <th pSortableColumn="weight" style="width: 8%;">Peso<p-sortIcon field="weight"/></th>
+        <th pSortableColumn="packingType" style="width: 8%;">Embalagem<p-sortIcon field="packingType"/></th>
+        <th pSortableColumn="quantity" style="width: 8%;">Quantidade<p-sortIcon field="quantity"/></th>
+        <th pSortableColumn="price" style="width: 8%;">Preço<p-sortIcon field="price"/></th>
+        <th pSortableColumn="unitMeasurement" style="width: 14%;">Unidade de medida<p-sortIcon field="unitMeasurement"/></th>
+        <th pSortableColumn="batchNumber" style="width: 8%;">Nº de lote<p-sortIcon field="batchNumber"/></th>
         <th style="width: 5%;">Ações</th>
       </tr>
     </ng-template>
