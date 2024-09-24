@@ -6,6 +6,8 @@
     [rows]="10"
     [tableStyle]="{ 'min-width': '78rem' }"
     [globalFilterFields]="['name', 'packingType', 'unitMeasurement', 'batchNumber']"
+    (sortFunction)="customSort($event)"
+    [customSort]="true"
     >
     <ng-template pTemplate="caption">
         <div class="search-input">
