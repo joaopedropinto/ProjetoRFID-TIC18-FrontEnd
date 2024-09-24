@@ -12,9 +12,9 @@
             <!-- Adicione a animação de carregamento aqui -->
             <span *ngIf="loading" class="loading-spinner"></span>
           </p-button>
-          <p-button [rounded]="true" severity="primary" [raised]="true" (onClick)="saveHistory()">
-            Salvar
-          </p-button>
+          <p-button type="button" label="Salvar" icon="pi pi-save" [rounded]="true" [raised]="true" severity="primary" 
+  (onClick)="saveHistory()">
+</p-button>
         </div>
         <p-iconField iconPosition="left" class="input-icon">
           <p-inputIcon>

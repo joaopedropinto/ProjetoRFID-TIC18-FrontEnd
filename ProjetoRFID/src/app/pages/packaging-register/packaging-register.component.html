@@ -14,7 +14,10 @@
                 </div>
             </div>
             <div class="row">
-                <button pButton type="submit" [disabled]="packagingForm.invalid">Cadastrar</button>
+                <button pButton type="submit" [disabled]="packagingForm.invalid" label="Cadastrar" icon="pi pi-plus" 
+                [rounded]="true" [raised]="true" severity="primary">
+        </button>
+        
             </div>
         </form>
     </p-card>
