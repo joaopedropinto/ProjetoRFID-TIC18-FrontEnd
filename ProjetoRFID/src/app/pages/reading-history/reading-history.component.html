@@ -7,11 +7,11 @@
     [tableStyle]="{ 'min-width': '162vh', 'min-height': '40vh', 'vertical-align': 'top' }">
         <ng-template pTemplate="header">
             <tr>
-                <th style="width: 50%;">
-                    Data e Hora
+                <th pSortableColumn="readoutDate" style="width: 50%;">
+                    Data e Hora<p-sortIcon field="readoutDate"/>
                 </th>
-                <th style="width: 25%;">
-                    Quant. de Produtos
+                <th pSortableColumn="tags.length" style="width: 25%;">
+                    Quant. de Produtos<p-sortIcon field="tags.length"/>
                 </th>
                 <th style="width: 5%;">Ações</th>
             </tr>
