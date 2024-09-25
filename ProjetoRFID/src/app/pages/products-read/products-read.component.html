@@ -7,14 +7,13 @@
     <ng-template pTemplate="caption">
       <div class="search-input">
         <div class="lateral-buttons">
-          <p-button [rounded]="true" severity="secondary" [raised]="true" (onClick)="recarregarPagina()">
+          <p-button severity="secondary" (onClick)="recarregarPagina()">
             Nova leitura
-            <!-- Adicione a animação de carregamento aqui -->
             <span *ngIf="loading" class="loading-spinner"></span>
-          </p-button>
-          <p-button [rounded]="true" severity="primary" [raised]="true" (onClick)="saveHistory()">
-            Salvar
-          </p-button>
+        </p-button>
+        
+        <p-button (onClick)="saveHistory()">Salvar</p-button>
+
         </div>
         <p-iconField iconPosition="left" class="input-icon">
           <p-inputIcon>
