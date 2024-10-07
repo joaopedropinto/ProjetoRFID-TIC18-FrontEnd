@@ -19,8 +19,10 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { RippleModule } from 'primeng/ripple';
 import { Router } from '@angular/router';
-import { PackagingService } from '../../services/packaging/packaging.service'; // Importação do novo serviço
+import { PackagingService } from '../../services/packaging/packaging.service'; 
 import { Packaging } from '../../models/packaging.model';
+import { FileUploadModule } from 'primeng/fileupload'; // Importação do novo serviço p fazer upload de arquivos
+
 
 @Component({
   selector: 'app-product-register',
@@ -39,6 +41,7 @@ import { Packaging } from '../../models/packaging.model';
     ButtonModule,
     ToastModule,
     RippleModule,
+    FileUploadModule,
   ],
   providers: [MessageService],
   templateUrl: './product-register.component.html',
@@ -47,10 +50,15 @@ import { Packaging } from '../../models/packaging.model';
 export class ProductRegisterComponent implements OnInit {
 
   productForm!: FormGroup;
-
+  uploadedFiles: File[] = []; // Adicionado o atributo para armazenar os arquivos enviados
   categories!: Category[];
   suppliers!: Supplier[];
-  packages!: Packaging[]; // Adicionado novo atributo
+  packages!: Packaging[]; 
+
+  onUpload(event: any) {
+    this.uploadedFiles.push(...event.files); // Armazena os arquivos enviados
+    console.log(this.uploadedFiles); // Para verificar/testar os arquivos no console
+  }
 
   unitsOfMeasurement = [
     { label: 'Kg', value: 'Kg' },
@@ -86,6 +94,8 @@ export class ProductRegisterComponent implements OnInit {
       width: [null, [Validators.required, Validators.min(0.1)]],
       length: [null, [Validators.required, Validators.min(0.1)]],
     })
+
+    
   }
 
   ngOnInit(): void {
