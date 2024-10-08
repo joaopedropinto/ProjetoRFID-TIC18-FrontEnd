@@ -5,6 +5,7 @@ import { ProductsReadComponent} from './pages/products-read/products-read.compon
 import { Routes } from '@angular/router';
 import { ReadingHistoryComponent } from './pages/reading-history/reading-history.component';
 import { ReadoutDetailsComponent } from './pages/readout-details/readout-details.component';
+import { PackagingRegisterComponent } from './pages/packaging-register/packaging-register.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'produtos', pathMatch: 'full' },
@@ -14,4 +15,5 @@ export const routes: Routes = [
     { path: 'leituras/realizar', component: ProductsReadComponent},
     { path: 'leituras/historico', component: ReadingHistoryComponent },
     { path: 'leituras/historico/:id', component: ReadoutDetailsComponent },
+    { path: 'embalagens/cadastrar', component: PackagingRegisterComponent },
 ];

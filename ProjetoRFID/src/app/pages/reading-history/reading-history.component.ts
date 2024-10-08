@@ -9,6 +9,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { DatePipe } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { Router } from '@angular/router';
+import { SortEvent } from 'primeng/api';
 
 @Component({
   selector: 'app-reading-history',
@@ -29,6 +30,9 @@ export class ReadingHistoryComponent implements OnInit {
   
   @ViewChild('table') table!: Table;
   readings!: Readout[];
+  initialValue!: Readout[];
+  isSorted: boolean | null = null;
+
   loading: boolean = true;
 
   selectedReadout!: Readout;
@@ -44,6 +48,7 @@ export class ReadingHistoryComponent implements OnInit {
   ngOnInit(): void {
     this.readingService.getAllReadings().subscribe((response) => {
       this.readings = response;
+      this.initialValue = [...this.readings];
       this.loading = false;
     });
   }
@@ -55,5 +60,39 @@ export class ReadingHistoryComponent implements OnInit {
 
   formatDateTime(date: Date) {
     return this.datePipe.transform(date, 'dd/MM/yyyy HH:mm');
+  }
+
+  customSort(event: SortEvent) {
+    if (this.isSorted == null || this.isSorted === undefined) {
+        this.isSorted = true;
+        this.sortTableData(event);
+    } else if (this.isSorted == true) {
+        this.isSorted = false;
+        this.sortTableData(event);
+    } else if (this.isSorted == false) {
+        this.isSorted = null;
+        this.readings = [...this.initialValue];
+        this.table.reset();
+    }
+  }
+
+  sortTableData(event: SortEvent) {
+    let result = null;
+    event.data?.sort((data1, data2) => {
+      if(event.field === 'readoutDate') {
+        const field = event.field as string;
+        let value1 = data1[field];
+        let value2 = data2[field];
+        if (value1 == null && value2 != null) result = -1;
+        else if (value1 != null && value2 == null) result = 1;
+        else if (value1 == null && value2 == null) result = 0;
+        else if (typeof value1 === 'string' && typeof value2 === 'string') result = value1.localeCompare(value2);
+        else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
+      }
+      else {
+        result = data1.tags.length - data2.tags.length;
+      }
+        return event.order! * result;
+    });
   }
 }

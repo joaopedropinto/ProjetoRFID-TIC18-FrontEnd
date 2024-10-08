@@ -1,4 +1,9 @@
-<app-header></app-header>
-<router-outlet></router-outlet>
-<p-divider/>
-<app-footer></app-footer>
+<div class="container">
+    <app-header></app-header>
+    <div class="page">
+        <app-sidebar class="sidebar"></app-sidebar>
+        <div class="content">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

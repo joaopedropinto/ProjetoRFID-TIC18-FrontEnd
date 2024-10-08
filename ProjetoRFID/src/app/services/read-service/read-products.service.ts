@@ -26,11 +26,12 @@ export class ReadProductsService {
           const products = response.products || [];
           const notFoundResponses = response.notFoundResponses || [];
           const adaptedProducts: Product[] = notFoundResponses.map(tag => ({
-            id: undefined,  
+            id: '',  // Define um valor padrão ou um identificador válido
             idCategory: 'unknown', 
             idSupplier: 'unknown', 
-            name: tag.message,
-            rfidTag: tag.rfidTag,
+            idPackaging: '',  // Adicionei idPackaging com um valor padrão
+            name: tag.message || 'Desconhecido',
+            rfidTag: tag.rfidTag || '',
             description: '',
             weight: 0,
             manufacDate: new Date(), 
@@ -39,13 +40,18 @@ export class ReadProductsService {
             packingType: '', 
             batchNumber: '', 
             quantity: 0,
-            price: 0
+            price: 0,
+            height: 0,
+            width: 0,
+            length: 0,
+            volume: 0
           }));
           const allProducts = [...products, ...adaptedProducts];
           return { products: allProducts, notFoundResponses };
         })
       );
   }
+
   async getProductsByTag(tag: string): Promise<string> {
     try {
       const result = await firstValueFrom(
@@ -54,7 +60,7 @@ export class ReadProductsService {
             map(() => '200'),  // Em caso de sucesso, retorna "OK"
             catchError((error) => {
               console.error('Ocorreu um erro ao buscar o produto:', error);
-              return tag; // Em caso de erro, retorna a tag
+              return of(tag); // Em caso de erro, retorna a tag
             })
           )
       );
@@ -64,7 +70,8 @@ export class ReadProductsService {
       return tag; // Em caso de erro, retorna a tag
     }
   }
-  postReadout(readoutDate: string, tags: String[]): Observable<any> {
+
+  postReadout(readoutDate: string, tags: string[]): Observable<any> {
     const body = {
       readoutDate: readoutDate,
       tags: tags
@@ -73,4 +80,3 @@ export class ReadProductsService {
     return this.http.post(`${this.apiUrl}/Readout`, body);
   }
 }
-

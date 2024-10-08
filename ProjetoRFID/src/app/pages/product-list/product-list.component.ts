@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CardModule } from 'primeng/card';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { ProductService } from '../../services/product/product.service';
 import { Product } from '../../models/product.model';
 import { IconFieldModule } from 'primeng/iconfield';
@@ -9,7 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { TieredMenuModule } from 'primeng/tieredmenu';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, SortEvent } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -20,6 +20,8 @@ import { CategoryService } from '../../services/category/category.service';
 import { SupplierService } from '../../services/supplier/supplier.service';
 import { Category } from '../../models/category.model';
 import { Supplier } from '../../models/supplier.model';
+import { PackagingService } from '../../services/packaging/packaging.service';
+import { Packaging } from '../../models/packaging.model';
 
 @Component({
   selector: 'app-product-list',
@@ -46,6 +48,9 @@ import { Supplier } from '../../models/supplier.model';
 export class ProductListComponent implements OnInit {
 
   products!: Product[];
+  @ViewChild('table') table!: Table;
+  initialValue!: Product[];
+  isSorted: boolean | null = null;
 
   actions!: MenuItem[];
 
@@ -54,6 +59,7 @@ export class ProductListComponent implements OnInit {
   selectedProductSupplier!: Supplier;
   selectedProductDueDate!: string;
   selectedProductManuFacDate!: string;
+  selectedProductPackaging!: Packaging;
 
   loading: boolean = true;
 
@@ -64,15 +70,17 @@ export class ProductListComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private categoryService: CategoryService,
-    private supplierService: SupplierService
+    private supplierService: SupplierService,
+    private packagingService: PackagingService
   ) { }
   
   ngOnInit(): void {
-    this.productService.getProducts().subscribe(response => {
+    this.productService.returnAllActiveProducts().subscribe(response => {
       this.products = response;
       this.loading = false;
+      this.initialValue = [...this.products];
     });
-
+    
     this.actions = [
       { 
         label: 'Visualizar', 
@@ -89,11 +97,12 @@ export class ProductListComponent implements OnInit {
         command: () => this.deletionConfirmation(this.selectedProduct)
       }
     ];
+    
   }
 
   setSelectedProduct(product: Product): void {
     this.selectedProduct = product;
-
+    
     this.categoryService.getCategoryById(this.selectedProduct.idCategory).subscribe(category => {
       this.selectedProductCategory = category;
     });
@@ -101,6 +110,10 @@ export class ProductListComponent implements OnInit {
     this.supplierService.getSupplierById(this.selectedProduct.idSupplier).subscribe(supplier => {
       this.selectedProductSupplier = supplier;
     });
+    this.packagingService.getPackagingById(this.selectedProduct.idPackaging).subscribe(packaging => {
+      this.selectedProductPackaging = packaging;
+    });
+    
 
     this.selectedProductDueDate = new Date(this.selectedProduct.dueDate).toLocaleDateString('pt-BR');
     this.selectedProductManuFacDate = new Date(this.selectedProduct.manufacDate).toLocaleDateString('pt-BR');
@@ -110,6 +123,7 @@ export class ProductListComponent implements OnInit {
     if (editAction && this.selectedProduct) {
         editAction.routerLink = `/produto/editar/${product.id}`;
     }
+    
   }
 
   deletionConfirmation(product: Product) {
@@ -146,6 +160,36 @@ export class ProductListComponent implements OnInit {
   globalFilter(table: any, event: Event) {
     const input = event.target as HTMLInputElement;
     table.filterGlobal(input.value, 'contains');
+  }
+
+  customSort(event: SortEvent) {
+    if (this.isSorted == null || this.isSorted === undefined) {
+        this.isSorted = true;
+        this.sortTableData(event);
+    } else if (this.isSorted == true) {
+        this.isSorted = false;
+        this.sortTableData(event);
+    } else if (this.isSorted == false) {
+        this.isSorted = null;
+        this.products = [...this.initialValue];
+        this.table.reset();
+    }
+  }
+
+  sortTableData(event: SortEvent) {
+    event.data?.sort((data1, data2) => {
+      const field = event.field as string;
+        let value1 = data1[field];
+        let value2 = data2[field];
+        let result = null;
+        if (value1 == null && value2 != null) result = -1;
+        else if (value1 != null && value2 == null) result = 1;
+        else if (value1 == null && value2 == null) result = 0;
+        else if (typeof value1 === 'string' && typeof value2 === 'string') result = value1.localeCompare(value2);
+        else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
+
+        return event.order! * result;
+    });
   }
 
 }

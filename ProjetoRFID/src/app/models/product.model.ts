@@ -2,6 +2,7 @@ export interface Product {
     id?: string;
     idCategory: string;
     idSupplier: string;
+    idPackaging: string;
     name: string;
     rfidTag?: string;
     description?: string;
@@ -13,4 +14,8 @@ export interface Product {
     batchNumber?: string;
     quantity: number;
     price: number;
+    height: number;
+    width: number;
+    length: number;
+    volume: number;
 }

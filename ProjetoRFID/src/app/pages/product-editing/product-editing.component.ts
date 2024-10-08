@@ -18,6 +18,8 @@ import { SupplierService } from '../../services/supplier/supplier.service';
 import { Product } from '../../models/product.model';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { Packaging } from '../../models/packaging.model';
+import { PackagingService } from '../../services/packaging/packaging.service';
 
 @Component({
   selector: 'app-product-editing',
@@ -52,16 +54,17 @@ export class ProductEditingComponent implements OnInit {
 
   categories!: Category[];
   suppliers!: Supplier[];
+  packages!: Packaging[];
 
   selectedCategory: Category | undefined;
   selectedSupplier: Supplier | undefined;
+  selectedPackaging: Packaging | undefined;
 
-  packingTypes = [
-    'Plástico',
-    'Enlatado',
-    'Papel e papelão',
-    'Vidro',
-    'A vácuo'
+  unitsOfMeasurement = [
+    { label: 'Kg', value: 'Kg' },
+    { label: 'Litros', value: 'Litros' },
+    { label: 'Unidades', value: 'Unidades' },
+    { label: 'Caixas', value: 'Caixas' }
   ];
 
   enableButtons: boolean = true;
@@ -70,9 +73,10 @@ export class ProductEditingComponent implements OnInit {
     private productService: ProductService,
     private categoryService: CategoryService,
     private supplierService: SupplierService,
+    private packagingService: PackagingService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
+    private router: Router, 
     private messageService: MessageService
   ) {
     this.productForm = this.formBuilder.group({
@@ -84,10 +88,13 @@ export class ProductEditingComponent implements OnInit {
       manufacDate: [null, [Validators.required]],
       dueDate: [null, [Validators.required]],
       unitMeasurement: [null, [Validators.required]],
-      packingType: [null, [Validators.required]],
+      packages: [null, [Validators.required]],
       batchNumber: [null, [Validators.required]],
       quantity: [null, [Validators.required, Validators.min(0)]],
       price: [null, [Validators.required, Validators.min(0.01)]],
+      height : [null, [Validators.required, Validators.min(0.1)]],
+      width : [null, [Validators.required, Validators.min(0.1)]],
+      length : [null, [Validators.required, Validators.min(0.1)]],
     });
    }
 
@@ -96,11 +103,15 @@ export class ProductEditingComponent implements OnInit {
 
     this.categoryService.getCategories().subscribe(response => {
        this.categories = response;
-    })
+    });
 
     this.supplierService.getSuppliers().subscribe(response => {
        this.suppliers = response;
     })
+
+    this.packagingService.getPackagingTypes().subscribe(response => {
+      this.packages = response; 
+    });
 
     this.productService.getProductById(this.productId).subscribe(productResponse => {
       this.categoryService.getCategoryById(productResponse.idCategory).subscribe(categoryResponse => {
@@ -110,6 +121,9 @@ export class ProductEditingComponent implements OnInit {
       this.supplierService.getSupplierById(productResponse.idSupplier).subscribe(supplierResponse => {
         this.selectedSupplier = supplierResponse;
       });
+      this.packagingService.getPackagingById(productResponse.idPackaging).subscribe(packagingResponse => {
+        this.selectedPackaging = packagingResponse;
+      })
 
       this.productForm.get('name')?.setValue(productResponse.name);
       this.productForm.get('description')?.setValue(productResponse.description);
@@ -117,11 +131,14 @@ export class ProductEditingComponent implements OnInit {
       this.productForm.get('manufacDate')?.setValue(new Date(productResponse.manufacDate));
       this.productForm.get('dueDate')?.setValue(new Date(productResponse.dueDate));
       this.productForm.get('unitMeasurement')?.setValue(productResponse.unitMeasurement);
-      this.productForm.get('packingType')?.setValue(productResponse.packingType);
+      this.productForm.get('packages')?.setValue(productResponse.packingType);
       this.productForm.get('batchNumber')?.setValue(productResponse.batchNumber);
       this.productForm.get('quantity')?.setValue(productResponse.quantity);
       this.productForm.get('price')?.setValue(productResponse.price);
-    })
+      this.productForm.get('height')?.setValue(productResponse.height);
+      this.productForm.get('width')?.setValue(productResponse.width);
+      this.productForm.get('length')?.setValue(productResponse.length);
+      this.productForm.get('volume')?.setValue(productResponse.height * productResponse.width * productResponse.length);})
 
     const manufacDateControl = this.productForm.get('manufacDate');
     const dueDateControl = this.productForm.get('dueDate');
@@ -152,26 +169,31 @@ export class ProductEditingComponent implements OnInit {
       name: this.productForm.get('name')?.value,
       idCategory: this.productForm.get('category')?.value.id,
       idSupplier: this.productForm.get('supplier')?.value.id,
+      idPackaging: this.productForm.get('packages')?.value.id,
       description: this.productForm.get('description')?.value,
       weight: this.productForm.get('weight')?.value,
       manufacDate: this.productForm.get('manufacDate')?.value.toISOString(),
       dueDate: this.productForm.get('dueDate')?.value.toISOString(),
       unitMeasurement: this.productForm.get('unitMeasurement')?.value,
-      packingType: this.productForm.get('packingType')?.value,
       batchNumber: this.productForm.get('batchNumber')?.value,
       quantity: this.productForm.get('quantity')?.value,
       price: this.productForm.get('price')?.value,
+      height: this.productForm.get('height')?.value, 
+      width: this.productForm.get('width')?.value,
+      length: this.productForm.get('length')?.value,
+      volume: this.productForm.get('height')?.value * this.productForm.get('width')?.value * this.productForm.get('length')?.value // Corrige o cálculo do volume
     }
-
-    if(this.productForm.valid) {
+  
+    if (this.productForm.valid) {
       this.productService.putProduct(updatedProduct).subscribe(() => {
-        this.messageService.add({ severity:'success', summary: 'Sucesso', detail: 'Produto atualizado com sucesso!' });
+        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Produto atualizado com sucesso!' });
         this.enableButtons = false;
         setTimeout(() => {
-          this.router.navigate(['produtos'])
+          this.router.navigate(['produtos']);
         }, 2000);
       });
     }
   }
+  
 
 }

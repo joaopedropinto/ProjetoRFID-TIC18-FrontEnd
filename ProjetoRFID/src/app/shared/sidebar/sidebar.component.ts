@@ -3,6 +3,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { ButtonModule } from 'primeng/button';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { MenuItem } from 'primeng/api';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-sidebar',
@@ -11,32 +12,34 @@ import { MenuItem } from 'primeng/api';
     SidebarModule,
     ButtonModule,
     PanelMenuModule,
+    CardModule,
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
-  @Input() sidebarVisible!: boolean;
+  @Input() sidebarVisible: boolean = true;
   @Output() hideSidebarEvent = new EventEmitter<boolean>();
 
   items: MenuItem[] = [
     {
+      label: 'Embalagens',
+      icon: 'pi pi-inbox',
+      routerLink: ['/embalagens/cadastrar'],
+    },
+    {
       label: 'Produtos',
       icon: 'pi pi-box',
       routerLink: ['/produtos'],
-      command: () => { this.hideSidebar() } },
+    },
     {
       label: 'Leituras',
       icon: 'pi pi-barcode',
       items: [
-        { label: 'Nova Leitura', icon: 'pi pi-plus', routerLink: ['/leituras/realizar'], command: () => { this.hideSidebar() } },
-        { label: 'Histórico', icon: 'pi pi-history', routerLink: ['/leituras/historico'], command: () => { this.hideSidebar() } },
+        { label: 'Nova Leitura', icon: 'pi pi-plus', routerLink: ['/leituras/realizar'] },
+        { label: 'Histórico', icon: 'pi pi-history', routerLink: ['/leituras/historico'] },
       ]
-    }
+    },
+    
   ];
-
-  hideSidebar(): void {
-    this.sidebarVisible = false;
-    this.hideSidebarEvent.emit(this.sidebarVisible);
-  }
 }

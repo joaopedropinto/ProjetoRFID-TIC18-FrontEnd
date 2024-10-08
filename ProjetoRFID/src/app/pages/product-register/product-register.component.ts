@@ -19,6 +19,8 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { RippleModule } from 'primeng/ripple';
 import { Router } from '@angular/router';
+import { PackagingService } from '../../services/packaging/packaging.service'; // Importação do novo serviço
+import { Packaging } from '../../models/packaging.model';
 
 @Component({
   selector: 'app-product-register',
@@ -40,7 +42,7 @@ import { Router } from '@angular/router';
   ],
   providers: [MessageService],
   templateUrl: './product-register.component.html',
-  styleUrl: './product-register.component.css'
+  styleUrls: ['./product-register.component.css'] // Corrigido de styleUrl para styleUrls
 })
 export class ProductRegisterComponent implements OnInit {
 
@@ -48,13 +50,13 @@ export class ProductRegisterComponent implements OnInit {
 
   categories!: Category[];
   suppliers!: Supplier[];
+  packages!: Packaging[]; // Adicionado novo atributo
 
-  packingTypes = [
-    'Plástico',
-    'Enlatado',
-    'Papel e papelão',
-    'Vidro',
-    'A vácuo'
+  unitsOfMeasurement = [
+    { label: 'Kg', value: 'Kg' },
+    { label: 'Litros', value: 'Litros' },
+    { label: 'Unidades', value: 'Unidades' },
+    { label: 'Caixas', value: 'Caixas' }
   ];
 
   constructor(
@@ -62,6 +64,7 @@ export class ProductRegisterComponent implements OnInit {
     private productService: ProductService,
     private categoryService: CategoryService,
     private supplierService: SupplierService,
+    private packagingService: PackagingService, 
     private messageService: MessageService,
     private router: Router
   ) {
@@ -75,32 +78,38 @@ export class ProductRegisterComponent implements OnInit {
       manufacDate: [null, [Validators.required]],
       dueDate: [null, [Validators.required]],
       unitMeasurement: [null, [Validators.required]],
-      packingType: [null, [Validators.required]],
+      packages: [null, [Validators.required]],
       batchNumber: [null, [Validators.required]],
       quantity: [null, [Validators.required, Validators.min(0)]],
       price: [null, [Validators.required, Validators.min(0.01)]],
+      height: [null, [Validators.required, Validators.min(0.1)]],
+      width: [null, [Validators.required, Validators.min(0.1)]],
+      length: [null, [Validators.required, Validators.min(0.1)]],
     })
   }
 
   ngOnInit(): void {
     this.categoryService.getCategories().subscribe(response => {
-       this.categories = response;
-    })
+      this.categories = response;
+    });
 
     this.supplierService.getSuppliers().subscribe(response => {
-       this.suppliers = response;
-    })
+      this.suppliers = response;
+    });
+
+    this.packagingService.getPackagingTypes().subscribe(response => {
+      this.packages = response; 
+    });
 
     const manufacDateControl = this.productForm.get('manufacDate');
     const dueDateControl = this.productForm.get('dueDate');
 
-    if(manufacDateControl && dueDateControl) {
+    if (manufacDateControl && dueDateControl) {
       dueDateControl.addValidators([
         this.compareDatesValidator(manufacDateControl)
       ]);
       dueDateControl.updateValueAndValidity();
     }
-
   }
 
   compareDatesValidator(manufacDateControl: AbstractControl): ValidatorFn {
@@ -126,17 +135,19 @@ export class ProductRegisterComponent implements OnInit {
       manufacDate: this.productForm.get('manufacDate')?.value.toISOString(),
       dueDate: this.productForm.get('dueDate')?.value.toISOString(),
       unitMeasurement: this.productForm.get('unitMeasurement')?.value,
-      packingType: this.productForm.get('packingType')?.value,
+      idPackaging: this.productForm.get('packages')?.value.id,
       batchNumber: this.productForm.get('batchNumber')?.value,
       quantity: this.productForm.get('quantity')?.value,
       price: this.productForm.get('price')?.value,
+      height: this.productForm.get('height')?.value,
+      width: this.productForm.get('width')?.value,
+      length: this.productForm.get('length')?.value,
+      volume: this.productForm.get('height')?.value * this.productForm.get('width')?.value * this.productForm.get('length')?.value
     }
-
     console.log(newProduct);
-
-    if(this.productForm.valid) {
+    if (this.productForm.valid) {
       this.productService.postProduct(newProduct).subscribe(() => {
-        this.messageService.add({ severity:'success', summary: 'Sucesso', detail: 'Produto cadastrado com sucesso!' });
+        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Produto cadastrado com sucesso!' });
         this.productForm.reset();
         setTimeout(() => {
           this.router.navigate(['produtos'])

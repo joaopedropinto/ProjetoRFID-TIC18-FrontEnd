@@ -1,4 +1,14 @@
-.footer {
+.footer-content {
     display: flex;
+    background-color: #1b458975;
+    color: #fff;
     justify-content: center;
+}
+
+.footer-section {
+    padding: 2px;
+}
+
+.footer-section h2 {
+    font-size: 14px;
 }
