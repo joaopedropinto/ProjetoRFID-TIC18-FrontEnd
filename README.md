@@ -11,4 +11,3 @@ Ingenico Brasil - https://ingenico.com/pt
 
 | [<img src="https://avatars.githubusercontent.com/u/81397160?v=4" width=115><br><sub>Alberto Henrique</sub>](https://github.com/albertolunia) | [<img src="https://avatars.githubusercontent.com/u/51959432?v=4" width=115><br><sub>Víctor Quirino</sub>](https://github.com/VictorSMQuirino) | [<img src="https://avatars.githubusercontent.com/u/85597024?s=96&v=4" width=115><br><sub>A. Caroline Neris</sub>](https://github.com/CarolineNeris) |
 | :---: | :---: | :---: |
-
