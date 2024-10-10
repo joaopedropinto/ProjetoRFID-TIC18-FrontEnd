@@ -18,5 +18,5 @@ export interface Product {
     width: number;
     length: number;
     volume: number;
-    IsActive?: boolean;
+    IsDeleted?: boolean;
 }
