@@ -118,7 +118,7 @@ export class ProductsReadComponent implements OnInit {
     
     const promises = this.products.map(async product => {
       let verify = await this.productsService.getProductsByTag(product.rfidTag!);
-      if (verify === '200' && product.IsDeleted === true) {
+      if (verify === '200' && product.IsDeleted === false) {
         this.History.push(product.rfidTag!);
       } else {
         this.NonProductTags.push(product.rfidTag!);
