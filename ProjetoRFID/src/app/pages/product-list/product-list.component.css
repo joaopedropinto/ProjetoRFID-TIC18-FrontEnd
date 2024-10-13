@@ -6,6 +6,12 @@
     margin-left: auto;
 }
 
+.table-column-header {
+    display: flex;
+    align-items: center;
+    column-gap: 0.5rem;
+}
+
 .productDetails {
     list-style-type: none;
     display: flex;

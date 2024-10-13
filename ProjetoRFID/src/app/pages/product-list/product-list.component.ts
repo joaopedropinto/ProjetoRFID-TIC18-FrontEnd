@@ -51,6 +51,7 @@ export class ProductListComponent implements OnInit {
   @ViewChild('table') table!: Table;
   initialValue!: Product[];
   isSorted: boolean | null = null;
+  orderedColumn: string | null = null;
 
   actions!: MenuItem[];
 
@@ -179,6 +180,7 @@ export class ProductListComponent implements OnInit {
   sortTableData(event: SortEvent) {
     event.data?.sort((data1, data2) => {
       const field = event.field as string;
+        this.orderedColumn = field;
         let value1 = data1[field];
         let value2 = data2[field];
         let result = null;
@@ -190,6 +192,18 @@ export class ProductListComponent implements OnInit {
 
         return event.order! * result;
     });
+  }
+
+  sortIconClass(fieldName: string): string {
+    if(this.orderedColumn == fieldName) {
+      if(this.isSorted) 
+        return "pi pi-sort-up-fill";
+  
+      else if(this.isSorted == false) 
+        return "pi pi-sort-down-fill";
+    }
+    
+    return "pi pi-sort";
   }
 
 }
