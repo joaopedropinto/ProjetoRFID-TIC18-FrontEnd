@@ -138,18 +138,27 @@ export class ProductRegisterComponent implements OnInit {
   }
 
   onFileSelect(event: any): void {
-    const file = (event.target as HTMLInputElement).files![0];
-    if (file) {
-      const reader = new FileReader();  
+    const files = event.files; // pega o evento da imagem
 
-      reader.onload = () => {
-        const base64Image = reader.result as string;
-            this.productForm.patchValue({ imageBase64: base64Image });
-          };
-          reader.readAsDataURL(file);  
-        }
-      }
+    if (files && files.length > 0) {
+        const file = files[0]; // garante pegar o primeiro 
+        const reader = new FileReader();
 
+        reader.onload = () => {
+            const base64Image = reader.result as string; // converte a imgem
+            this.productForm.patchValue({ imageBase64: base64Image }); 
+            
+        };
+
+    } else {
+        console.error('Nenhum arquivo foi selecionado.');
+    }
+    console.log('base', this.productForm.get('imageBase64')?.value);
+    
+}
+
+
+  
   onSubmit(): void {
     const newProduct: Product = {
       name: this.productForm.get('name')?.value,
@@ -169,7 +178,7 @@ export class ProductRegisterComponent implements OnInit {
       width: this.productForm.get('width')?.value,
       length: this.productForm.get('length')?.value,
       volume: this.productForm.get('height')?.value * this.productForm.get('width')?.value * this.productForm.get('length')?.value,
-      imageBase64: this.productForm.get('imageBase64')?.value
+      imageBase64: this.productForm.get('imageBase64')?.value 
     }
     console.log(newProduct);
     if (this.productForm.valid) {

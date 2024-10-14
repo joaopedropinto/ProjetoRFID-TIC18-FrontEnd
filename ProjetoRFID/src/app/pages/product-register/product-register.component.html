@@ -107,10 +107,7 @@
                             class="full-width-input">
                         <label for="batchNumber">Nº de lote</label>
                     </p-floatLabel>
-                    <small class="error-message"
-                        *ngIf="productForm.get('batchNumber')?.errors && productForm.get('batchNumber')?.touched">
-                        * O número de lote é obrigatório
-                    </small>
+                   
                 </div>
             </div>
             <div class="row">
@@ -192,31 +189,25 @@
                     </small>
                 </div>
             </div>
-            <p-fileUpload 
-    name="demo[]" 
-    url="https://www.primefaces.org/cdn/api/upload.php" 
-    [multiple]="false" 
-    accept="image/*" 
-    maxFileSize="1000000" 
-    (onUpload)="onUpload($event)" 
-    [auto]="true"> <!-- O upload automático pode ser ativado aqui -->
-    <ng-template pTemplate="content">
-        <ul *ngIf="uploadedFiles.length">
-            <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
-            
-        </ul>
-</p-fileUpload>
-
-<!-- Para exibir os arquivos carregados -->
-<div *ngIf="uploadedFiles.length > 0">
-    <h5>Arquivos Carregados:</h5>
-    <ul>
-        <li *ngFor="let file of uploadedFiles">
-            {{ file.name }} - {{ file.size }} bytes
-        </li>
-        
-    </ul>
-</div>
+            <div class="row">
+                <label for="image">Faça upload da imagem do Produto</label>
+                <div class="inputFloatLabel">
+                  
+                <p-fileUpload 
+                    name="image" 
+                    accept="image/*" 
+                    mode="basic" 
+                    (onSelect)="onFileSelect($event)"
+                    accept="image/*">
+                </p-fileUpload>
+                              
+                
+                    <small class="error-message"
+                        *ngIf="productForm.get('description')?.errors && productForm.get('description')?.touched">
+                        * A descrição do produto é obrigatória
+                    </small>
+                </div>
+            </div>
             <div class="row">
                 <div class="inputFloatLabel">
                     <p-floatLabel>
@@ -230,26 +221,6 @@
                     </small>
                 </div>
             </div>
-            <div class="row">
-                <label for="image">Faça upload da imagem do Produto</label>
-                <div class="inputFloatLabel">
-                  
-                <p-fileUpload 
-                    name="image" 
-                    accept="image/*" 
-                    mode="basic" 
-                    (onSelect)="onFileSelected($event)" 
-                >
-                </p-fileUpload>
-                    
-                
-                    <small class="error-message"
-                        *ngIf="productForm.get('description')?.errors && productForm.get('description')?.touched">
-                        * A descrição do produto é obrigatória
-                    </small>
-                </div>
-            </div>
-
             <div class="row">
                 <p-button label="Cadastrar" type="submit" [disabled]="productForm.invalid">
                 </p-button>
