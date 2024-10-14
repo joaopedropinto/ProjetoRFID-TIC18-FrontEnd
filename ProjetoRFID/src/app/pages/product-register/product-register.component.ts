@@ -21,11 +21,9 @@ import { RippleModule } from 'primeng/ripple';
 import { Router } from '@angular/router';
 import { PackagingService } from '../../services/packaging/packaging.service'; 
 import { Packaging } from '../../models/packaging.model';
-<<<<<<< HEAD
 import { FileUploadModule } from 'primeng/fileupload';
-=======
-import { FileUploadModule } from 'primeng/fileupload'; // Importação do novo serviço p fazer upload de arquivos
->>>>>>> 2b8ad1a7172515142568e721db71c6141486bbe8
+
+
 
 
 @Component({
