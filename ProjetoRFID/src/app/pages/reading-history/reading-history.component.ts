@@ -32,6 +32,7 @@ export class ReadingHistoryComponent implements OnInit {
   readings!: Readout[];
   initialValue!: Readout[];
   isSorted: boolean | null = null;
+  orderedColumn: string | null = null;
 
   loading: boolean = true;
 
@@ -63,24 +64,30 @@ export class ReadingHistoryComponent implements OnInit {
   }
 
   customSort(event: SortEvent) {
-    if (this.isSorted == null || this.isSorted === undefined) {
-        this.isSorted = true;
-        this.sortTableData(event);
-    } else if (this.isSorted == true) {
-        this.isSorted = false;
-        this.sortTableData(event);
-    } else if (this.isSorted == false) {
-        this.isSorted = null;
-        this.readings = [...this.initialValue];
-        this.table.reset();
+    if(event.field != this.orderedColumn) {
+      this.isSorted = true;
+      this.sortTableData(event);
+    } else {
+      if (this.isSorted == null || this.isSorted === undefined) {
+          this.isSorted = true;
+          this.sortTableData(event);
+      } else if (this.isSorted == true) {
+          this.isSorted = false;
+          this.sortTableData(event);
+      } else if (this.isSorted == false) {
+          this.isSorted = null;
+          this.readings = [...this.initialValue];
+          this.table.reset();
+      }
     }
   }
 
   sortTableData(event: SortEvent) {
     let result = null;
+    const field = event.field as string;
+    this.orderedColumn = field;
     event.data?.sort((data1, data2) => {
       if(event.field === 'readoutDate') {
-        const field = event.field as string;
         let value1 = data1[field];
         let value2 = data2[field];
         if (value1 == null && value2 != null) result = -1;
@@ -94,5 +101,17 @@ export class ReadingHistoryComponent implements OnInit {
       }
         return event.order! * result;
     });
+  }
+
+  sortIconClass(fieldName: string): string {
+    if(this.orderedColumn == fieldName) {
+      if(this.isSorted) 
+        return "pi pi-sort-up-fill";
+  
+      else if(this.isSorted == false) 
+        return "pi pi-sort-down-fill";
+    }
+    
+    return "pi pi-sort";
   }
 }

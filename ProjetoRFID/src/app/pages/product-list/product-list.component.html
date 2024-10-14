@@ -22,25 +22,88 @@
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
-                    <th pSortableColumn="name" style="width: 10%;">Nome<p-sortIcon field="name"/></th>
-                    <th pSortableColumn="weight" style="width: 8%;">Peso<p-sortIcon field="weight"/></th>
-                    <th pSortableColumn="packingType" style="width: 8%;">Embalagem<p-sortIcon field="packingType"/></th>
-                    <th pSortableColumn="quantity" style="width: 8%;">Quantidade<p-sortIcon field="quantity"/></th>
-                    <th pSortableColumn="price" style="width: 8%;">Preço<p-sortIcon field="price"/></th>
-                    <th pSortableColumn="unitMeasurement" style="width: 14%;">Unidade de medida<p-sortIcon field="unitMeasurement"/></th>
-                    <th pSortableColumn="batchNumber" style="width: 8%;">Nº de lote<p-sortIcon field="batchNumber"/></th>
+                    <th pSortableColumn="name" style="width: 12%;">
+                        <div class="table-column-header">
+                            Nome
+                            <i [ngClass]="sortIconClass('name')"></i>
+                        </div>
+                    </th>
+                    <th pSortableColumn="weight" style="width: 8%;">
+                        <div class="table-column-header">
+                            Peso
+                            <i [ngClass]="sortIconClass('weight')"></i>
+                        </div>
+                    </th>
+                    <th pSortableColumn="packingType" style="width: 10%;">
+                        <div class="table-column-header">
+                            Embalagem
+                            <i [ngClass]="sortIconClass('packingType')"></i>
+                        </div>
+                    </th>
+                    <th pSortableColumn="quantity" style="width: 9%;">
+                        <div class="table-column-header">
+                            Quantidade
+                            <i [ngClass]="sortIconClass('quantity')"></i>
+                        </div>
+                    </th>
+                    <th pSortableColumn="price" style="width: 9%;">
+                        <div class="table-column-header">
+                            Preço
+                            <i [ngClass]="sortIconClass('price')"></i>
+                        </div>
+                    </th>
+                    <th pSortableColumn="unitMeasurement" style="width: 8%;">
+                        <div class="table-column-header">
+                            Unidade <br>de medida
+                            <i [ngClass]="sortIconClass('unitMeasurement')"></i>
+                        </div>
+                    </th>
+                    <th pSortableColumn="batchNumber" style="width: 8%;">
+                        <div class="table-column-header">
+                            Nº de lote
+                            <i [ngClass]="sortIconClass('batchNumber')"></i>
+                        </div>
+                    </th>
                     <th style="width: 5%;">Ações</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-product>
                 <tr>
-                    <td>{{ product.name }}</td>
-                    <td>{{ product.weight }} kg</td>
-                    <td>{{ product.packingType }}</td>
-                    <td>{{ product.quantity }}</td>
-                    <td>R$ {{ product.price }}</td>
-                    <td>{{ product.unitMeasurement }}</td>
-                    <td>{{ product.batchNumber }}</td>
+                    <td>
+                        <div class="table-column-value">
+                            {{ product.name }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="table-column-value">
+                            {{ product.weight }} kg
+                        </div>
+                    </td>
+                    <td>
+                        <div class="table-column-value">
+                            {{ product.packingType }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="table-column-value">
+                            {{ product.quantity }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="table-column-value">
+                            R$ {{ product.price }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="table-column-value">
+                            {{ product.unitMeasurement }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="table-column-value">
+                            {{ product.batchNumber }}
+                        </div>
+                    </td>
                     <td class="action-button-group">
                         <p-button icon="pi pi-ellipsis-v" [rounded]="true" [text]="true"
                             (onClick)="setSelectedProduct(product); menu.toggle($event)">
