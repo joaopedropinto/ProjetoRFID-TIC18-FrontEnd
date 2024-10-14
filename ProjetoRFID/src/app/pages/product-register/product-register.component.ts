@@ -21,6 +21,8 @@ import { RippleModule } from 'primeng/ripple';
 import { Router } from '@angular/router';
 import { PackagingService } from '../../services/packaging/packaging.service'; // Importação do novo serviço
 import { Packaging } from '../../models/packaging.model';
+import { FileUploadModule } from 'primeng/fileupload';
+
 
 @Component({
   selector: 'app-product-register',
@@ -39,6 +41,7 @@ import { Packaging } from '../../models/packaging.model';
     ButtonModule,
     ToastModule,
     RippleModule,
+    FileUploadModule,
   ],
   providers: [MessageService],
   templateUrl: './product-register.component.html',
@@ -58,6 +61,7 @@ export class ProductRegisterComponent implements OnInit {
     { label: 'Unidades', value: 'Unidades' },
     { label: 'Caixas', value: 'Caixas' }
   ];
+ 
 
   constructor(
     private formBuilder: FormBuilder, 
@@ -124,6 +128,19 @@ export class ProductRegisterComponent implements OnInit {
     };
   }
 
+  onFileSelect(event: any): void {
+    const file = (event.target as HTMLInputElement).files![0];
+    if (file) {
+      const reader = new FileReader();  
+
+      reader.onload = () => {
+        const base64Image = reader.result as string;
+            this.productForm.patchValue({ imageBase64: base64Image });
+          };
+          reader.readAsDataURL(file);  
+        }
+      }
+
   onSubmit(): void {
     const newProduct: Product = {
       name: this.productForm.get('name')?.value,
@@ -142,7 +159,8 @@ export class ProductRegisterComponent implements OnInit {
       height: this.productForm.get('height')?.value,
       width: this.productForm.get('width')?.value,
       length: this.productForm.get('length')?.value,
-      volume: this.productForm.get('height')?.value * this.productForm.get('width')?.value * this.productForm.get('length')?.value
+      volume: this.productForm.get('height')?.value * this.productForm.get('width')?.value * this.productForm.get('length')?.value,
+      imageBase64: this.productForm.get('imageBase64')?.value
     }
     console.log(newProduct);
     if (this.productForm.valid) {

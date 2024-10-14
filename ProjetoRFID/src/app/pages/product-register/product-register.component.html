@@ -206,6 +206,26 @@
                 </div>
             </div>
             <div class="row">
+                <label for="image">Faça upload da imagem do Produto</label>
+                <div class="inputFloatLabel">
+                  
+                <p-fileUpload 
+                    name="image" 
+                    accept="image/*" 
+                    mode="basic" 
+                    (onSelect)="onFileSelected($event)" 
+                >
+                </p-fileUpload>
+                    
+                
+                    <small class="error-message"
+                        *ngIf="productForm.get('description')?.errors && productForm.get('description')?.touched">
+                        * A descrição do produto é obrigatória
+                    </small>
+                </div>
+            </div>
+
+            <div class="row">
                 <p-button label="Cadastrar" type="submit" [disabled]="productForm.invalid">
                 </p-button>
                 
