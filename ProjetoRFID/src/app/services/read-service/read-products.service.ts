@@ -51,23 +51,24 @@ export class ReadProductsService {
         })
       );
   }
-
-  async getProductsByTag(tag: string): Promise<string> {
+  async getProductsByTag(): Promise<ProductsByTagResponse | { error: string, details: string }> {
     try {
       const result = await firstValueFrom(
-        this.http.get(`${this.apiUrl}/Product/get-product-by-rfid?RfidTag=${tag}`)
+        this.http.get<ProductsByTagResponse>(`${this.apiUrl}/Product/get-products-by-rfids`)
           .pipe(
-            map(() => '200'),  // Em caso de sucesso, retorna "OK"
-            catchError((error) => {
+            map(response => response),  // Retorna o objeto completo no caso de sucesso
+            catchError((error: any) => {
               console.error('Ocorreu um erro ao buscar o produto:', error);
-              return of(tag); // Em caso de erro, retorna a tag
+              const errorMessage = error?.message || 'Erro desconhecido';
+              return of({ error: 'Erro ao buscar produtos', details: errorMessage });  // Retorna a mensagem de erro
             })
           )
       );
       return result;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro na requisição:', error);
-      return tag; // Em caso de erro, retorna a tag
+      const errorMessage = error?.message || 'Erro desconhecido';
+      return { error: 'Erro ao fazer a requisição', details: errorMessage };
     }
   }
 
@@ -79,4 +80,9 @@ export class ReadProductsService {
 
     return this.http.post(`${this.apiUrl}/Readout`, body);
   }
+}
+//interface usada para que o codigo reconheça a estrutura do resultado fornecido pelo end point
+interface ProductsByTagResponse {
+  products: any[];        // O tipo real de produtos pode ser definido conforme necessário
+  notFoundResponses: any[]; // O tipo real de notFoundProducts pode ser definido conforme necessário
 }
