@@ -27,6 +27,7 @@ import { SupplierService } from '../../services/supplier/supplier.service';
 import { Packaging } from '../../models/packaging.model';
 import { PackagingService } from '../../services/packaging/packaging.service';
 
+
 @Component({
   selector: 'app-products-read',
   standalone: true,
@@ -112,25 +113,24 @@ export class ProductsReadComponent implements OnInit {
     this.visibleDialog = true;
   }
   async saveHistory() {
-    
     this.History = [];
     this.NonProductTags = [];
-    
-    const promises = this.products.map(async product => {
-      let verify = await this.productsService.getProductsByTag(product.rfidTag!);
-      if (verify === '200' && product.IsDeleted === false) {
-        this.History.push(product.rfidTag!);
-      } else {
-        this.NonProductTags.push(product.rfidTag!);
-      }
-    });
-      
-    await Promise.all(promises);
   
-    if (this.NonProductTags.length !== 0) {
-      this.Message();  
-    }
+    let verify = await this.productsService.getProductsByTag();
+  
+    if ('error' in verify) {
+      console.log(verify.error);  // Lida com o erro, se houver
+    } else {
       
+      // Atribui os valores para as listas
+      this.History = verify.products?.map(item => item.rfidTag) || [];
+      this.NonProductTags = verify.notFoundResponses?.map(item => item.rfidTag) || [];
+    }
+    /*Permite ou não o salvamento do historico juntamente com a menssagem do porque não,
+    sobe a condição de todas as tag possuirem produtos cadastrados*/
+    if (this.NonProductTags.length !== 0) {
+      this.Message();
+    }
     if (this.NonProductTags.length === 0 && this.History.length > 0) {
       this.enviarReadout(this.History);
     }
@@ -173,7 +173,7 @@ export class ProductsReadComponent implements OnInit {
   
   Message() {
     if (this.NonProductTags.length > 0) {
-      const tagsNaoEncontradas = this.NonProductTags.join(', '); 
+      const tagsNaoEncontradas = this.NonProductTags.join(", "); 
       this.messages = [
         { 
           severity: 'error', 
@@ -189,7 +189,6 @@ export class ProductsReadComponent implements OnInit {
       ];
     }
   }
-
   ToastMessages() {
     this.messages = [
       { 
@@ -198,6 +197,5 @@ export class ProductsReadComponent implements OnInit {
       }
     ];
   }
-
 }
 
