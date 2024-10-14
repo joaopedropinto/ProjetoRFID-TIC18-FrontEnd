@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CardModule } from 'primeng/card';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { ReadProductsService } from '../../services/read-service/read-products.service';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
@@ -8,7 +8,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { TieredMenuModule } from 'primeng/tieredmenu';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, SortEvent } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -60,10 +60,14 @@ export class ProductsReadComponent implements OnInit {
   FormatedDueDate: string = '';
   isModalOpen = false;
   products!: Product[];
+  @ViewChild('table') table!: Table;
+  initialValue!: Product[];
   selectedProduct: Product | null = null;
   actions!: MenuItem[];
   mostrar: boolean = true;
   loading: boolean = false;
+  orderedColumn: string | null = null;
+  isSorted: boolean | null = null;
 
   selectedProductCategory!: Category;
   selectedProductSupplier!: Supplier;
@@ -88,6 +92,8 @@ export class ProductsReadComponent implements OnInit {
           product.packingType = packaging.name;
         });
       }
+
+      this.initialValue = [...this.products];
     });
   }
   
@@ -197,5 +203,53 @@ export class ProductsReadComponent implements OnInit {
       }
     ];
   }
+  customSort(event: SortEvent) {
+    if(event.field != this.orderedColumn) {
+      this.isSorted = true;
+      this.sortTableData(event);
+    } else {
+      if (this.isSorted == null || this.isSorted === undefined) {
+          this.isSorted = true;
+          this.sortTableData(event);
+      } else if (this.isSorted == true) {
+          this.isSorted = false;
+          this.sortTableData(event);
+      } else if (this.isSorted == false) {
+          this.isSorted = null;
+          this.products = [...this.initialValue];
+          this.table.reset();
+      }
+    }
+  }
+
+  sortTableData(event: SortEvent) {
+    event.data?.sort((data1, data2) => {
+      const field = event.field as string;
+        this.orderedColumn = field;
+        let value1 = data1[field];
+        let value2 = data2[field];
+        let result = null;
+        if (value1 == null && value2 != null) result = -1;
+        else if (value1 != null && value2 == null) result = 1;
+        else if (value1 == null && value2 == null) result = 0;
+        else if (typeof value1 === 'string' && typeof value2 === 'string') result = value1.localeCompare(value2);
+        else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
+
+        return event.order! * result;
+    });
+  }
+
+  sortIconClass(fieldName: string): string {
+    if(this.orderedColumn == fieldName) {
+      if(this.isSorted) 
+        return "pi pi-sort-up-fill";
+  
+      else if(this.isSorted == false) 
+        return "pi pi-sort-down-fill";
+    }
+    
+    return "pi pi-sort";
+  }
+
 }
 
