@@ -69,13 +69,41 @@
             </ng-template>
             <ng-template pTemplate="body" let-product>
                 <tr>
-                    <td>{{ product.name }}</td>
-                    <td>{{ product.weight }} kg</td>
-                    <td>{{ product.packingType }}</td>
-                    <td>{{ product.quantity }}</td>
-                    <td>R$ {{ product.price }}</td>
-                    <td>{{ product.unitMeasurement }}</td>
-                    <td>{{ product.batchNumber }}</td>
+                    <td>
+                        <div class="table-column-value">
+                            {{ product.name }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="table-column-value">
+                            {{ product.weight }} kg
+                        </div>
+                    </td>
+                    <td>
+                        <div class="table-column-value">
+                            {{ product.packingType }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="table-column-value">
+                            {{ product.quantity }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="table-column-value">
+                            R$ {{ product.price }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="table-column-value">
+                            {{ product.unitMeasurement }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="table-column-value">
+                            {{ product.batchNumber }}
+                        </div>
+                    </td>
                     <td class="action-button-group">
                         <p-button icon="pi pi-ellipsis-v" [rounded]="true" [text]="true"
                             (onClick)="setSelectedProduct(product); menu.toggle($event)">
