@@ -164,16 +164,21 @@ export class ProductListComponent implements OnInit {
   }
 
   customSort(event: SortEvent) {
-    if (this.isSorted == null || this.isSorted === undefined) {
-        this.isSorted = true;
-        this.sortTableData(event);
-    } else if (this.isSorted == true) {
-        this.isSorted = false;
-        this.sortTableData(event);
-    } else if (this.isSorted == false) {
-        this.isSorted = null;
-        this.products = [...this.initialValue];
-        this.table.reset();
+    if(event.field != this.orderedColumn) {
+      this.isSorted = true;
+      this.sortTableData(event);
+    } else {
+      if (this.isSorted == null || this.isSorted === undefined) {
+          this.isSorted = true;
+          this.sortTableData(event);
+      } else if (this.isSorted == true) {
+          this.isSorted = false;
+          this.sortTableData(event);
+      } else if (this.isSorted == false) {
+          this.isSorted = null;
+          this.products = [...this.initialValue];
+          this.table.reset();
+      }
     }
   }
 
