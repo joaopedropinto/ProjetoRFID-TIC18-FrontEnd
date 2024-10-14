@@ -192,6 +192,31 @@
                     </small>
                 </div>
             </div>
+            <p-fileUpload 
+    name="demo[]" 
+    url="https://www.primefaces.org/cdn/api/upload.php" 
+    [multiple]="false" 
+    accept="image/*" 
+    maxFileSize="1000000" 
+    (onUpload)="onUpload($event)" 
+    [auto]="true"> <!-- O upload automático pode ser ativado aqui -->
+    <ng-template pTemplate="content">
+        <ul *ngIf="uploadedFiles.length">
+            <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+            
+        </ul>
+</p-fileUpload>
+
+<!-- Para exibir os arquivos carregados -->
+<div *ngIf="uploadedFiles.length > 0">
+    <h5>Arquivos Carregados:</h5>
+    <ul>
+        <li *ngFor="let file of uploadedFiles">
+            {{ file.name }} - {{ file.size }} bytes
+        </li>
+        
+    </ul>
+</div>
             <div class="row">
                 <div class="inputFloatLabel">
                     <p-floatLabel>
