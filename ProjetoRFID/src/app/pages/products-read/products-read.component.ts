@@ -88,6 +88,7 @@ export class ProductsReadComponent implements OnInit {
         });
       }
     });
+
   }
   
   viewProduct(product: Product) {
@@ -104,6 +105,15 @@ export class ProductsReadComponent implements OnInit {
     this.packagingService.getPackagingById(this.selectedProduct.idPackaging).subscribe(response => {
       this.selectedProductPackaging = response; 
     });
+    
+    if (this.selectedProduct) {
+      this.productsService.getImageUrl(this.selectedProduct.imageObjectName!).subscribe(url => {
+        this.selectedProduct!.imageUrl = url || 'default-image-url';
+        console.log(this.selectedProduct!.imageUrl);
+      });
+    }
+    
+    
 
 
     this.selectedProductDueDate = new Date(this.selectedProduct.dueDate).toLocaleDateString('pt-BR');

@@ -51,6 +51,12 @@ export class ReadProductsService {
         })
       );
   }
+  getImageUrl(ObjectName: string): Observable<string> {
+    return this.http.get<{ url: string }>(`${this.apiUrl}/Product/image-url/${ObjectName}`).pipe(
+      map(response => response.url) // Mapeia para obter apenas a URL da resposta
+    );
+  }
+  
 
   async getProductsByTag(tag: string): Promise<string> {
     try {
@@ -79,4 +85,5 @@ export class ReadProductsService {
 
     return this.http.post(`${this.apiUrl}/Readout`, body);
   }
+
 }

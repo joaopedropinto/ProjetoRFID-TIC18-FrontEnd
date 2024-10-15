@@ -65,6 +65,10 @@
   [resizable]="false" [style]="{ width: '40vw' }">
   <table>
     <ul class="productDetails" *ngIf="selectedProduct">
+      <li *ngIf="selectedProduct.imageUrl">
+        <b></b><br>
+        <img [src]="selectedProduct.imageUrl" style="max-width: 60%; height: auto;">
+    </li>
       <li><b>RFID: </b>{{ selectedProduct.rfidTag }}</li>
       <li><b>Nome: </b>{{ selectedProduct.name }}</li>
       <li><b>Categoria: </b>{{ selectedProductCategory.name }}</li>
