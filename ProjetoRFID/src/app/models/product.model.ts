@@ -19,4 +19,6 @@ export interface Product {
     length: number;
     volume: number;
     imageBase64?: string;
+    imageUrl?: string;
+    imageObjectName?: string;
 }

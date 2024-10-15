@@ -79,8 +79,9 @@ export class ProductListComponent implements OnInit {
       this.products = response;
       this.loading = false;
       this.initialValue = [...this.products];
-    });
-    
+
+      
+  });
     this.actions = [
       { 
         label: 'Visualizar', 
@@ -102,6 +103,7 @@ export class ProductListComponent implements OnInit {
 
   setSelectedProduct(product: Product): void {
     this.selectedProduct = product;
+   
     
     this.categoryService.getCategoryById(this.selectedProduct.idCategory).subscribe(category => {
       this.selectedProductCategory = category;
@@ -113,6 +115,11 @@ export class ProductListComponent implements OnInit {
     this.packagingService.getPackagingById(this.selectedProduct.idPackaging).subscribe(packaging => {
       this.selectedProductPackaging = packaging;
     });
+    this.productService.getImageUrl(this.selectedProduct.imageObjectName!).subscribe(url => {
+      this.selectedProduct.imageUrl = url;
+      console.log(this.selectedProduct.imageUrl);
+    });
+    
     
 
     this.selectedProductDueDate = new Date(this.selectedProduct.dueDate).toLocaleDateString('pt-BR');
