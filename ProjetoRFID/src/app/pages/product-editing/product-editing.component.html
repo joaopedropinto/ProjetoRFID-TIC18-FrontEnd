@@ -180,6 +180,25 @@
                 </div>
             </div>
             <div class="row">
+                <label for="image">Faça upload da imagem do Produto</label>
+                <div class="inputFloatLabel">
+                  
+                <p-fileUpload 
+                    name="image" 
+                    accept="image/*" 
+                    mode="basic" 
+                    (onSelect)="onFileSelect($event)"
+                    accept="image/*">
+                </p-fileUpload>
+                              
+                
+                    <small class="error-message"
+                        *ngIf="productForm.get('description')?.errors && productForm.get('description')?.touched">
+                        * A imagem do produto é obrigatória
+                    </small>
+                </div>
+            </div>
+            <div class="row">
                 <div class="inputFloatLabel">
                     <p-floatLabel>
                         <textarea id="description" class="textarea" rows="5" cols="50" pInputTextarea
