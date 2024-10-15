@@ -96,6 +96,7 @@ export class ProductRegisterComponent implements OnInit {
       height: [null, [Validators.required, Validators.min(0.1)]],
       width: [null, [Validators.required, Validators.min(0.1)]],
       length: [null, [Validators.required, Validators.min(0.1)]],
+      imageBase64: [null, [Validators.required]]
     })
 
     
@@ -138,24 +139,46 @@ export class ProductRegisterComponent implements OnInit {
   }
 
   onFileSelect(event: any): void {
-    const files = event.files; // pega o evento da imagem
+    const files = event.files; 
 
+    
     if (files && files.length > 0) {
-        const file = files[0]; // garante pegar o primeiro 
+        const file = files[0]; 
+
+        // testa se é imagem
+        if (!file.type.startsWith('image/')) {
+            console.error('Por favor, selecione um arquivo de imagem válido.');
+            return;
+        }
+
+        // testa tamanho do arquivo
+        const MAX_SIZE = 2 * 1024 * 1024; 
+        if (file.size > MAX_SIZE) {
+            console.error('O arquivo é muito grande. Selecione um arquivo menor que 2MB.');
+            return;
+        }
+
         const reader = new FileReader();
 
+        
         reader.onload = () => {
-            const base64Image = reader.result as string; // converte a imgem
-            this.productForm.patchValue({ imageBase64: base64Image }); 
+            const base64Image = reader.result as string; // converte a imagem para Base64
+            this.productForm.patchValue({ imageBase64: base64Image }); // Atualiza o formulário
             
+            // log teste
+            console.log('Imagem em Base64:', this.productForm.get('imageBase64')?.value);
         };
 
+        // leitura
+        reader.readAsDataURL(file); 
     } else {
         console.error('Nenhum arquivo foi selecionado.');
     }
-    console.log('base', this.productForm.get('imageBase64')?.value);
     
+    // teste loh
+    console.log('base fora do método', this.productForm.get('imageBase64')?.value);
 }
+
 
 
   
