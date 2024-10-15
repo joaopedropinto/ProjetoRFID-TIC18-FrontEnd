@@ -43,7 +43,7 @@ import { Packaging } from '../../models/packaging.model';
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './product-list.component.html',
-  styleUrl: './product-list.component.css'
+  styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit {
 
@@ -64,6 +64,8 @@ export class ProductListComponent implements OnInit {
   loading: boolean = true;
 
   visibleDialog: boolean = false;
+  visibleImageDialog: boolean = false;
+  selectedImageUrl: string | null = null;
   
   constructor(
     private productService: ProductService,
@@ -79,9 +81,8 @@ export class ProductListComponent implements OnInit {
       this.products = response;
       this.loading = false;
       this.initialValue = [...this.products];
-
-      
-  });
+    });
+    
     this.actions = [
       { 
         label: 'Visualizar', 
@@ -90,7 +91,7 @@ export class ProductListComponent implements OnInit {
       },
       { 
         label: 'Editar', 
-        icon: 'pi pi-pen-to-square',
+        icon: 'pi pi-pencil',
       },
       { 
         label: 'Excluir', 
@@ -98,13 +99,12 @@ export class ProductListComponent implements OnInit {
         command: () => this.deletionConfirmation(this.selectedProduct)
       }
     ];
-    
   }
 
   setSelectedProduct(product: Product): void {
     this.selectedProduct = product;
-   
-    
+
+    // Buscar detalhes adicionais
     this.categoryService.getCategoryById(this.selectedProduct.idCategory).subscribe(category => {
       this.selectedProductCategory = category;
     });
@@ -112,27 +112,55 @@ export class ProductListComponent implements OnInit {
     this.supplierService.getSupplierById(this.selectedProduct.idSupplier).subscribe(supplier => {
       this.selectedProductSupplier = supplier;
     });
+
     this.packagingService.getPackagingById(this.selectedProduct.idPackaging).subscribe(packaging => {
       this.selectedProductPackaging = packaging;
     });
+
     this.productService.getImageUrl(this.selectedProduct.imageObjectName!).subscribe(url => {
       this.selectedProduct.imageUrl = url;
       console.log(this.selectedProduct.imageUrl);
     });
-    
-    
 
     this.selectedProductDueDate = new Date(this.selectedProduct.dueDate).toLocaleDateString('pt-BR');
     this.selectedProductManuFacDate = new Date(this.selectedProduct.manufacDate).toLocaleDateString('pt-BR');
 
     const editAction = this.actions.find(action => action.label === 'Editar');
-
     if (editAction && this.selectedProduct) {
-        editAction.routerLink = `/produto/editar/${product.id}`;
+      editAction.routerLink = `/produto/editar/${product.id}`;
     }
-    
   }
 
+  // Exibir o modal de detalhes do produto
+  viewProduct() {
+    this.visibleDialog = true;
+  }
+
+  // Fechar o modal de detalhes
+  closeModal() {
+    this.visibleDialog = false;
+  }
+
+  // Exibir o modal de imagem do produto
+  openImageModal(imageUrl: string | null): void {
+    if (imageUrl) {
+      this.selectedImageUrl = imageUrl;
+      this.visibleImageDialog = true; // Abre o modal de imagem
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: 'URL da imagem não encontrada.'
+      });
+    }
+  }
+  //fecha imagem modal
+  closeImageModal(): void {
+    this.visibleImageDialog = false; // Fecha o modal
+    this.selectedImageUrl = null;    // Limpa a URL da imagem selecionada
+  }
+
+  // Função de confirmação para exclusão de produto
   deletionConfirmation(product: Product) {
     this.confirmationService.confirm({
         message: `Tem certeza que deseja excluir ${product.name}?`,
@@ -140,35 +168,29 @@ export class ProductListComponent implements OnInit {
         icon: 'pi pi-exclamation-triangle',
         acceptLabel: 'Sim',
         rejectLabel: 'Não',
-        acceptIcon:"none",
-        rejectIcon:"none",
-        acceptButtonStyleClass:"p-button-danger p-button-text",
+        acceptIcon: "none",
+        rejectIcon: "none",
+        acceptButtonStyleClass: "p-button-danger p-button-text",
         accept: () => {
             this.deleteProduct(this.selectedProduct);
         },
     });
-}
-
-  viewProduct() {
-    this.visibleDialog = true;
-  }
-
-  closeModal() {
-    this.visibleDialog = false;
   }
 
   deleteProduct(product: Product) {
      this.productService.deleteProduct(product).subscribe(() => {
-       this.products = this.products.filter(p => p.id!== product.id);
-     })
-    this.messageService.add({severity:'secondary', summary: 'Sucesso', detail: `${product.name} excluído com sucesso!`});
+       this.products = this.products.filter(p => p.id !== product.id);
+     });
+     this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: `${product.name} excluído com sucesso!` });
   }
 
+  // Filtro global de pesquisa
   globalFilter(table: any, event: Event) {
     const input = event.target as HTMLInputElement;
     table.filterGlobal(input.value, 'contains');
   }
 
+  // Lógica para ordenação customizada
   customSort(event: SortEvent) {
     if (this.isSorted == null || this.isSorted === undefined) {
         this.isSorted = true;
@@ -186,17 +208,17 @@ export class ProductListComponent implements OnInit {
   sortTableData(event: SortEvent) {
     event.data?.sort((data1, data2) => {
       const field = event.field as string;
-        let value1 = data1[field];
-        let value2 = data2[field];
-        let result = null;
-        if (value1 == null && value2 != null) result = -1;
-        else if (value1 != null && value2 == null) result = 1;
-        else if (value1 == null && value2 == null) result = 0;
-        else if (typeof value1 === 'string' && typeof value2 === 'string') result = value1.localeCompare(value2);
-        else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
+      let value1 = data1[field];
+      let value2 = data2[field];
+      let result = null;
 
-        return event.order! * result;
+      if (value1 == null && value2 != null) result = -1;
+      else if (value1 != null && value2 == null) result = 1;
+      else if (value1 == null && value2 == null) result = 0;
+      else if (typeof value1 === 'string' && typeof value2 === 'string') result = value1.localeCompare(value2);
+      else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
+
+      return event.order! * result;
     });
   }
-
 }
