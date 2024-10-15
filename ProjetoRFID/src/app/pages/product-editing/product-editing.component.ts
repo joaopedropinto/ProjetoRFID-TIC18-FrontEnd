@@ -102,7 +102,7 @@ export class ProductEditingComponent implements OnInit {
       height : [null, [Validators.required, Validators.min(0.1)]],
       width : [null, [Validators.required, Validators.min(0.1)]],
       length : [null, [Validators.required, Validators.min(0.1)]],
-      imageBase64: [null, [Validators.required]],
+      
     });
    }
 
@@ -210,6 +210,13 @@ export class ProductEditingComponent implements OnInit {
     
     // teste loh
     console.log('base fora do método', this.productForm.get('imageBase64')?.value);
+}
+onFileRemove(event: any): void {
+    // Limpa o valor da imagem no formulário ao remover o arquivo
+    this.productForm.patchValue({ imageBase64: null });
+    
+    // Log de teste
+    console.log('Arquivo removido');
 }
 
   onSubmit() {

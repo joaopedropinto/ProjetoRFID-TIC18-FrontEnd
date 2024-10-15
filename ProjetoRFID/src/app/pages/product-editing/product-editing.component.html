@@ -180,18 +180,29 @@
                 </div>
             </div>
             <div class="row">
-                <label for="image">Faça upload da imagem do Produto</label>
+                <div >
+                    <label for="image">Faça upload da imagem do Produto</label>
+                </div>
+            </div>
+            
+           
+            
+            <div class="row"> <!-- Nova linha para o componente de upload -->
                 <div class="inputFloatLabel">
-                  
-                <p-fileUpload 
-                    name="image" 
-                    accept="image/*" 
-                    mode="basic" 
-                    (onSelect)="onFileSelect($event)"
-                    accept="image/*">
-                </p-fileUpload>
-                              
-                
+                    <div class="file-upload-container"> <!-- Classe para centralizar -->
+                        <p-fileUpload 
+                        
+                            name="image" 
+                            accept="image/*" 
+                            mode="advanced" 
+                            (onSelect)="onFileSelect($event)"
+                            (onRemove)="onFileRemove($event)"
+                            chooseLabel="Escolher Imagem"
+                            [showUploadButton]="false"
+                            [showCancelButton]="false"> 
+                        </p-fileUpload>
+                    </div>
+            
                     <small class="error-message"
                         *ngIf="productForm.get('description')?.errors && productForm.get('description')?.touched">
                         * A imagem do produto é obrigatória
