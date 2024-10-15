@@ -48,9 +48,15 @@ export class PackagingRegisterComponent {
       name: this.packagingForm.get('name')?.value,
     }
     
-    this.packagingService.postPackaging(packaging).subscribe(() => {
-      this.messageService.add({ severity:'success', summary: 'Sucesso', detail: 'Embalagem cadastrada com sucesso!' });
-      this.packagingForm.reset();
+    this.packagingService.postPackaging(packaging).subscribe({
+      next: () => {
+        this.messageService.add({ severity:'success', summary: 'Sucesso', detail: 'Embalagem cadastrada com sucesso!' });
+        this.packagingForm.reset();
+      },
+      error: (error) => {
+        this.messageService.add({ severity:'error', summary: error.error.errorTitle, detail: error.error.errorDescription });
+        this.packagingForm.reset();
+      }
     });
   }
 
