@@ -22,7 +22,7 @@
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
-                    <th style="width: 5%;">url</th>
+                    <th style="width: 5%;">Imagem</th>
                     <th pSortableColumn="name" style="width: 10%;">Nome<p-sortIcon field="name"/></th>
                     <th pSortableColumn="weight" style="width: 8%;">Peso<p-sortIcon field="weight"/></th>
                     <th pSortableColumn="packingType" style="width: 8%;">Embalagem<p-sortIcon field="packingType"/></th>
@@ -37,7 +37,7 @@
                 <tr>
                     <td>
                         <p-button icon="pi pi-image" [rounded]="true" [text]="true"
-                            (click)="openImageModal(product.id)">
+                            (click)=" openImageModal(product.imageObjectName)">
                         </p-button>
                       </td>
                       

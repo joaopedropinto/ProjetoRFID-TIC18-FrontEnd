@@ -160,7 +160,7 @@ export class ProductListComponent implements OnInit {
   
   closeImageModal(): void {
     this.visibleImageDialog = false;  // Fecha o modal
-    this.selectedImageUrl = null;     // Limpa a URL da imagem
+         // Limpa a URL da imagem
   }
   
   
