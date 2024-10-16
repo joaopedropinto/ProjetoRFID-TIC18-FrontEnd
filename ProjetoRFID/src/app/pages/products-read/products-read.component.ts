@@ -56,6 +56,8 @@ export class ProductsReadComponent implements OnInit {
   NonProductTags: string[] = [];
   History: string[] = []; // Alterado de String[] para string[]
   visibleDialog: boolean = false;
+  visibleImageDialog: boolean = false;
+  selectedImageUrl: string | null = null;
   FormatedManufacDate: string = '';
   FormatedDueDate: string = '';
   isModalOpen = false;
@@ -159,6 +161,22 @@ export class ProductsReadComponent implements OnInit {
   globalFilter(table: any, event: Event) {
     const input = event.target as HTMLInputElement;
     table.filterGlobal(input.value, 'contains');
+  }
+   // Fechar o modal de detalhes
+   openImageModal(productId: string): void {
+    this.productsService.getImageUrl(productId).subscribe(
+      (url: string) => {
+        this.selectedImageUrl = url;  // Define a URL da imagem
+        this.visibleImageDialog = true; // Abre o modal
+      },
+      
+    );
+  }
+  
+  
+  closeImageModal(): void {
+    this.visibleImageDialog = false;  // Fecha o modal
+         // Limpa a URL da imagem
   }
   
   recarregarPagina() {

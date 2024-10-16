@@ -26,7 +26,8 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="name" style="width: 12%;">
+        <th style="width: 4%;">Imagem</th>
+        <th pSortableColumn="name" style="width: 11%;">
                         <div class="table-column-header">
                             Nome
                             <i [ngClass]="sortIconClass('name')"></i>
@@ -38,25 +39,25 @@
                             <i [ngClass]="sortIconClass('weight')"></i>
                         </div>
                     </th>
-                    <th pSortableColumn="packingType" style="width: 10%;">
+                    <th pSortableColumn="packingType" style="width: 9%;">
                         <div class="table-column-header">
                             Embalagem
                             <i [ngClass]="sortIconClass('packingType')"></i>
                         </div>
                     </th>
-                    <th pSortableColumn="quantity" style="width: 9%;">
+                    <th pSortableColumn="quantity" style="width: 8%;">
                         <div class="table-column-header">
                             Quantidade
                             <i [ngClass]="sortIconClass('quantity')"></i>
                         </div>
                     </th>
-                    <th pSortableColumn="price" style="width: 9%;">
+                    <th pSortableColumn="price" style="width: 8%;">
                         <div class="table-column-header">
                             Preço
                             <i [ngClass]="sortIconClass('price')"></i>
                         </div>
                     </th>
-                    <th pSortableColumn="unitMeasurement" style="width: 8%;">
+                    <th pSortableColumn="unitMeasurement" style="width: 7%;">
                         <div class="table-column-header">
                             Unidade <br>de medida
                             <i [ngClass]="sortIconClass('unitMeasurement')"></i>
@@ -73,6 +74,14 @@
     </ng-template>
     <ng-template pTemplate="body" let-product>
       <tr>
+        <td>
+          <div class="table-column-value"> 
+              <p-button icon="pi pi-image" [rounded]="true" [text]="true"
+              (click)=" openImageModal(product.imageObjectName)">
+              </p-button> 
+          </div>
+        
+        </td>
         <td>
           <div class="table-column-value">
               {{ product.name }}
@@ -155,4 +164,15 @@
   <div class="confirmDialogButton">
     <p-button (onClick)="closeModal()">OK</p-button>
   </div>
+</p-dialog>
+<p-dialog header="Visualização da Imagem" [(visible)]="visibleImageDialog" [modal]="true" [draggable]="false"
+[resizable]="false" [style]="{ width: '30vw' }" (onHide)="closeImageModal()">
+
+<div *ngIf="selectedImageUrl">
+<img [src]="selectedImageUrl" style="width: 100%; height: auto;">
+</div>
+
+<div class="confirmDialogButton">
+<p-button label="Fechar" (onClick)="closeImageModal()"></p-button>
+</div>
 </p-dialog>
