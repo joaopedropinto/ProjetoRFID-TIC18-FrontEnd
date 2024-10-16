@@ -24,7 +24,7 @@
                 <tr>
 
                     <th style="width: 5%;">Imagem</th>
-                 
+                                   
 
                     <th pSortableColumn="name" style="width: 12%;">
                         <div class="table-column-header">
@@ -75,14 +75,16 @@
             <ng-template pTemplate="body" let-product>
                 <tr>
                     <td>
-
-                        <p-button icon="pi pi-image" [rounded]="true" [text]="true"
+                        <div class="table-column-value"> 
+                            <p-button icon="pi pi-image" [rounded]="true" [text]="true"
                             (click)=" openImageModal(product.imageObjectName)">
-                        </p-button>
+                            </p-button> 
+                        </div>
+                      
                       </td>
                                         
                     
-                    
+                    <td>
                   
                         <div class="table-column-value">
                             {{ product.name }}
