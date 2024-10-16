@@ -51,6 +51,7 @@ export class ReadProductsService {
         })
       );
   }
+  
   async getProductsByTag(): Promise<ProductsByTagResponse | { error: string, details: string }> {
     try {
       const result = await firstValueFrom(
@@ -80,6 +81,12 @@ export class ReadProductsService {
 
     return this.http.post(`${this.apiUrl}/Readout`, body);
   }
+   getImageUrl(ObjectName: string): Observable<string> {
+    return this.http.get<{ url: string }>(`${this.apiUrl}/Product/image-url/${ObjectName}`).pipe(
+      map(response => response.url) // Mapeia para obter apenas a URL da resposta
+    );
+  }
+
 }
 //interface usada para que o codigo reconheça a estrutura do resultado fornecido pelo end point
 interface ProductsByTagResponse {

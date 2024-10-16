@@ -180,6 +180,36 @@
                 </div>
             </div>
             <div class="row">
+                <div >
+                    <label for="image">Faça upload da imagem do Produto</label>
+                </div>
+            </div>
+            
+           
+            
+            <div class="row"> <!-- Nova linha para o componente de upload -->
+                <div class="inputFloatLabel">
+                    <div class="file-upload-container"> <!-- Classe para centralizar -->
+                        <p-fileUpload 
+                        
+                            name="image" 
+                            accept="image/*" 
+                            mode="advanced" 
+                            (onSelect)="onFileSelect($event)"
+                            (onRemove)="onFileRemove($event)"
+                            chooseLabel="Escolher Imagem"
+                            [showUploadButton]="false"
+                            [showCancelButton]="false"> 
+                        </p-fileUpload>
+                    </div>
+            
+                    <small class="error-message"
+                        *ngIf="productForm.get('description')?.errors && productForm.get('description')?.touched">
+                        * A imagem do produto é obrigatória
+                    </small>
+                </div>
+            </div>
+            <div class="row">
                 <div class="inputFloatLabel">
                     <p-floatLabel>
                         <textarea id="description" class="textarea" rows="5" cols="50" pInputTextarea
@@ -192,6 +222,7 @@
                     </small>
                 </div>
             </div>
+            
             <div class="row">
                 <button pButton type="submit" [disabled]="productForm.invalid">Cadastrar</button>
             </div>

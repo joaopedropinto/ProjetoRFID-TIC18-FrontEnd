@@ -22,6 +22,10 @@
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
+
+                    <th style="width: 5%;">Imagem</th>
+                 
+
                     <th pSortableColumn="name" style="width: 12%;">
                         <div class="table-column-header">
                             Nome
@@ -64,12 +68,22 @@
                             <i [ngClass]="sortIconClass('batchNumber')"></i>
                         </div>
                     </th>
+
                     <th style="width: 5%;">Ações</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-product>
                 <tr>
                     <td>
+
+                        <p-button icon="pi pi-image" [rounded]="true" [text]="true"
+                            (click)=" openImageModal(product.imageObjectName)">
+                        </p-button>
+                      </td>
+                                        
+                    
+                    
+                  
                         <div class="table-column-value">
                             {{ product.name }}
                         </div>
@@ -104,6 +118,7 @@
                             {{ product.batchNumber }}
                         </div>
                     </td>
+
                     <td class="action-button-group">
                         <p-button icon="pi pi-ellipsis-v" [rounded]="true" [text]="true"
                             (onClick)="setSelectedProduct(product); menu.toggle($event)">
@@ -124,6 +139,11 @@
     <p-dialog header="Detalhes do produto" [(visible)]="visibleDialog" [modal]="true" [draggable]="false"
         [resizable]="false" [style]="{ width: '40vw' }">
         <ul class="productDetails" *ngIf="selectedProduct">
+            
+            <li *ngIf="selectedProduct.imageUrl">
+                <b></b><br>
+                <img [src]="selectedProduct.imageUrl" style="max-width: 60%; height: auto;">
+            </li>
             <li><b>RFID: </b>{{ selectedProduct.rfidTag }}</li>
             <li><b>Nome: </b>{{ selectedProduct.name }}</li>
             <li><b>Categoria: </b>{{ selectedProductCategory.name }}</li>
@@ -146,4 +166,17 @@
             <p-button (onClick)="closeModal()">OK</p-button>
         </div>
     </p-dialog>
+    <p-dialog header="Visualização da Imagem" [(visible)]="visibleImageDialog" [modal]="true" [draggable]="false"
+    [resizable]="false" [style]="{ width: '30vw' }" (onHide)="closeImageModal()">
+
+  <div *ngIf="selectedImageUrl">
+    <img [src]="selectedImageUrl" style="width: 100%; height: auto;">
+  </div>
+  
+  <div class="confirmDialogButton">
+    <p-button label="Fechar" (onClick)="closeImageModal()"></p-button>
+  </div>
+</p-dialog>
+
+    
 </div>

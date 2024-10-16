@@ -20,7 +20,7 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { Packaging } from '../../models/packaging.model';
 import { PackagingService } from '../../services/packaging/packaging.service';
-
+import { FileUploadModule } from 'primeng/fileupload';
 @Component({
   selector: 'app-product-editing',
   standalone: true,
@@ -37,7 +37,8 @@ import { PackagingService } from '../../services/packaging/packaging.service';
     ReactiveFormsModule,
     FormsModule,
     RouterLink,
-    ToastModule
+    ToastModule,
+    FileUploadModule 
   ],
   providers: [MessageService],
   templateUrl: './product-editing.component.html',
@@ -46,6 +47,7 @@ import { PackagingService } from '../../services/packaging/packaging.service';
 export class ProductEditingComponent implements OnInit {
 
   productForm!: FormGroup;
+  uploadedFiles: File[] = [];
 
   private productId!: string;
   productManuFacDate!: Date;
@@ -55,6 +57,11 @@ export class ProductEditingComponent implements OnInit {
   categories!: Category[];
   suppliers!: Supplier[];
   packages!: Packaging[];
+
+  onUpload(event: any) {
+    this.uploadedFiles.push(...event.files); // Armazena os arquivos enviados
+    console.log(this.uploadedFiles); // Para verificar/testar os arquivos no console
+  }
 
   selectedCategory: Category | undefined;
   selectedSupplier: Supplier | undefined;
@@ -95,6 +102,7 @@ export class ProductEditingComponent implements OnInit {
       height : [null, [Validators.required, Validators.min(0.1)]],
       width : [null, [Validators.required, Validators.min(0.1)]],
       length : [null, [Validators.required, Validators.min(0.1)]],
+      
     });
    }
 
@@ -138,7 +146,8 @@ export class ProductEditingComponent implements OnInit {
       this.productForm.get('height')?.setValue(productResponse.height);
       this.productForm.get('width')?.setValue(productResponse.width);
       this.productForm.get('length')?.setValue(productResponse.length);
-      this.productForm.get('volume')?.setValue(productResponse.height * productResponse.width * productResponse.length);})
+      this.productForm.get('volume')?.setValue(productResponse.height * productResponse.width * productResponse.length);});
+      
 
     const manufacDateControl = this.productForm.get('manufacDate');
     const dueDateControl = this.productForm.get('dueDate');
@@ -162,6 +171,53 @@ export class ProductEditingComponent implements OnInit {
       return null;
     };
   }
+  onFileSelect(event: any): void {
+    const files = event.files; 
+
+    
+    if (files && files.length > 0) {
+        const file = files[0]; 
+
+        // testa se é imagem
+        if (!file.type.startsWith('image/')) {
+            console.error('Por favor, selecione um arquivo de imagem válido.');
+            return;
+        }
+
+        // testa tamanho do arquivo
+        const MAX_SIZE = 2 * 1024 * 1024; 
+        if (file.size > MAX_SIZE) {
+            console.error('O arquivo é muito grande. Selecione um arquivo menor que 2MB.');
+            return;
+        }
+
+        const reader = new FileReader();
+
+        
+        reader.onload = () => {
+            const base64Image = reader.result as string; // converte a imagem para Base64
+            this.productForm.patchValue({ imageBase64: base64Image }); // Atualiza o formulário
+            
+            // log teste
+            console.log('Imagem em Base64:', this.productForm.get('imageBase64')?.value);
+        };
+
+        // leitura
+        reader.readAsDataURL(file); 
+    } else {
+        console.error('Nenhum arquivo foi selecionado.');
+    }
+    
+    // teste loh
+    console.log('base fora do método', this.productForm.get('imageBase64')?.value);
+}
+onFileRemove(event: any): void {
+    // Limpa o valor da imagem no formulário ao remover o arquivo
+    this.productForm.patchValue({ imageBase64: null });
+    
+    // Log de teste
+    console.log('Arquivo removido');
+}
 
   onSubmit() {
     const updatedProduct: Product = {
@@ -181,7 +237,8 @@ export class ProductEditingComponent implements OnInit {
       height: this.productForm.get('height')?.value, 
       width: this.productForm.get('width')?.value,
       length: this.productForm.get('length')?.value,
-      volume: this.productForm.get('height')?.value * this.productForm.get('width')?.value * this.productForm.get('length')?.value // Corrige o cálculo do volume
+      volume: this.productForm.get('height')?.value * this.productForm.get('width')?.value * this.productForm.get('length')?.value, 
+      imageBase64: this.productForm.get('imageBase64')?.value
     }
   
     if (this.productForm.valid) {

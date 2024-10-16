@@ -96,9 +96,19 @@ export class ReadoutDetailsComponent implements OnInit {
       this.selectedProductSupplier = supplier;
     });
 
+    this.productsService.getImageUrl(this.selectedProduct.imageObjectName!).subscribe(url => {
+      this.selectedProduct.imageUrl = url;
+      console.log(this.selectedProduct.imageUrl);
+    });
+    
+
     this.selectedProductDueDate = new Date(this.selectedProduct.dueDate).toLocaleDateString('pt-BR');
     this.selectedProductManuFacDate = new Date(this.selectedProduct.manufacDate).toLocaleDateString('pt-BR');
+
+    
   }
+
+
 
   openModal(): void {
     this.visibleDialog = true;
