@@ -135,31 +135,35 @@ export class ProductListComponent implements OnInit {
   viewProduct() {
     this.visibleDialog = true;
   }
-
+  closeModal(): void {
+    this.visibleDialog = false; // Fecha o modal
+  }
+  
   // Fechar o modal de detalhes
-  closeModal() {
-    this.visibleDialog = false;
+  openImageModal(productId: string): void {
+    this.productService.getImageUrl(productId).subscribe(
+      (url: string) => {
+        this.selectedImageUrl = url;  // Define a URL da imagem
+        this.visibleImageDialog = true; // Abre o modal
+      },
+      (error) => {
+        console.error('Erro ao buscar URL da imagem', error);
+        this.messageService.add({ 
+          severity: 'error', 
+          summary: 'Erro', 
+          detail: 'Erro ao carregar a imagem.' 
+        });
+      }
+    );
   }
-
-  // Exibir o modal de imagem do produto
-  openImageModal(imageUrl: string | null): void {
-    if (imageUrl) {
-      this.selectedImageUrl = imageUrl;
-      this.visibleImageDialog = true; // Abre o modal de imagem
-    } else {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Erro',
-        detail: 'URL da imagem não encontrada.'
-      });
-    }
-  }
-  //fecha imagem modal
+  
+  
   closeImageModal(): void {
-    this.visibleImageDialog = false; // Fecha o modal
-    this.selectedImageUrl = null;    // Limpa a URL da imagem selecionada
+    this.visibleImageDialog = false;  // Fecha o modal
+    this.selectedImageUrl = null;     // Limpa a URL da imagem
   }
-
+  
+  
   // Função de confirmação para exclusão de produto
   deletionConfirmation(product: Product) {
     this.confirmationService.confirm({

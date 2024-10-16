@@ -37,9 +37,11 @@
                 <tr>
                     <td>
                         <p-button icon="pi pi-image" [rounded]="true" [text]="true"
-                            (click)="openImageModal(product.imageUrl)">
+                            (click)="openImageModal(product.id)">
                         </p-button>
-                    </td>
+                      </td>
+                      
+                      
                     
                     
                     <td>{{ product.name }}</td>
@@ -96,6 +98,17 @@
             <p-button (onClick)="closeModal()">OK</p-button>
         </div>
     </p-dialog>
+    <p-dialog header="Visualização da Imagem" [(visible)]="visibleImageDialog" [modal]="true" [draggable]="false"
+    [resizable]="false" [style]="{ width: '30vw' }" (onHide)="closeImageModal()">
+
+  <div *ngIf="selectedImageUrl">
+    <img [src]="selectedImageUrl" style="width: 100%; height: auto;">
+  </div>
+  
+  <div class="confirmDialogButton">
+    <p-button label="Fechar" (onClick)="closeImageModal()"></p-button>
+  </div>
+</p-dialog>
 
     
 </div>
