@@ -55,6 +55,8 @@ export class ReadoutDetailsComponent implements OnInit {
   selectedProductManuFacDate!: string;
   selectedProductDueDate!: string;
   visibleDialog: boolean = false;
+  visibleImageDialog: boolean = false;
+  selectedImageUrl: string | null = null;
 
   constructor(
     private productsService: ProductService,
@@ -113,10 +115,22 @@ export class ReadoutDetailsComponent implements OnInit {
   openModal(): void {
     this.visibleDialog = true;
   }
-
+  // Fechar o modal de detalhes
+  openImageModal(productId: string): void {
+    this.productsService.getImageUrl(productId).subscribe(
+      (url: string) => {
+        this.selectedImageUrl = url;  // Define a URL da imagem
+        this.visibleImageDialog = true; // Abre o modal
+      } );
+  }
   closeModal(): void {
     this.visibleDialog = false;
   }
+  closeImageModal(): void {
+    this.visibleImageDialog = false;  // Fecha o modal
+         // Limpa a URL da imagem
+  }
+  
 
   globalFilter(table: any, event: Event) {
     const input = event.target as HTMLInputElement;

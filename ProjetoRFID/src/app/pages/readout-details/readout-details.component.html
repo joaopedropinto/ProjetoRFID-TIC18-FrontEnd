@@ -25,13 +25,14 @@
     </ng-template>
         <ng-template pTemplate="header">
             <tr>
+                <th style="width: 4%;">Imagem</th>
                 <th pSortableColumn="name" style="width: 12%;">
                     <div class="table-column-header">
                         Nome
                         <i [ngClass]="sortIconClass('name')"></i>
                     </div>
                 </th>
-                <th pSortableColumn="weight" style="width: 8%;">
+                <th pSortableColumn="weight" style="width: 6%;">
                     <div class="table-column-header">
                         Peso
                         <i [ngClass]="sortIconClass('weight')"></i>
@@ -43,7 +44,7 @@
                         <i [ngClass]="sortIconClass('packingType')"></i>
                     </div>
                 </th>
-                <th pSortableColumn="quantity" style="width: 9%;">
+                <th pSortableColumn="quantity" style="width: 8%;">
                     <div class="table-column-header">
                         Quantidade
                         <i [ngClass]="sortIconClass('quantity')"></i>
@@ -72,6 +73,14 @@
         </ng-template>
         <ng-template pTemplate="body" let-product>
             <tr>
+                <td>
+                    <div class="table-column-value"> 
+                        <p-button icon="pi pi-image" [rounded]="true" [text]="true"
+                        (click)=" openImageModal(product.imageObjectName)">
+                        </p-button> 
+                    </div>
+                  
+                </td>
                 <td>
                     <div class="table-column-value">
                         {{ product.name }}
@@ -157,4 +166,15 @@ header="Detalhes do produto"
     <div class="confirmDialogButton">
         <p-button (onClick)="closeModal()">OK</p-button>
     </div>
+</p-dialog>
+<p-dialog header="Visualização da Imagem" [(visible)]="visibleImageDialog" [modal]="true" [draggable]="false"
+    [resizable]="false" [style]="{ width: '30vw' }" (onHide)="closeImageModal()">
+
+  <div *ngIf="selectedImageUrl">
+    <img [src]="selectedImageUrl" style="width: 100%; height: auto;">
+  </div>
+  
+  <div class="confirmDialogButton">
+    <p-button label="Fechar" (onClick)="closeImageModal()"></p-button>
+  </div>
 </p-dialog>
