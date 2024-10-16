@@ -21,4 +21,6 @@ export interface Product {
     imageBase64?: string;
     imageUrl?: string;
     imageObjectName?: string;
+    IsDeleted?: boolean;
+
 }
