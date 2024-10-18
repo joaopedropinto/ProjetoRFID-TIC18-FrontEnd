@@ -140,7 +140,8 @@
     <ul class="productDetails" *ngIf="selectedProduct">
       <li *ngIf="selectedProduct.imageUrl">
         <b></b><br>
-        <img [src]="selectedProduct.imageUrl" style="max-width: 60%; height: auto;">
+        <img [src]="selectedProduct.imageUrl" style="max-width: 60%; height: auto;"
+        (error)="selectedImageUrl='assets/images/default-image.png'" alt="Imagem indisponível">
     </li>
       <li><b>RFID: </b>{{ selectedProduct.rfidTag }}</li>
       <li><b>Nome: </b>{{ selectedProduct.name }}</li>
@@ -169,7 +170,8 @@
 [resizable]="false" [style]="{ width: '30vw' }" (onHide)="closeImageModal()">
 
 <div *ngIf="selectedImageUrl">
-<img [src]="selectedImageUrl" style="width: 100%; height: auto;">
+<img [src]="selectedImageUrl" style="width: 100%; height: auto;"
+(error)="selectedImageUrl='assets/images/default-image.png'" alt="Imagem indisponível">
 </div>
 
 <div class="confirmDialogButton">
