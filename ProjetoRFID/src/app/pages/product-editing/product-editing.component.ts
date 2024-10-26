@@ -102,7 +102,7 @@ export class ProductEditingComponent implements OnInit {
       height : [null, [Validators.required, Validators.min(0.1)]],
       width : [null, [Validators.required, Validators.min(0.1)]],
       length : [null, [Validators.required, Validators.min(0.1)]],
-      
+      imageBase64: [null, ],
     });
    }
 
