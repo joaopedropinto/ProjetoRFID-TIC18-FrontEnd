@@ -47,6 +47,7 @@ export class ReadoutDetailsComponent implements OnInit {
   products: Product[] = [];
   initialValue: Product[] = [];
   isSorted: boolean | null = null;
+  orderedColumn: string | null = null;
 
   selectedProduct!: Product;
   selectedProductCategory!: Category;
@@ -54,6 +55,8 @@ export class ReadoutDetailsComponent implements OnInit {
   selectedProductManuFacDate!: string;
   selectedProductDueDate!: string;
   visibleDialog: boolean = false;
+  visibleImageDialog: boolean = false;
+  selectedImageUrl: string | null = null;
 
   constructor(
     private productsService: ProductService,
@@ -95,17 +98,39 @@ export class ReadoutDetailsComponent implements OnInit {
       this.selectedProductSupplier = supplier;
     });
 
+    this.productsService.getImageUrl(this.selectedProduct.imageObjectName!).subscribe(url => {
+      this.selectedProduct.imageUrl = url;
+      console.log(this.selectedProduct.imageUrl);
+    });
+    
+
     this.selectedProductDueDate = new Date(this.selectedProduct.dueDate).toLocaleDateString('pt-BR');
     this.selectedProductManuFacDate = new Date(this.selectedProduct.manufacDate).toLocaleDateString('pt-BR');
+
+    
   }
+
+
 
   openModal(): void {
     this.visibleDialog = true;
   }
-
+  // Fechar o modal de detalhes
+  openImageModal(productId: string): void {
+    this.productsService.getImageUrl(productId).subscribe(
+      (url: string) => {
+        this.selectedImageUrl = url;  // Define a URL da imagem
+        this.visibleImageDialog = true; // Abre o modal
+      } );
+  }
   closeModal(): void {
     this.visibleDialog = false;
   }
+  closeImageModal(): void {
+    this.visibleImageDialog = false;  // Fecha o modal
+         // Limpa a URL da imagem
+  }
+  
 
   globalFilter(table: any, event: Event) {
     const input = event.target as HTMLInputElement;
@@ -113,22 +138,28 @@ export class ReadoutDetailsComponent implements OnInit {
   }
 
   customSort(event: SortEvent) {
-    if (this.isSorted == null || this.isSorted === undefined) {
-        this.isSorted = true;
-        this.sortTableData(event);
-    } else if (this.isSorted == true) {
-        this.isSorted = false;
-        this.sortTableData(event);
-    } else if (this.isSorted == false) {
-        this.isSorted = null;
-        this.products = [...this.initialValue];
-        this.table.reset();
+    if(event.field != this.orderedColumn) {
+      this.isSorted = true;
+      this.sortTableData(event);
+    } else {
+      if (this.isSorted == null || this.isSorted === undefined) {
+          this.isSorted = true;
+          this.sortTableData(event);
+      } else if (this.isSorted == true) {
+          this.isSorted = false;
+          this.sortTableData(event);
+      } else if (this.isSorted == false) {
+          this.isSorted = null;
+          this.products = [...this.initialValue];
+          this.table.reset();
+      }
     }
   }
 
   sortTableData(event: SortEvent) {
     event.data?.sort((data1, data2) => {
       const field = event.field as string;
+      this.orderedColumn = field;
         let value1 = data1[field];
         let value2 = data2[field];
         let result = null;
@@ -140,5 +171,17 @@ export class ReadoutDetailsComponent implements OnInit {
 
         return event.order! * result;
     });
+  }
+
+  sortIconClass(fieldName: string): string {
+    if(this.orderedColumn == fieldName) {
+      if(this.isSorted) 
+        return "pi pi-sort-up-fill";
+  
+      else if(this.isSorted == false) 
+        return "pi pi-sort-down-fill";
+    }
+    
+    return "pi pi-sort";
   }
 }

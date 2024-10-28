@@ -18,4 +18,9 @@ export interface Product {
     width: number;
     length: number;
     volume: number;
+    imageBase64?: string;
+    imageUrl?: string;
+    imageObjectName?: string;
+    IsDeleted?: boolean;
+
 }

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CardModule } from 'primeng/card';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { ReadProductsService } from '../../services/read-service/read-products.service';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
@@ -8,7 +8,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { TieredMenuModule } from 'primeng/tieredmenu';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, SortEvent } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -26,6 +26,7 @@ import { CategoryService } from '../../services/category/category.service';
 import { SupplierService } from '../../services/supplier/supplier.service';
 import { Packaging } from '../../models/packaging.model';
 import { PackagingService } from '../../services/packaging/packaging.service';
+
 
 @Component({
   selector: 'app-products-read',
@@ -55,14 +56,20 @@ export class ProductsReadComponent implements OnInit {
   NonProductTags: string[] = [];
   History: string[] = []; // Alterado de String[] para string[]
   visibleDialog: boolean = false;
+  visibleImageDialog: boolean = false;
+  selectedImageUrl: string | null = null;
   FormatedManufacDate: string = '';
   FormatedDueDate: string = '';
   isModalOpen = false;
   products!: Product[];
+  @ViewChild('table') table!: Table;
+  initialValue!: Product[];
   selectedProduct: Product | null = null;
   actions!: MenuItem[];
   mostrar: boolean = true;
   loading: boolean = false;
+  orderedColumn: string | null = null;
+  isSorted: boolean | null = null;
 
   selectedProductCategory!: Category;
   selectedProductSupplier!: Supplier;
@@ -87,7 +94,10 @@ export class ProductsReadComponent implements OnInit {
           product.packingType = packaging.name;
         });
       }
+
+      this.initialValue = [...this.products];
     });
+
   }
   
   viewProduct(product: Product) {
@@ -104,6 +114,15 @@ export class ProductsReadComponent implements OnInit {
     this.packagingService.getPackagingById(this.selectedProduct.idPackaging).subscribe(response => {
       this.selectedProductPackaging = response; 
     });
+    
+    if (this.selectedProduct) {
+      this.productsService.getImageUrl(this.selectedProduct.imageObjectName!).subscribe(url => {
+        this.selectedProduct!.imageUrl = url || 'default-image-url';
+        console.log(this.selectedProduct!.imageUrl);
+      });
+    }
+    
+    
 
 
     this.selectedProductDueDate = new Date(this.selectedProduct.dueDate).toLocaleDateString('pt-BR');
@@ -112,25 +131,24 @@ export class ProductsReadComponent implements OnInit {
     this.visibleDialog = true;
   }
   async saveHistory() {
-    
     this.History = [];
     this.NonProductTags = [];
-    
-    const promises = this.products.map(async product => {
-      let verify = await this.productsService.getProductsByTag(product.rfidTag!);
-      if (verify === '200') {
-        this.History.push(product.rfidTag!);
-      } else {
-        this.NonProductTags.push(product.rfidTag!);
-      }
-    });
-      
-    await Promise.all(promises);
   
-    if (this.NonProductTags.length !== 0) {
-      this.Message();  
-    }
+    let verify = await this.productsService.getProductsByTag();
+  
+    if ('error' in verify) {
+      console.log(verify.error);  // Lida com o erro, se houver
+    } else {
       
+      // Atribui os valores para as listas
+      this.History = verify.products?.map(item => item.rfidTag) || [];
+      this.NonProductTags = verify.notFoundResponses?.map(item => item.rfidTag) || [];
+    }
+    /*Permite ou não o salvamento do historico juntamente com a menssagem do porque não,
+    sobe a condição de todas as tag possuirem produtos cadastrados*/
+    if (this.NonProductTags.length !== 0) {
+      this.Message();
+    }
     if (this.NonProductTags.length === 0 && this.History.length > 0) {
       this.enviarReadout(this.History);
     }
@@ -143,6 +161,22 @@ export class ProductsReadComponent implements OnInit {
   globalFilter(table: any, event: Event) {
     const input = event.target as HTMLInputElement;
     table.filterGlobal(input.value, 'contains');
+  }
+   // Fechar o modal de detalhes
+   openImageModal(productId: string): void {
+    this.productsService.getImageUrl(productId).subscribe(
+      (url: string) => {
+        this.selectedImageUrl = url;  // Define a URL da imagem
+        this.visibleImageDialog = true; // Abre o modal
+      },
+      
+    );
+  }
+  
+  
+  closeImageModal(): void {
+    this.visibleImageDialog = false;  // Fecha o modal
+         // Limpa a URL da imagem
   }
   
   recarregarPagina() {
@@ -173,7 +207,7 @@ export class ProductsReadComponent implements OnInit {
   
   Message() {
     if (this.NonProductTags.length > 0) {
-      const tagsNaoEncontradas = this.NonProductTags.join(', '); 
+      const tagsNaoEncontradas = this.NonProductTags.join(", "); 
       this.messages = [
         { 
           severity: 'error', 
@@ -189,7 +223,6 @@ export class ProductsReadComponent implements OnInit {
       ];
     }
   }
-
   ToastMessages() {
     this.messages = [
       { 
@@ -197,6 +230,53 @@ export class ProductsReadComponent implements OnInit {
         detail: `Leitura salva com sucesso no histórico.`
       }
     ];
+  }
+  customSort(event: SortEvent) {
+    if(event.field != this.orderedColumn) {
+      this.isSorted = true;
+      this.sortTableData(event);
+    } else {
+      if (this.isSorted == null || this.isSorted === undefined) {
+          this.isSorted = true;
+          this.sortTableData(event);
+      } else if (this.isSorted == true) {
+          this.isSorted = false;
+          this.sortTableData(event);
+      } else if (this.isSorted == false) {
+          this.isSorted = null;
+          this.products = [...this.initialValue];
+          this.table.reset();
+      }
+    }
+  }
+
+  sortTableData(event: SortEvent) {
+    event.data?.sort((data1, data2) => {
+      const field = event.field as string;
+        this.orderedColumn = field;
+        let value1 = data1[field];
+        let value2 = data2[field];
+        let result = null;
+        if (value1 == null && value2 != null) result = -1;
+        else if (value1 != null && value2 == null) result = 1;
+        else if (value1 == null && value2 == null) result = 0;
+        else if (typeof value1 === 'string' && typeof value2 === 'string') result = value1.localeCompare(value2);
+        else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
+
+        return event.order! * result;
+    });
+  }
+
+  sortIconClass(fieldName: string): string {
+    if(this.orderedColumn == fieldName) {
+      if(this.isSorted) 
+        return "pi pi-sort-up-fill";
+  
+      else if(this.isSorted == false) 
+        return "pi pi-sort-down-fill";
+    }
+    
+    return "pi pi-sort";
   }
 
 }

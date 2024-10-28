@@ -11,10 +11,16 @@
         <ng-template pTemplate="header">
             <tr>
                 <th pSortableColumn="readoutDate" style="width: 50%;">
-                    Data e Hora<p-sortIcon field="readoutDate"/>
+                    <div class="table-column-header">
+                        Data e Hora
+                        <i [ngClass]="sortIconClass('readoutDate')"></i>    
+                    </div>
                 </th>
                 <th pSortableColumn="tags.length" style="width: 25%;">
-                    Quant. de Produtos<p-sortIcon field="tags.length"/>
+                    <div class="table-column-header">
+                        Quant. de Produtos
+                        <i [ngClass]="sortIconClass('tags.length')"></i>
+                    </div>
                 </th>
                 <th style="width: 5%;">Ações</th>
             </tr>

@@ -19,8 +19,12 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { RippleModule } from 'primeng/ripple';
 import { Router } from '@angular/router';
-import { PackagingService } from '../../services/packaging/packaging.service'; // Importação do novo serviço
+import { PackagingService } from '../../services/packaging/packaging.service'; 
 import { Packaging } from '../../models/packaging.model';
+import { FileUploadModule } from 'primeng/fileupload';
+
+
+
 
 @Component({
   selector: 'app-product-register',
@@ -39,6 +43,7 @@ import { Packaging } from '../../models/packaging.model';
     ButtonModule,
     ToastModule,
     RippleModule,
+    FileUploadModule,
   ],
   providers: [MessageService],
   templateUrl: './product-register.component.html',
@@ -47,10 +52,15 @@ import { Packaging } from '../../models/packaging.model';
 export class ProductRegisterComponent implements OnInit {
 
   productForm!: FormGroup;
-
+  uploadedFiles: File[] = []; // Adicionado o atributo para armazenar os arquivos enviados
   categories!: Category[];
   suppliers!: Supplier[];
-  packages!: Packaging[]; // Adicionado novo atributo
+  packages!: Packaging[]; 
+
+  onUpload(event: any) {
+    this.uploadedFiles.push(...event.files); // Armazena os arquivos enviados
+    console.log(this.uploadedFiles); // Para verificar/testar os arquivos no console
+  }
 
   unitsOfMeasurement = [
     { label: 'Kg', value: 'Kg' },
@@ -58,6 +68,7 @@ export class ProductRegisterComponent implements OnInit {
     { label: 'Unidades', value: 'Unidades' },
     { label: 'Caixas', value: 'Caixas' }
   ];
+ 
 
   constructor(
     private formBuilder: FormBuilder, 
@@ -85,7 +96,10 @@ export class ProductRegisterComponent implements OnInit {
       height: [null, [Validators.required, Validators.min(0.1)]],
       width: [null, [Validators.required, Validators.min(0.1)]],
       length: [null, [Validators.required, Validators.min(0.1)]],
+      imageBase64: [null, ],
     })
+
+    
   }
 
   ngOnInit(): void {
@@ -124,6 +138,57 @@ export class ProductRegisterComponent implements OnInit {
     };
   }
 
+  onFileSelect(event: any): void {
+    const files = event.files; 
+
+    
+    if (files && files.length > 0) {
+        const file = files[0]; 
+
+        // testa se é imagem
+        if (!file.type.startsWith('image/')) {
+            console.error('Por favor, selecione um arquivo de imagem válido.');
+            return;
+        }
+
+        // testa tamanho do arquivo
+        const MAX_SIZE = 2 * 1024 * 1024; 
+        if (file.size > MAX_SIZE) {
+            console.error('O arquivo é muito grande. Selecione um arquivo menor que 2MB.');
+            return;
+        }
+
+        const reader = new FileReader();
+
+        
+        reader.onload = () => {
+            const base64Image = reader.result as string; // converte a imagem para Base64
+            this.productForm.patchValue({ imageBase64: base64Image }); // Atualiza o formulário
+            
+            // log teste
+            console.log('Imagem em Base64:', this.productForm.get('imageBase64')?.value);
+        };
+
+        // leitura
+        reader.readAsDataURL(file); 
+    } else {
+        console.error('Nenhum arquivo foi selecionado.');
+    }
+    
+    // teste loh
+    console.log('base fora do método', this.productForm.get('imageBase64')?.value);
+}
+onFileRemove(event: any): void {
+    // Limpa o valor da imagem no formulário ao remover o arquivo
+    this.productForm.patchValue({ imageBase64: null });
+    
+    // Log de teste
+    console.log('Arquivo removido');
+}
+
+
+
+  
   onSubmit(): void {
     const newProduct: Product = {
       name: this.productForm.get('name')?.value,
@@ -142,7 +207,8 @@ export class ProductRegisterComponent implements OnInit {
       height: this.productForm.get('height')?.value,
       width: this.productForm.get('width')?.value,
       length: this.productForm.get('length')?.value,
-      volume: this.productForm.get('height')?.value * this.productForm.get('width')?.value * this.productForm.get('length')?.value
+      volume: this.productForm.get('height')?.value * this.productForm.get('width')?.value * this.productForm.get('length')?.value,
+      imageBase64: this.productForm.get('imageBase64')?.value 
     }
     console.log(newProduct);
     if (this.productForm.valid) {

@@ -45,6 +45,13 @@ export class ProductService {
     return this.http.delete<void>(`${this.apiUrl}/Product/${id}`);
   }
 
+  getImageUrl(ObjectName: string): Observable<string> {
+    return this.http.get<{ url: string }>(`${this.apiUrl}/Product/image-url/${ObjectName}`).pipe(
+      map(response => response.url) // Mapeia para obter apenas a URL da resposta
+    );
+  }
+  
+
   returnAllActiveProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.apiUrl}/Product/active`).pipe(
       map((produtos: Product[]) => {
