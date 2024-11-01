@@ -4,7 +4,7 @@
 <p-card header="Produtos Lidos">
   <p-table #table [globalFilterFields]="['name', 'packingType', 'unitMeasurement', 'batchNumber']" [value]="products"
     [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '162vh', 'min-height': '40vh', 'max-width': '162vh' }"
-    (sortFunction)="customSort($event)" [customSort]="true">
+    (sortFunction)="customSort($event)" [customSort]="true" [rowsPerPageOptions]="[10, 25, 50, 100]">
     <ng-template pTemplate="caption">
       <div class="search-input">
         <div class="lateral-buttons">
