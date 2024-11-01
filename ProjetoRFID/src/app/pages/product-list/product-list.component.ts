@@ -124,7 +124,10 @@ export class ProductListComponent implements OnInit {
     });
 
     this.selectedProductDueDate = new Date(this.selectedProduct.dueDate).toLocaleDateString('pt-BR');
-    this.selectedProductManuFacDate = new Date(this.selectedProduct.manufacDate).toLocaleDateString('pt-BR');
+    this.selectedProductManuFacDate = new Date(this.selectedProduct.manufacDate).toLocaleDateString('pt-BR', {
+      year: 'numeric',
+      month: '2-digit'  // Mostra o mês com dois dígitos
+  });
 
     const editAction = this.actions.find(action => action.label === 'Editar');
     if (editAction && this.selectedProduct) {
