@@ -76,6 +76,7 @@ export class ReadoutDetailsComponent implements OnInit {
         for(let tag of this.readout.tags) {
           this.productsService.getProductByRfid(tag).subscribe(product => {
             this.products.push(product);
+            this.products = [...this.products];
             this.initialValue.push(product);
 
             this.packagingService.getPackagingById(product.idPackaging).subscribe(packaging => {

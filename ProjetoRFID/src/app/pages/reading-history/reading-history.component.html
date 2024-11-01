@@ -4,6 +4,7 @@
     [value]="readings"
     [paginator]="true"
     [rows]="10"
+    [rowsPerPageOptions]="[10, 25, 50, 100]"
     [tableStyle]="{ 'min-width': '162vh', 'min-height': '40vh', 'vertical-align': 'top' }"
     (sortFunction)="customSort($event)"
     [customSort]="true"
