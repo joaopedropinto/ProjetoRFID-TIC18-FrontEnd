@@ -22,6 +22,7 @@ import { Router } from '@angular/router';
 import { PackagingService } from '../../services/packaging/packaging.service'; 
 import { Packaging } from '../../models/packaging.model';
 import { FileUploadModule } from 'primeng/fileupload';
+import { ActivatedRoute } from '@angular/router';
 
 
 
@@ -65,7 +66,6 @@ export class ProductRegisterComponent implements OnInit {
   unitsOfMeasurement = [
     { label: 'Kg', value: 'Kg' },
     { label: 'Litros', value: 'Litros' },
-    { label: 'Unidades', value: 'Unidades' },
     { label: 'Caixas', value: 'Caixas' }
   ];
  
@@ -77,7 +77,8 @@ export class ProductRegisterComponent implements OnInit {
     private supplierService: SupplierService,
     private packagingService: PackagingService, 
     private messageService: MessageService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.productForm = this.formBuilder.group({
       name: [null, [Validators.required]],
@@ -96,7 +97,7 @@ export class ProductRegisterComponent implements OnInit {
       height: [null, [Validators.required, Validators.min(0.1)]],
       width: [null, [Validators.required, Validators.min(0.1)]],
       length: [null, [Validators.required, Validators.min(0.1)]],
-      imageBase64: [null, ],
+      imageBase64: [null ],
     })
 
     
@@ -124,6 +125,14 @@ export class ProductRegisterComponent implements OnInit {
       ]);
       dueDateControl.updateValueAndValidity();
     }
+
+    this.route.paramMap.subscribe(params => {
+      const tagParam = params.get('tag');
+      console.log('Tag recebida:', tagParam);
+      if (tagParam) {
+        this.productForm.patchValue({ tag: tagParam });
+      }
+    });
   }
 
   compareDatesValidator(manufacDateControl: AbstractControl): ValidatorFn {
