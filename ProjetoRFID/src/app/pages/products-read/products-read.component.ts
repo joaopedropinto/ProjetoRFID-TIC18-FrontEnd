@@ -197,7 +197,8 @@ export class ProductsReadComponent implements OnInit {
   }
 
   navigateToCadastro(rfidTag: string) {
-    this.router.navigate(['produtos/cadastrar', rfidTag]);
+    this.router.navigate(['produtos/cadastrar'], { queryParams: { tag: rfidTag } });
+
 
     console.log(rfidTag);
   }

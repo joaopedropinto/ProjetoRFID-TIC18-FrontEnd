@@ -57,6 +57,7 @@ export class ProductRegisterComponent implements OnInit {
   categories!: Category[];
   suppliers!: Supplier[];
   packages!: Packaging[]; 
+  tag: string | null=null;
 
   onUpload(event: any) {
     this.uploadedFiles.push(...event.files); // Armazena os arquivos enviados
@@ -126,11 +127,12 @@ export class ProductRegisterComponent implements OnInit {
       dueDateControl.updateValueAndValidity();
     }
 
-    this.route.paramMap.subscribe(params => {
-      const tagParam = params.get('tag');
-      console.log('Tag recebida:', tagParam);
-      if (tagParam) {
-        this.productForm.patchValue({ tag: tagParam });
+    this.route.queryParamMap.subscribe(params => {
+      this.tag = params.get('tag'); // Captura a tag a partir dos query parameters
+      console.log('Tag recebida:', this.tag); // Verifique se a tag é logada corretamente
+      if (this.tag) {
+        // Preencha o campo do formulário com a tag recebida
+        this.productForm.patchValue({ tag: this.tag });
       }
     });
   }

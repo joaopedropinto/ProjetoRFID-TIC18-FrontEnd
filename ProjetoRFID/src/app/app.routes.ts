@@ -16,5 +16,5 @@ export const routes: Routes = [
     { path: 'leituras/historico', component: ReadingHistoryComponent },
     { path: 'leituras/historico/:id', component: ReadoutDetailsComponent },
     { path: 'embalagens/cadastrar', component: PackagingRegisterComponent },
-    { path: 'produtos/cadastrar/:tag', component: ProductRegisterComponent },
+   
 ];
