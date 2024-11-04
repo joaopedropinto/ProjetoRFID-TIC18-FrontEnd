@@ -199,39 +199,41 @@ export class ProductRegisterComponent implements OnInit {
     console.log('Arquivo removido');
   }
 
-  setTagByReading(): void {
+  setTagFieldValueByReading(): void {
     this.readService.getProductsByTagRfids().subscribe(response => {
-      if(response.products.length > 1) {
-        this.messageService.add(
-          { 
-            severity: 'error', 
-            summary: 'Múltiplas tags', 
+      switch (response.products.length) {
+        case 0:
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Leitura vazia',
+            detail: 'Nenhuma tag encontrada na leitura.'
+          });
+          break;
+
+        case 1:
+          if (response.notFoundResponses.length === 0) {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Tag já utilizada',
+              detail: `Já existe um produto cadastrado com a tag: ${response.products[0].rfidTag}`
+            });
+            break;
+          }
+
+          const tag = response.notFoundResponses[0].rfidTag;
+          this.productForm.patchValue({ tag: tag });
+          this.onTagChange({ target: { value: tag } });
+
+          break;
+
+        default:
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Múltiplas tags',
             detail: 'Leia somente uma tag para cadastrar a partir da leitura.'
           });
-          return;
       }
-
-      if(response.products.length == 0) {
-        this.messageService.add({
-          severity: 'warn',
-          summary: 'Leitura vazia',
-          detail: 'Nenhuma tag encontrada na leitura.'
-        });
-        return;
-      }
-
-      if(response.notFoundResponses.length == 0) {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Tag já utilizada',
-          detail: `Já existe um produto cadastrado com a tag: ${ response.products[0].rfidTag }`
-        });
-        return;        
-      }
-
-      const tag = response.notFoundResponses[0].rfidTag;
-      this.productForm.patchValue({ tag: tag});
-    })
+    });
   }
 
   onSubmit(): void {
