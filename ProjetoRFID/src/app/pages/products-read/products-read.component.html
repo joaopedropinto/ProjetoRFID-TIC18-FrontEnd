@@ -26,6 +26,7 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
+        <th style="width: 5%;"><div class="table-column-header">#</div> </th>
         <th style="width: 4%;">Imagem</th>
         <th pSortableColumn="name" style="width: 11%;">
                         <div class="table-column-header">
@@ -72,8 +73,15 @@
                     <th style="width: 5%;">Ações</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-product>
+    <ng-template pTemplate="body" let-product  let-rowIndex="rowIndex">
+      
       <tr>
+        <td>
+          <div class="table-column-value">
+            {{ rowIndex + 1 }}
+          </div>
+      </td>
+       
         <td>
           <div class="table-column-value"> 
               <p-button icon="pi pi-image" [rounded]="true" [text]="true"
