@@ -22,9 +22,7 @@ import { Router } from '@angular/router';
 import { PackagingService } from '../../services/packaging/packaging.service';
 import { Packaging } from '../../models/packaging.model';
 import { FileUploadModule } from 'primeng/fileupload';
-
-
-
+import { ReadProductsService } from '../../services/read-service/read-products.service';
 
 @Component({
   selector: 'app-product-register',
@@ -76,6 +74,7 @@ export class ProductRegisterComponent implements OnInit {
     private categoryService: CategoryService,
     private supplierService: SupplierService,
     private packagingService: PackagingService,
+    private readService: ReadProductsService, 
     private messageService: MessageService,
     private router: Router
   ) {
@@ -200,8 +199,42 @@ export class ProductRegisterComponent implements OnInit {
     console.log('Arquivo removido');
   }
 
+  setTagFieldValueByReading(): void {
+    this.readService.getProductsByTagRfids().subscribe(response => {
+      switch (response.products.length) {
+        case 0:
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Leitura vazia',
+            detail: 'Nenhuma tag encontrada na leitura.'
+          });
+          break;
 
+        case 1:
+          if (response.notFoundResponses.length === 0) {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Tag já utilizada',
+              detail: `Já existe um produto cadastrado com a tag: ${response.products[0].rfidTag}`
+            });
+            break;
+          }
 
+          const tag = response.notFoundResponses[0].rfidTag;
+          this.productForm.patchValue({ tag: tag });
+          this.onTagChange({ target: { value: tag } });
+
+          break;
+
+        default:
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Múltiplas tags',
+            detail: 'Leia somente uma tag para cadastrar a partir da leitura.'
+          });
+      }
+    });
+  }
 
   onSubmit(): void {
     const newProduct: Product = {
