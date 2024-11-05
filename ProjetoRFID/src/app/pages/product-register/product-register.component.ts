@@ -22,7 +22,13 @@ import { Router } from '@angular/router';
 import { PackagingService } from '../../services/packaging/packaging.service';
 import { Packaging } from '../../models/packaging.model';
 import { FileUploadModule } from 'primeng/fileupload';
+import { ActivatedRoute } from '@angular/router';
+
+
+
+
 import { ReadProductsService } from '../../services/read-service/read-products.service';
+
 
 @Component({
   selector: 'app-product-register',
@@ -53,7 +59,12 @@ export class ProductRegisterComponent implements OnInit {
   uploadedFiles: File[] = []; // Adicionado o atributo para armazenar os arquivos enviados
   categories!: Category[];
   suppliers!: Supplier[];
+  
+  packages!: Packaging[]; 
+  tag: string | null=null;
+
   packages!: Packaging[];
+
 
   onUpload(event: any) {
     this.uploadedFiles.push(...event.files); // Armazena os arquivos enviados
@@ -63,7 +74,6 @@ export class ProductRegisterComponent implements OnInit {
   unitsOfMeasurement = [
     { label: 'Kg', value: 'Kg' },
     { label: 'Litros', value: 'Litros' },
-    { label: 'Unidades', value: 'Unidades' },
     { label: 'Caixas', value: 'Caixas' }
   ];
 
@@ -76,7 +86,8 @@ export class ProductRegisterComponent implements OnInit {
     private packagingService: PackagingService,
     private readService: ReadProductsService, 
     private messageService: MessageService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.productForm = this.formBuilder.group({
       name: [null, [Validators.required]],
@@ -95,7 +106,9 @@ export class ProductRegisterComponent implements OnInit {
       height: [null, [Validators.required, Validators.min(0.1)]],
       width: [null, [Validators.required, Validators.min(0.1)]],
       length: [null, [Validators.required, Validators.min(0.1)]],
-      imageBase64: [null,],
+
+      imageBase64: [null ],
+
     })
 
 
@@ -123,6 +136,15 @@ export class ProductRegisterComponent implements OnInit {
       ]);
       dueDateControl.updateValueAndValidity();
     }
+
+    this.route.queryParamMap.subscribe(params => {
+      this.tag = params.get('tag'); // Captura a tag a partir dos query parameters
+      console.log('Tag recebida:', this.tag); // Verifique se a tag é logada corretamente
+      if (this.tag) {
+        // Preencha o campo do formulário com a tag recebida
+        this.productForm.patchValue({ tag: this.tag });
+      }
+    });
   }
   onTagChange(event: any): void {
     const tagCode = event.target.value;
