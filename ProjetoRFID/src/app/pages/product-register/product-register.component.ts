@@ -63,7 +63,7 @@ export class ProductRegisterComponent implements OnInit {
   packages!: Packaging[]; 
   tag: string | null=null;
 
-  packages!: Packaging[];
+  
 
 
   onUpload(event: any) {
