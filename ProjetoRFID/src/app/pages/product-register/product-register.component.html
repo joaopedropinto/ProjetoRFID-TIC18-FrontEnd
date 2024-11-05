@@ -5,7 +5,7 @@
                 <!-- Campo de Código da Tag RFID movido para o início -->
                 <div class="inputFloatLabel">
                     <p-floatLabel>
-                        <input class="full-width-input" type="text" pInputText id="tagCode" formControlName="tag">
+                        <input class="full-width-input" type="text" pInputText id="tagCode" formControlName="tag" (input) = "onTagChange($event)">
                         <label for="tagCode">Código da tag</label>
                     </p-floatLabel>
                     <small class="error-message"
@@ -13,6 +13,9 @@
                         * O código da tag do produto é obrigatório
                     </small>
                 </div>
+                <p-button label="Obter da leitura"
+                    icon="pi pi-barcode" 
+                    (onClick)="setTagFieldValueByReading()" />
             </div>
             <div class="row">
                 <div class="inputFloatLabel">
