@@ -138,11 +138,11 @@ export class ProductRegisterComponent implements OnInit {
     }
 
     this.route.queryParamMap.subscribe(params => {
-      this.tag = params.get('tag'); // Captura a tag a partir dos query parameters
-      console.log('Tag recebida:', this.tag); // Verifique se a tag é logada corretamente
+      this.tag = params.get('tag');
+      console.log('Tag recebida:', this.tag); 
       if (this.tag) {
-        // Preencha o campo do formulário com a tag recebida
         this.productForm.patchValue({ tag: this.tag });
+        this.onTagChange({ target: { value: this.tag } });
       }
     });
   }
