@@ -195,7 +195,14 @@ export class ProductsReadComponent implements OnInit {
       });
     }, delay);
   }
-  
+
+  navigateToCadastro(rfidTag: string) {
+    this.router.navigate(['produtos/cadastrar'], { queryParams: { tag: rfidTag } });
+
+
+    console.log(rfidTag);
+  }
+
   enviarReadout(tag_list: string[]) {
     const readoutDate = new Date().toISOString();
     const tags = tag_list;
