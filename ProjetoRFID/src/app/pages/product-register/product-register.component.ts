@@ -59,11 +59,11 @@ export class ProductRegisterComponent implements OnInit {
   uploadedFiles: File[] = []; // Adicionado o atributo para armazenar os arquivos enviados
   categories!: Category[];
   suppliers!: Supplier[];
-  
-  packages!: Packaging[]; 
-  tag: string | null=null;
 
-  
+  packages!: Packaging[];
+  tag: string | null = null;
+
+
 
 
   onUpload(event: any) {
@@ -84,7 +84,7 @@ export class ProductRegisterComponent implements OnInit {
     private categoryService: CategoryService,
     private supplierService: SupplierService,
     private packagingService: PackagingService,
-    private readService: ReadProductsService, 
+    private readService: ReadProductsService,
     private messageService: MessageService,
     private router: Router,
     private route: ActivatedRoute
@@ -107,7 +107,7 @@ export class ProductRegisterComponent implements OnInit {
       width: [null, [Validators.required, Validators.min(0.1)]],
       length: [null, [Validators.required, Validators.min(0.1)]],
 
-      imageBase64: [null ],
+      imageBase64: [null],
 
     })
 
@@ -139,7 +139,7 @@ export class ProductRegisterComponent implements OnInit {
 
     this.route.queryParamMap.subscribe(params => {
       this.tag = params.get('tag');
-      console.log('Tag recebida:', this.tag); 
+      console.log('Tag recebida:', this.tag);
       if (this.tag) {
         this.productForm.patchValue({ tag: this.tag });
         this.onTagChange({ target: { value: this.tag } });
@@ -149,12 +149,13 @@ export class ProductRegisterComponent implements OnInit {
   onTagChange(event: any): void {
     const tagCode = event.target.value;
     const productCode = tagCode.substring(0, 6);
-    if (productCode === "C00829") //É uma tag ingenico
-    {
-      const manufacMonth = tagCode.substring(6, 8);
-      const manufacYear = '20' + tagCode.substring(8, 10);
-      const manufacDate = new Date(`${manufacYear}-${manufacMonth}-01`);
+    if (productCode === "C00829") { 
+      const manufacMonth = parseInt(tagCode.substring(6, 8)) - 1; 
+      const manufacYear = 2000 + parseInt(tagCode.substring(8, 10)); 
+
+      const manufacDate = new Date(manufacYear, manufacMonth); 
       const batchNumber = tagCode.substring(10, 22);
+
       this.productForm.patchValue({
         manufacDate: manufacDate,
         batchNumber: batchNumber
