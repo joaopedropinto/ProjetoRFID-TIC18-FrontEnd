@@ -223,38 +223,47 @@ export class ProductRegisterComponent implements OnInit {
   }
 
   setTagFieldValueByReading(): void {
-    this.readService.getProductsByTagRfids().subscribe(response => {
-      switch (response.products.length) {
-        case 0:
-          this.messageService.add({
-            severity: 'warn',
-            summary: 'Leitura vazia',
-            detail: 'Nenhuma tag encontrada na leitura.'
-          });
-          break;
-
-        case 1:
-          if (response.notFoundResponses.length === 0) {
+    this.readService.getProductsByTagRfids().subscribe({
+      next: (response) => {
+        switch (response.products.length) {
+          case 0:
             this.messageService.add({
-              severity: 'error',
-              summary: 'Tag já utilizada',
-              detail: `Já existe um produto cadastrado com a tag: ${response.products[0].rfidTag}`
+              severity: 'warn',
+              summary: 'Leitura vazia',
+              detail: 'Nenhuma tag encontrada na leitura.'
             });
             break;
-          }
-
-          const tag = response.notFoundResponses[0].rfidTag;
-          this.productForm.patchValue({ tag: tag });
-          this.onTagChange({ target: { value: tag } });
-
-          break;
-
-        default:
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Múltiplas tags',
-            detail: 'Leia somente uma tag para cadastrar a partir da leitura.'
-          });
+  
+          case 1:
+            if (response.notFoundResponses.length === 0) {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Tag já utilizada',
+                detail: `Já existe um produto cadastrado com a tag: ${response.products[0].rfidTag}`
+              });
+              break;
+            }
+  
+            const tag = response.notFoundResponses[0].rfidTag;
+            this.productForm.patchValue({ tag: tag });
+            this.onTagChange({ target: { value: tag } });
+  
+            break;
+  
+          default:
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Múltiplas tags',
+              detail: 'Leia somente uma tag para cadastrar a partir da leitura.'
+            });
+        }
+      },
+      error: (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Ocorreu um erro ao realizar a leitura de tags. Tente novamente.'
+        });
       }
     });
   }
