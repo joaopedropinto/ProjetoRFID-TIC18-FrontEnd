@@ -1,4 +1,11 @@
-.logo {
+.p-toolbar-group-start{
+    display: flex;
+    flex: 100vb;
+    width:100%;
+    justify-content: space-between;
+}
+.logos {
     margin-left: 1.25em;
     width: 150px;
 }
+
