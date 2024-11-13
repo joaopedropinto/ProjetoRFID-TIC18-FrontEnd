@@ -96,48 +96,54 @@
           </div>
       </td>
       <td>
-          <div class="table-column-value">
+          <div *ngIf="product.id"  class="table-column-value">
               {{ product.weight }} kg
           </div>
       </td>
       <td>
-          <div class="table-column-value">
+          <div *ngIf="product.id"  class="table-column-value">
               {{ product.packingType }}
           </div>
       </td>
       <td>
-          <div class="table-column-value">
+          <div *ngIf="product.id" class="table-column-value">
               {{ product.quantity }}
           </div>
       </td>
       <td>
-          <div class="table-column-value">
+          <div *ngIf="product.id"  class="table-column-value">
               R$ {{ product.price }}
           </div>
       </td>
       <td>
-          <div class="table-column-value">
+          <div *ngIf="product.id"  class="table-column-value">
               {{ product.unitMeasurement }}
           </div>
       </td>
       <td>
-          <div class="table-column-value">
+          <div *ngIf="product.id"  class="table-column-value">
               {{ product.batchNumber }}
           </div>
       </td>
-        <td>
+        <td >
+          <div>
           <button 
           *ngIf="product.id" 
           type="button" pButton pRipple pTooltip="Visualizar" tooltipPosition="bottom"
           showDelay="1000" hideDelay="300" icon="pi pi-eye" [rounded]="true" text="true"
           severity="secondary" (click)="viewProduct(product)">
           </button>
-          <button *ngIf="!product.id" 
-           type="button" pButton pRipple pTooltip="Cadastrar Produto" tooltipPosition="bottom"
-           showDelay="1000" hideDelay="300" icon="pi pi-plus" [rounded]="true" text="true"
-          severity="primary" (click)="navigateToCadastro(product.rfidTag)">
-          </button>
+        </div>
+        <div>
+          <p-button *ngIf="!product.id" 
+          (onClick)="navigateToCadastro(product.rfidTag)" 
+          label="Cadastrar "
+          pTooltip="Cadastrar Produto" tooltipPosition="bottom"
+          showDelay="1000" hideDelay="300">
+        </p-button>
+        </div>
         </td>
+        
       </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
