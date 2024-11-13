@@ -8,6 +8,14 @@
     <ng-template pTemplate="caption">
       <div class="search-input">
         <div class="lateral-buttons">
+          <p-dropdown 
+  [options]="categories" 
+  [(ngModel)]="selectedCategory" 
+  optionLabel="name" 
+  placeholder="Selecionar Categoria"
+  (onChange)="filterProductsByCategory()">
+</p-dropdown>
+
           <p-button severity="secondary" (onClick)="recarregarPagina()">
             Nova leitura
             <span *ngIf="loading" class="loading-spinner"></span>

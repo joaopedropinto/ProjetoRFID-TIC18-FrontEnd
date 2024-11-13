@@ -26,6 +26,8 @@ import { CategoryService } from '../../services/category/category.service';
 import { SupplierService } from '../../services/supplier/supplier.service';
 import { Packaging } from '../../models/packaging.model';
 import { PackagingService } from '../../services/packaging/packaging.service';
+import { Dropdown, DropdownModule } from 'primeng/dropdown';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
@@ -45,7 +47,9 @@ import { PackagingService } from '../../services/packaging/packaging.service';
     ModalDetailingComponent,
     CommonModule,
     DialogModule,
-    MessagesModule
+    MessagesModule, 
+    DropdownModule,
+    FormsModule,
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './products-read.component.html',
@@ -70,6 +74,9 @@ export class ProductsReadComponent implements OnInit {
   loading: boolean = false;
   orderedColumn: string | null = null;
   isSorted: boolean | null = null;
+  selectedCategory!: Category;
+  categories: Category[] = []; // Adicione esta linha
+  allCategoriesOption: Category = { id: undefined, name: 'Todas as Categorias' }; // Adicione esta linha
 
   selectedProductCategory!: Category;
   selectedProductSupplier!: Supplier;
@@ -86,6 +93,12 @@ export class ProductsReadComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    this.categoryService.getCategories().subscribe(categories => {
+      this.categories = categories;
+      this.categories.unshift(this.allCategoriesOption); // Adiciona a opção "Todas as Categorias" no início
+    });
+
     this.productsService.getProductsByTagRfids().subscribe(response => {
       this.products = response.products;
 
@@ -97,8 +110,10 @@ export class ProductsReadComponent implements OnInit {
 
       this.initialValue = [...this.products];
     });
+    this.selectedCategory = this.allCategoriesOption;
 
   }
+  
   
   viewProduct(product: Product) {
     this.selectedProduct = product;
@@ -288,6 +303,14 @@ export class ProductsReadComponent implements OnInit {
     }
     
     return "pi pi-sort";
+  }
+  filterProductsByCategory(): void {
+    if (this.selectedCategory?.id) {
+      const categoryId = this.selectedCategory.id;
+      this.products = this.initialValue.filter(product => product.idCategory === categoryId);
+    } else {
+      this.products = [...this.initialValue]; // Exibe todos os produtos
+    }
   }
 
 }
