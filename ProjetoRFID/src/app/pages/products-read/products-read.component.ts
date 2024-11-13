@@ -163,6 +163,17 @@ export class ProductsReadComponent implements OnInit {
       this.History = verify.products?.map(item => item.rfidTag) || [];
       this.NonProductTags = verify.notFoundResponses?.map(item => item.rfidTag) || [];
     }
+    if (this.selectedCategory?.id && this.selectedCategory.id !== undefined) {
+      this.History = this.History.filter(tag => {
+        const product = this.products.find(p => p.rfidTag === tag);
+        return product?.idCategory === this.selectedCategory.id;
+      });
+  
+      this.NonProductTags = this.NonProductTags.filter(tag => {
+        const product = this.products.find(p => p.rfidTag === tag);
+        return product?.idCategory !== this.selectedCategory.id;
+      });
+    }
     /*Permite ou não o salvamento do historico juntamente com a menssagem do porque não,
     sobe a condição de todas as tag possuirem produtos cadastrados*/
     if (this.NonProductTags.length !== 0) {
