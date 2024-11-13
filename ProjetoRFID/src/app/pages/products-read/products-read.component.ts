@@ -156,10 +156,10 @@ export class ProductsReadComponent implements OnInit {
     let verify = await this.productsService.getProductsByTag();
   
     if ('error' in verify) {
-      console.log(verify.error);  // Lida com o erro, se houver
+      console.log(verify.error);  
     } else {
       
-      // Atribui os valores para as listas
+    
       this.History = verify.products?.map(item => item.rfidTag) || [];
       this.NonProductTags = verify.notFoundResponses?.map(item => item.rfidTag) || [];
     }
