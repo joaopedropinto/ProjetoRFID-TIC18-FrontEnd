@@ -149,40 +149,51 @@ export class ProductsReadComponent implements OnInit {
 
     this.visibleDialog = true;
   }
+  
   async saveHistory() {
     this.History = [];
     this.NonProductTags = [];
-  
-    let verify = await this.productsService.getProductsByTag();
-  
+
+    const verify = await this.productsService.getProductsByTag();
+
     if ('error' in verify) {
-      console.log(verify.error);  
-    } else {
-      
+        console.log(verify.error);
+        return;
+    }
+
     
-      this.History = verify.products?.map(item => item.rfidTag) || [];
-      this.NonProductTags = verify.notFoundResponses?.map(item => item.rfidTag) || [];
+    this.History = verify.products?.map(item => item.rfidTag) || [];
+    this.NonProductTags = verify.notFoundResponses?.map(item => item.rfidTag) || [];
+
+   
+    if (this.selectedCategory?.id) {
+        const categoryId = this.selectedCategory.id;
+
+        
+        this.History = this.History.filter(tag => {
+            const product = this.products.find(p => p.rfidTag === tag);
+            return product?.idCategory === categoryId;
+        });
+
+       
+        this.NonProductTags = this.NonProductTags.filter(tag => {
+            const product = this.products.find(p => p.rfidTag === tag);
+            return !product || product.idCategory !== categoryId;
+        });
     }
-    if (this.selectedCategory?.id && this.selectedCategory.id !== undefined) {
-      this.History = this.History.filter(tag => {
-        const product = this.products.find(p => p.rfidTag === tag);
-        return product?.idCategory === this.selectedCategory.id;
-      });
-  
-      this.NonProductTags = this.NonProductTags.filter(tag => {
-        const product = this.products.find(p => p.rfidTag === tag);
-        return product?.idCategory !== this.selectedCategory.id;
-      });
+
+    
+    else if (this.NonProductTags.length > 0) {
+        this.Message(); 
+        return;
     }
-    /*Permite ou não o salvamento do historico juntamente com a menssagem do porque não,
-    sobe a condição de todas as tag possuirem produtos cadastrados*/
-    if (this.NonProductTags.length !== 0) {
-      this.Message();
+
+   
+    if (this.History.length > 0) {
+        this.enviarReadout(this.History);
     }
-    if (this.NonProductTags.length === 0 && this.History.length > 0) {
-      this.enviarReadout(this.History);
-    }
-  }
+}
+
   
   closeModal() {
     this.visibleDialog = false;
