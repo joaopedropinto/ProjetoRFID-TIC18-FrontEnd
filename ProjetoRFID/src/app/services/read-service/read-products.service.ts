@@ -86,8 +86,47 @@ export class ReadProductsService {
       map(response => response.url) // Mapeia para obter apenas a URL da resposta
     );
   }
+  getProductsByTagRfidsByTime(readingTime: number, page: number = 1, itemsPerPage: number = 10): Observable<{ products: Product[], notFoundResponses: any[] }> {
+    const params = new HttpParams()
+      .set('ReadingTime', readingTime.toString())
+      .set('page', page.toString())
+      .set('itemsPerPage', itemsPerPage.toString());
+
+    return this.http.get<{ products: Product[], notFoundResponses: any[] }>(`${this.apiUrl}/Product/get-products-by-rfids-by-time`, { params })
+      .pipe(
+        map(response => {
+          const products = response.products || [];
+          const notFoundResponses = response.notFoundResponses || [];
+          const adaptedProducts: Product[] = notFoundResponses.map(tag => ({
+            id: '',  // Define um valor padrão ou um identificador válido
+            idCategory: 'unknown', 
+            idSupplier: 'unknown', 
+            idPackaging: '',  // Adicionei idPackaging com um valor padrão
+            name: tag.message || 'Desconhecido',
+            rfidTag: tag.rfidTag || '',
+            description: '',
+            weight: 0,
+            manufacDate: new Date(), 
+            dueDate: new Date(), 
+            unitMeasurement: '', 
+            packingType: '', 
+            batchNumber: '', 
+            quantity: 0,
+            price: 0,
+            height: 0,
+            width: 0,
+            length: 0,
+            volume: 0
+          }));
+          const allProducts = [...products, ...adaptedProducts];
+          return { products: allProducts, notFoundResponses };
+        })
+      );
+  }
+
 
 }
+
 //interface usada para que o codigo reconheça a estrutura do resultado fornecido pelo end point
 interface ProductsByTagResponse {
   products: any[];        // O tipo real de produtos pode ser definido conforme necessário

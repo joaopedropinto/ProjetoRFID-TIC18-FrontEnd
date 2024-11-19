@@ -16,8 +16,11 @@
             mode="decimal" 
             [(ngModel)]="readingTime">
           </p-inputNumber>
-
-         
+          <p-button severity="secondary" (onClick)="loadProductsByReadingTime()">
+            Buscar
+            <span *ngIf="loading" class="loading-spinner"></span>
+        </p-button>
+          
 
           <p-dropdown 
             [options]="categories" 

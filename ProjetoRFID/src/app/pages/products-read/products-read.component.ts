@@ -96,6 +96,8 @@ export class ProductsReadComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.loadProductsByReadingTime();
+
     this.categoryService.getCategories().subscribe(categories => {
       this.categories = categories;
       this.categories.unshift(this.allCategoriesOption); // Adiciona a opção "Todas as Categorias" no início
@@ -324,6 +326,21 @@ export class ProductsReadComponent implements OnInit {
     } else {
       this.products = [...this.initialValue]; // Exibe todos os produtos
     }
+  }
+
+  loadProductsByReadingTime(): void {
+    this.productsService.getProductsByTagRfidsByTime(this.readingTime, 1, 10).subscribe(
+      (response) => {
+        this.products = response.products;
+      },
+      (error) => {
+        console.error('Erro ao buscar produtos:', error);
+      }
+    );
+  }
+
+  onReadingTimeChange(): void {
+    this.loadProductsByReadingTime();  // Atualiza os produtos conforme o valor de readingTime
   }
 
 }
