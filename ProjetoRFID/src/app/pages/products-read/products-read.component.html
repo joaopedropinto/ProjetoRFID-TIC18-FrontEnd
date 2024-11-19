@@ -8,13 +8,24 @@
     <ng-template pTemplate="caption">
       <div class="search-input">
         <div class="lateral-buttons">
+
+          <p-inputNumber 
+            placeholder="Digite milissegundos" 
+            [min]="1000" 
+            [showButtons]="true" 
+            mode="decimal" 
+            [(ngModel)]="readingTime">
+          </p-inputNumber>
+
+         
+
           <p-dropdown 
-  [options]="categories" 
-  [(ngModel)]="selectedCategory" 
-  optionLabel="name" 
-  placeholder="Selecionar Categoria"
-  (onChange)="filterProductsByCategory()">
-</p-dropdown>
+            [options]="categories" 
+            [(ngModel)]="selectedCategory" 
+            optionLabel="name" 
+            placeholder="Selecionar Categoria"
+            (onChange)="filterProductsByCategory()">
+          </p-dropdown>
 
           <p-button severity="secondary" (onClick)="recarregarPagina()">
             Nova leitura

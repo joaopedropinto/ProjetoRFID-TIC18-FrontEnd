@@ -28,7 +28,7 @@ import { Packaging } from '../../models/packaging.model';
 import { PackagingService } from '../../services/packaging/packaging.service';
 import { Dropdown, DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
-
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   selector: 'app-products-read',
@@ -50,12 +50,14 @@ import { FormsModule } from '@angular/forms';
     MessagesModule, 
     DropdownModule,
     FormsModule,
+    InputNumberModule,
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './products-read.component.html',
   styleUrls: ['./products-read.component.css']
 })
 export class ProductsReadComponent implements OnInit {
+  readingTime: number = 1000;
   messages: Message[] = [];
   NonProductTags: string[] = [];
   History: string[] = []; // Alterado de String[] para string[]
