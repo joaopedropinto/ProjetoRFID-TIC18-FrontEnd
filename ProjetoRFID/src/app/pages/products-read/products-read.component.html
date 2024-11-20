@@ -9,17 +9,7 @@
       <div class="search-input">
         <div class="lateral-buttons">
 
-          <p-inputNumber 
-            placeholder="Digite milissegundos" 
-            [min]="1000" 
-            [showButtons]="true" 
-            mode="decimal" 
-            [(ngModel)]="readingTime">
-          </p-inputNumber>
-          <p-button severity="secondary" (onClick)="loadProductsByReadingTime()">
-            Buscar
-            <span *ngIf="loading" class="loading-spinner"></span>
-        </p-button>
+         
           
 
           <p-dropdown 
@@ -30,9 +20,21 @@
             (onChange)="filterProductsByCategory()">
           </p-dropdown>
 
+          <p-inputNumber 
+          placeholder="Tempo de leitura" 
+          [min]="1000" 
+          [showButtons]="true" 
+          mode="decimal" 
+          [(ngModel)]="readingTime">
+        </p-inputNumber>
+        <div class="continuous-reading-switch">
+          <p-inputSwitch [(ngModel)]="checked" [style]="{ width: '50px', height: '20px' }"></p-inputSwitch>
+          <span class="switch-label">Leitura contínua</span>
+        </div>
+
           <p-button severity="secondary" (onClick)="recarregarPagina()">
             Nova leitura
-            <span *ngIf="loading" class="loading-spinner"></span>
+            
         </p-button>
         
         <p-button (onClick)="saveHistory()">Salvar</p-button>
@@ -96,7 +98,8 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-product  let-rowIndex="rowIndex">
-      
+
+     
       <tr>
         <td>
           <div class="table-column-value">
@@ -171,6 +174,9 @@
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="8">Nenhum produto lido.</td>
+        <div class="details-loading-overlay" *ngIf="loading">
+          <span class="loading-spinner"></span>
+        </div>
       </tr>
     </ng-template>
   </p-table>
