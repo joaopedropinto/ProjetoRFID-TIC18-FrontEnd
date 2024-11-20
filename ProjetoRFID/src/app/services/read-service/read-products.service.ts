@@ -86,11 +86,9 @@ export class ReadProductsService {
       map(response => response.url) // Mapeia para obter apenas a URL da resposta
     );
   }
-  getProductsByTagRfidsByTime(readingTime: number, page: number = 1, itemsPerPage: number = 10): Observable<{ products: Product[], notFoundResponses: any[] }> {
+  getProductsByTagRfidsByTime(readingTime: number): Observable<{ products: Product[], notFoundResponses: any[] }> {
     const params = new HttpParams()
-      .set('ReadingTime', readingTime.toString())
-      .set('page', page.toString())
-      .set('itemsPerPage', itemsPerPage.toString());
+      .set('ReadingTime', readingTime.toString());
 
     return this.http.get<{ products: Product[], notFoundResponses: any[] }>(`${this.apiUrl}/Product/get-products-by-rfids-by-time`, { params })
       .pipe(

@@ -29,6 +29,7 @@ import { PackagingService } from '../../services/packaging/packaging.service';
 import { Dropdown, DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
+import {InputSwitchModule} from 'primeng/inputswitch';
 
 @Component({
   selector: 'app-products-read',
@@ -51,16 +52,18 @@ import { InputNumberModule } from 'primeng/inputnumber';
     DropdownModule,
     FormsModule,
     InputNumberModule,
+    InputSwitchModule,
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './products-read.component.html',
   styleUrls: ['./products-read.component.css']
 })
 export class ProductsReadComponent implements OnInit {
-  readingTime: number = 1000;
+  checked: boolean = false;
+  readingTime: number | null = null;
   messages: Message[] = [];
   NonProductTags: string[] = [];
-  History: string[] = []; // Alterado de String[] para string[]
+  History: string[] = []; 
   visibleDialog: boolean = false;
   visibleImageDialog: boolean = false;
   selectedImageUrl: string | null = null;
@@ -79,7 +82,7 @@ export class ProductsReadComponent implements OnInit {
   selectedCategory!: Category;
   categories: Category[] = []; // Adicione esta linha
   allCategoriesOption: Category = { id: undefined, name: 'Todas as Categorias' }; // Adicione esta linha
-
+  
   selectedProductCategory!: Category;
   selectedProductSupplier!: Supplier;
   selectedProductDueDate!: string;
@@ -96,7 +99,7 @@ export class ProductsReadComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.loadProductsByReadingTime();
+   
 
     this.categoryService.getCategories().subscribe(categories => {
       this.categories = categories;
@@ -215,6 +218,12 @@ export class ProductsReadComponent implements OnInit {
   
   recarregarPagina() {
     this.loading = true;
+
+    if (this.checked === true) {
+      this.loadProductsByReadingTime();
+      this.loading = true; 
+      return;
+    }
   
     const delay = 500;
     setTimeout(() => {
@@ -329,19 +338,27 @@ export class ProductsReadComponent implements OnInit {
   }
 
   loadProductsByReadingTime(): void {
-    this.productsService.getProductsByTagRfidsByTime(this.readingTime, 1, 10).subscribe(
-      (response) => {
-        this.products = response.products;
-      },
-      (error) => {
-        console.error('Erro ao buscar produtos:', error);
-      }
-    );
+   
+    if (this.readingTime !== null) {
+      this.productsService.getProductsByTagRfidsByTime(this.readingTime).subscribe({
+        next: (response) => {
+          console.log(this.readingTime);
+          console.log("leiturapassando ok", response);
+          this.products = response.products;
+         
+        },
+        error: (err) => {
+          console.error("Erro ao carregar produtos por tempo:", err);
+         
+        },
+        complete: () => {
+          console.log("Leitura concluída.");
+          
+        },
+      });
+    } else {
+      console.warn("O parâmetro readingTime está nulo.");
+      
+    }
   }
-
-  onReadingTimeChange(): void {
-    this.loadProductsByReadingTime();  // Atualiza os produtos conforme o valor de readingTime
-  }
-
 }
-
