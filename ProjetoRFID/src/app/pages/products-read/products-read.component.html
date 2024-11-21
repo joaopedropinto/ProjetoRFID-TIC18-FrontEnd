@@ -18,12 +18,12 @@
           </p-inputNumber>
         </div>
         <div class="botoes-leitura">
-          <p-button severity="secondary" (onClick)="realizarLeiutura()">
+          <p-button severity="secondary" (onClick)="realizarLeiutura()" [disabled]="newReadingButtonDisabled">
             Nova leitura
     
           </p-button>
     
-          <p-button (onClick)="saveHistory()">Salvar</p-button>
+          <p-button (onClick)="saveHistory()" [loading]="saveReadingButtonLoading" [disabled]="!products">Salvar</p-button>
         </div>
       </div>
       <p-divider></p-divider>

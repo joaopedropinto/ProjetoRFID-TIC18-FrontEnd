@@ -92,6 +92,9 @@ export class ProductsReadComponent implements OnInit {
   selectedProductPackaging!: Packaging;
   selectedProductManuFacDate!: string;
 
+  saveReadingButtonLoading: boolean = false;
+  newReadingButtonDisabled: boolean = false;
+
   constructor(
     private productsService: ReadProductsService,
     private router: Router,
@@ -143,6 +146,8 @@ export class ProductsReadComponent implements OnInit {
     this.visibleDialog = true;
   }
   async saveHistory() {
+    this.saveReadingButtonLoading = true;
+    this.newReadingButtonDisabled = true;
     this.History = [];
     this.NonProductTags = [];
   
@@ -173,6 +178,8 @@ export class ProductsReadComponent implements OnInit {
     if (this.NonProductTags.length === 0 && this.History.length > 0) {
       this.enviarReadout(this.History);
     }
+    this.saveReadingButtonLoading = false;
+    this.newReadingButtonDisabled = false;
   }
   
   closeModal() {
