@@ -206,7 +206,6 @@ export class ProductsReadComponent implements OnInit {
 
     if (this.checked === true) {
       this.loadProductsByReadingTime();
-      this.loading = false; 
       return;
     }
 
@@ -222,14 +221,6 @@ export class ProductsReadComponent implements OnInit {
       this.loading = false;
       this.initialValue = [...this.products];
     });
-    // const delay = 500;
-    // setTimeout(() => {
-    //   const currentUrl = this.router.url;
-    //   this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-    //     this.router.navigate([currentUrl]);
-    //     this.loading = false;
-    //   });
-    // }, delay);
   }
 
   navigateToCadastro(rfidTag: string) {
@@ -333,9 +324,16 @@ export class ProductsReadComponent implements OnInit {
 
   loadProductsByReadingTime(): void {
     if (this.readingTime !== null) {
-      this.productsService.getProductsByTagRfidsByTime(this.readingTime).subscribe({
+      this.productsService.getProductsByTagRfidsByTime(this.readingTime * 1000).subscribe({
         next: (response) => {
          this.products = response.products;
+
+         for(let product of this.products) {
+          this.packagingService.getPackagingById(product.idPackaging).subscribe(packaging => {
+            product.packingType = packaging.name;
+          });
+        }
+
          this.loading = false;
         },
         error: (err) => {
