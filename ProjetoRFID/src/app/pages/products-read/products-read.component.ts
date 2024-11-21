@@ -30,6 +30,7 @@ import { Dropdown, DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
 import {InputSwitchModule} from 'primeng/inputswitch';
+import { DividerModule } from 'primeng/divider';
 
 @Component({
   selector: 'app-products-read',
@@ -53,6 +54,7 @@ import {InputSwitchModule} from 'primeng/inputswitch';
     FormsModule,
     InputNumberModule,
     InputSwitchModule,
+    DividerModule
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './products-read.component.html',
@@ -103,17 +105,6 @@ export class ProductsReadComponent implements OnInit {
       this.categories.unshift(this.allCategoriesOption); // Adiciona a opção "Todas as Categorias" no início
     });
 
-    this.productsService.getProductsByTagRfids().subscribe(response => {
-      this.products = response.products;
-
-      for(let product of this.products) {
-        this.packagingService.getPackagingById(product.idPackaging).subscribe(packaging => {
-          product.packingType = packaging.name;
-        });
-      }
-
-      this.initialValue = [...this.products];
-    });
     this.selectedCategory = this.allCategoriesOption;
 
   }
@@ -140,9 +131,6 @@ export class ProductsReadComponent implements OnInit {
         console.log(this.selectedProduct!.imageUrl);
       });
     }
-    
-    
-
 
     this.selectedProductDueDate = new Date(this.selectedProduct.dueDate).toLocaleDateString('pt-BR');
     this.selectedProductManuFacDate = new Date(this.selectedProduct.manufacDate).toLocaleDateString('pt-BR', {
@@ -213,7 +201,7 @@ export class ProductsReadComponent implements OnInit {
          // Limpa a URL da imagem
   }
   
-  recarregarPagina() {
+  realizarLeiutura() {
     this.loading = true;
 
     if (this.checked === true) {
@@ -221,22 +209,31 @@ export class ProductsReadComponent implements OnInit {
       this.loading = false; 
       return;
     }
-    
-    const delay = 500;
-    setTimeout(() => {
-      const currentUrl = this.router.url;
-      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate([currentUrl]);
-        this.loading = false;
-      });
-    }, delay);
+
+    this.productsService.getProductsByTagRfids().subscribe(response => {
+      this.products = response.products;
+
+      for(let product of this.products) {
+        this.packagingService.getPackagingById(product.idPackaging).subscribe(packaging => {
+          product.packingType = packaging.name;
+        });
+      }
+
+      this.loading = false;
+      this.initialValue = [...this.products];
+    });
+    // const delay = 500;
+    // setTimeout(() => {
+    //   const currentUrl = this.router.url;
+    //   this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+    //     this.router.navigate([currentUrl]);
+    //     this.loading = false;
+    //   });
+    // }, delay);
   }
 
   navigateToCadastro(rfidTag: string) {
     this.router.navigate(['produtos/cadastrar'], { queryParams: { tag: rfidTag } });
-
-
-    console.log(rfidTag);
   }
 
   enviarReadout(tag_list: string[]) {
@@ -335,12 +332,10 @@ export class ProductsReadComponent implements OnInit {
   }
 
   loadProductsByReadingTime(): void {
-   this.loading = true;
     if (this.readingTime !== null) {
       this.productsService.getProductsByTagRfidsByTime(this.readingTime).subscribe({
         next: (response) => {
          this.products = response.products;
-        //  this.initialValue = [...this.products];
          this.loading = false;
         },
         error: (err) => {

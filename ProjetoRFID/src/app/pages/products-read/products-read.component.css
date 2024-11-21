@@ -14,6 +14,22 @@ div.lateral-buttons {
   justify-self: right;
 }
 
+.acoesLeitura {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.switch-leitura-continua {
+  display: flex;
+  column-gap: 20px;
+} 
+
+.botoes-leitura {
+  display: flex;
+  gap: 10px;
+}
+
 .input-icon {
   gap: 1vw;
 }
@@ -93,7 +109,7 @@ th {
 .continuous-reading-switch {
   display: flex;
   flex-direction: column; 
-  align-items: left; 
+  align-items: center; 
   gap: 5px; 
 }
 
