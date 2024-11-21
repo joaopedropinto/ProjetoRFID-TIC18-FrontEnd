@@ -82,7 +82,7 @@ export class ProductsReadComponent implements OnInit {
   loading: boolean = false;
   orderedColumn: string | null = null;
   isSorted: boolean | null = null;
-  selectedCategory!: Category;
+  selectedCategorys!: Category[];
   categories: Category[] = [];
   allCategoriesOption: Category = { id: undefined, name: 'Todas as Categorias' };
   
@@ -103,10 +103,11 @@ export class ProductsReadComponent implements OnInit {
   ngOnInit(): void {
     this.categoryService.getCategories().subscribe(categories => {
       this.categories = categories;
-      this.categories.unshift(this.allCategoriesOption);
+      // this.categories.unshift(this.allCategoriesOption);
     });
 
-    this.selectedCategory = this.allCategoriesOption;
+    this.selectedCategorys = this.categories;
+    // this.selectedCategory = this.allCategoriesOption;
 
   }
   
@@ -150,20 +151,18 @@ export class ProductsReadComponent implements OnInit {
     if ('error' in verify) {
       console.log(verify.error);  
     } else {
-      
-    
       this.History = verify.products?.map(item => item.rfidTag) || [];
       this.NonProductTags = verify.notFoundResponses?.map(item => item.rfidTag) || [];
     }
-    if (this.selectedCategory?.id && this.selectedCategory.id !== undefined) {
+    if (this.selectedCategorys.length > 0) {
       this.History = this.History.filter(tag => {
         const product = this.products.find(p => p.rfidTag === tag);
-        return product?.idCategory === this.selectedCategory.id;
+        return this.selectedCategorys.filter(category => product?.category === category);
       });
   
       this.NonProductTags = this.NonProductTags.filter(tag => {
         const product = this.products.find(p => p.rfidTag === tag);
-        return product?.idCategory !== this.selectedCategory.id;
+        return this.selectedCategorys.filter(category => product?.category === category);
       });
     }
     /*Permite ou não o salvamento do historico juntamente com a menssagem do porque não,
@@ -313,9 +312,10 @@ export class ProductsReadComponent implements OnInit {
     return "pi pi-sort";
   }
   filterProductsByCategory(): void {
-    if (this.selectedCategory?.id) {
-      const categoryId = this.selectedCategory.id;
-      this.products = this.initialValue.filter(product => product.idCategory === categoryId);
+    if (this.selectedCategorys.length > 0) {
+      this.products = this.initialValue.filter(product => {
+        return this.selectedCategorys.some(category => category.id === product.idCategory);
+      })
     } else {
       this.products = [...this.initialValue]; // Exibe todos os produtos
     }
@@ -331,9 +331,10 @@ export class ProductsReadComponent implements OnInit {
           this.packagingService.getPackagingById(product.idPackaging).subscribe(packaging => {
             product.packingType = packaging.name;
           });
-        }
+          }
 
-         this.loading = false;
+          this.initialValue = [...this.products];
+          this.loading = false;
         },
         error: (err) => {
           this.loading = false;

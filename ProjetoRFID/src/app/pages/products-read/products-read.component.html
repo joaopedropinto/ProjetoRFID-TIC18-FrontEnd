@@ -29,9 +29,9 @@
       <p-divider></p-divider>
       <div class="search-input">
         <div class="lateral-buttons">
-          <p-dropdown [options]="categories" [(ngModel)]="selectedCategory" optionLabel="name"
+          <p-multiSelect [options]="categories" [(ngModel)]="selectedCategorys" optionLabel="name"
             placeholder="Selecionar Categoria" (onChange)="filterProductsByCategory()">
-          </p-dropdown>
+          </p-multiSelect>
         </div>
         <p-iconField iconPosition="left" class="input-icon">
           <p-inputIcon>
