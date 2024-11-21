@@ -2,7 +2,6 @@
     <p-card header="Cadastro de Produto">
         <form class="form-container" [formGroup]="productForm" (ngSubmit)="onSubmit()">
             <div class="row">
-                <!-- Campo de Código da Tag RFID movido para o início -->
                 <div class="inputFloatLabel">
                     <p-floatLabel>
                         <input class="full-width-input" type="text" pInputText id="tagCode" formControlName="tag" (blur) = "onTagChange($event)">
@@ -15,7 +14,9 @@
                 </div>
                 <p-button label="Obter da leitura"
                     icon="pi pi-barcode" 
-                    (onClick)="setTagFieldValueByReading()" />
+                    [loading]="getFromReadingButtonLoading" 
+                    (onClick)="setTagFieldValueByReading()"
+                    [disabled]="productForm.get('tag')?.value"/>
             </div>
             <div class="row">
                 <div class="inputFloatLabel">

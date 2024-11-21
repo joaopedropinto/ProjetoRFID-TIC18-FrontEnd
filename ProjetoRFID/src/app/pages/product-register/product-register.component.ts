@@ -24,11 +24,7 @@ import { Packaging } from '../../models/packaging.model';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ActivatedRoute } from '@angular/router';
 
-
-
-
 import { ReadProductsService } from '../../services/read-service/read-products.service';
-
 
 @Component({
   selector: 'app-product-register',
@@ -63,8 +59,7 @@ export class ProductRegisterComponent implements OnInit {
   packages!: Packaging[];
   tag: string | null = null;
 
-
-
+  getFromReadingButtonLoading: boolean = false;
 
   onUpload(event: any) {
     this.uploadedFiles.push(...event.files); // Armazena os arquivos enviados
@@ -76,7 +71,6 @@ export class ProductRegisterComponent implements OnInit {
     { label: 'Litros', value: 'Litros' },
     { label: 'Caixas', value: 'Caixas' }
   ];
-
 
   constructor(
     private formBuilder: FormBuilder,
@@ -106,12 +100,8 @@ export class ProductRegisterComponent implements OnInit {
       height: [null, [Validators.required, Validators.min(0.1)]],
       width: [null, [Validators.required, Validators.min(0.1)]],
       length: [null, [Validators.required, Validators.min(0.1)]],
-
       imageBase64: [null],
-
     })
-
-
   }
 
   ngOnInit(): void {
@@ -223,6 +213,7 @@ export class ProductRegisterComponent implements OnInit {
   }
 
   setTagFieldValueByReading(): void {
+    this.getFromReadingButtonLoading = true;
     this.readService.getProductsByTagRfids().subscribe({
       next: (response) => {
         switch (response.products.length) {
@@ -256,6 +247,7 @@ export class ProductRegisterComponent implements OnInit {
               summary: 'Múltiplas tags',
               detail: 'Leia somente uma tag para cadastrar a partir da leitura.'
             });
+            this.getFromReadingButtonLoading = false;
         }
       },
       error: (error) => {
@@ -264,8 +256,10 @@ export class ProductRegisterComponent implements OnInit {
           summary: 'Erro',
           detail: 'Ocorreu um erro ao realizar a leitura de tags. Tente novamente.'
         });
+        this.getFromReadingButtonLoading = false;
       }
     });
+
   }
 
   onSubmit(): void {

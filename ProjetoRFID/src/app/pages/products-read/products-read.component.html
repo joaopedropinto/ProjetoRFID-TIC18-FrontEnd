@@ -4,25 +4,34 @@
 <p-card header="Produtos Lidos">
   <p-table #table [globalFilterFields]="['name', 'packingType', 'unitMeasurement', 'batchNumber']" [value]="products"
     [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '162vh', 'min-height': '40vh', 'max-width': '162vh' }"
-    (sortFunction)="customSort($event)" [customSort]="true" [rowsPerPageOptions]="[10, 25, 50, 100]">
+    (sortFunction)="customSort($event)" [customSort]="true" [rowsPerPageOptions]="[10, 25, 50, 100]"
+    [loading]="loading">
     <ng-template pTemplate="caption">
+      <div class="acoesLeitura">
+        <div class="switch-leitura-continua">
+          <div class="continuous-reading-switch">
+            <span class="switch-label">Leitura contínua</span>
+            <p-inputSwitch [(ngModel)]="checked" [style]="{ width: '45px', height: '22px' }"></p-inputSwitch>
+          </div>
+          <p-inputNumber *ngIf="checked" placeholder="Leitura em 1 - 65 segundos" [min]="1" [max]="65"
+            mode="decimal" [(ngModel)]="readingTime">
+          </p-inputNumber>
+        </div>
+        <div class="botoes-leitura">
+          <p-button severity="secondary" (onClick)="realizarLeiutura()" [disabled]="newReadingButtonDisabled">
+            Nova leitura
+    
+          </p-button>
+    
+          <p-button (onClick)="saveHistory()" [loading]="saveReadingButtonLoading" [disabled]="!products">Salvar</p-button>
+        </div>
+      </div>
+      <p-divider></p-divider>
       <div class="search-input">
         <div class="lateral-buttons">
-          <p-dropdown 
-  [options]="categories" 
-  [(ngModel)]="selectedCategory" 
-  optionLabel="name" 
-  placeholder="Selecionar Categoria"
-  (onChange)="filterProductsByCategory()">
-</p-dropdown>
-
-          <p-button severity="secondary" (onClick)="recarregarPagina()">
-            Nova leitura
-            <span *ngIf="loading" class="loading-spinner"></span>
-        </p-button>
-        
-        <p-button (onClick)="saveHistory()">Salvar</p-button>
-
+          <p-multiSelect [options]="categories" [(ngModel)]="selectedCategorys" optionLabel="name"
+            placeholder="Selecionar Categoria" (onChange)="filterProductsByCategory()">
+          </p-multiSelect>
         </div>
         <p-iconField iconPosition="left" class="input-icon">
           <p-inputIcon>
@@ -34,129 +43,128 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th style="width: 5%;"><div class="table-column-header">#</div> </th>
+        <th style="width: 5%;">
+          <div class="table-column-header">#</div>
+        </th>
         <th style="width: 4%;">Imagem</th>
         <th pSortableColumn="name" style="width: 11%;">
-                        <div class="table-column-header">
-                            Nome
-                            <i [ngClass]="sortIconClass('name')"></i>
-                        </div>
-                    </th>
-                    <th pSortableColumn="weight" style="width: 8%;">
-                        <div class="table-column-header">
-                            Peso
-                            <i [ngClass]="sortIconClass('weight')"></i>
-                        </div>
-                    </th>
-                    <th pSortableColumn="packingType" style="width: 9%;">
-                        <div class="table-column-header">
-                            Embalagem
-                            <i [ngClass]="sortIconClass('packingType')"></i>
-                        </div>
-                    </th>
-                    <th pSortableColumn="quantity" style="width: 8%;">
-                        <div class="table-column-header">
-                            Quantidade
-                            <i [ngClass]="sortIconClass('quantity')"></i>
-                        </div>
-                    </th>
-                    <th pSortableColumn="price" style="width: 8%;">
-                        <div class="table-column-header">
-                            Preço
-                            <i [ngClass]="sortIconClass('price')"></i>
-                        </div>
-                    </th>
-                    <th pSortableColumn="unitMeasurement" style="width: 7%;">
-                        <div class="table-column-header">
-                            Unidade <br>de medida
-                            <i [ngClass]="sortIconClass('unitMeasurement')"></i>
-                        </div>
-                    </th>
-                    <th pSortableColumn="batchNumber" style="width: 8%;">
-                        <div class="table-column-header">
-                            Nº de lote
-                            <i [ngClass]="sortIconClass('batchNumber')"></i>
-                        </div>
-                    </th>
-                    <th style="width: 5%;">Ações</th>
+          <div class="table-column-header">
+            Nome
+            <i [ngClass]="sortIconClass('name')"></i>
+          </div>
+        </th>
+        <th pSortableColumn="weight" style="width: 8%;">
+          <div class="table-column-header">
+            Peso
+            <i [ngClass]="sortIconClass('weight')"></i>
+          </div>
+        </th>
+        <th pSortableColumn="packingType" style="width: 9%;">
+          <div class="table-column-header">
+            Embalagem
+            <i [ngClass]="sortIconClass('packingType')"></i>
+          </div>
+        </th>
+        <th pSortableColumn="quantity" style="width: 8%;">
+          <div class="table-column-header">
+            Quantidade
+            <i [ngClass]="sortIconClass('quantity')"></i>
+          </div>
+        </th>
+        <th pSortableColumn="price" style="width: 8%;">
+          <div class="table-column-header">
+            Preço
+            <i [ngClass]="sortIconClass('price')"></i>
+          </div>
+        </th>
+        <th pSortableColumn="unitMeasurement" style="width: 7%;">
+          <div class="table-column-header">
+            Unidade <br>de medida
+            <i [ngClass]="sortIconClass('unitMeasurement')"></i>
+          </div>
+        </th>
+        <th pSortableColumn="batchNumber" style="width: 8%;">
+          <div class="table-column-header">
+            Nº de lote
+            <i [ngClass]="sortIconClass('batchNumber')"></i>
+          </div>
+        </th>
+        <th style="width: 5%;">Ações</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-product  let-rowIndex="rowIndex">
-      
+    <ng-template pTemplate="body" let-product let-rowIndex="rowIndex">
       <tr>
         <td>
           <div class="table-column-value">
             {{ rowIndex + 1 }}
           </div>
-      </td>
-       
+        </td>
+
         <td>
-          <div class="table-column-value"> 
-              <p-button icon="pi pi-image" [rounded]="true" [text]="true"
+          <div class="table-column-value">
+            <p-button icon="pi pi-image" [rounded]="true" [text]="true"
               (click)=" openImageModal(product.imageObjectName)">
-              </p-button> 
+            </p-button>
           </div>
-        
+
         </td>
         <td>
           <div class="table-column-value">
-              {{ product.name }}
+            {{ product.name }}
           </div>
-      </td>
-      <td>
-          <div *ngIf="product.id"  class="table-column-value">
-              {{ product.weight }} kg
-          </div>
-      </td>
-      <td>
-          <div *ngIf="product.id"  class="table-column-value">
-              {{ product.packingType }}
-          </div>
-      </td>
-      <td>
-          <div *ngIf="product.id" class="table-column-value">
-              {{ product.quantity }}
-          </div>
-      </td>
-      <td>
-          <div *ngIf="product.id"  class="table-column-value">
-              R$ {{ product.price }}
-          </div>
-      </td>
-      <td>
-          <div *ngIf="product.id"  class="table-column-value">
-              {{ product.unitMeasurement }}
-          </div>
-      </td>
-      <td>
-          <div *ngIf="product.id"  class="table-column-value">
-              {{ product.batchNumber }}
-          </div>
-      </td>
-        <td >
-          <div>
-          <button 
-          *ngIf="product.id" 
-          type="button" pButton pRipple pTooltip="Visualizar" tooltipPosition="bottom"
-          showDelay="1000" hideDelay="300" icon="pi pi-eye" [rounded]="true" text="true"
-          severity="secondary" (click)="viewProduct(product)">
-          </button>
-        </div>
-        <div>
-          <p-button *ngIf="!product.id" 
-          (onClick)="navigateToCadastro(product.rfidTag)" 
-          label="Cadastrar "
-          pTooltip="Cadastrar Produto" tooltipPosition="bottom"
-          showDelay="1000" hideDelay="300">
-        </p-button>
-        </div>
         </td>
-        
+        <td>
+          <div *ngIf="product.id" class="table-column-value">
+            {{ product.weight }} kg
+          </div>
+        </td>
+        <td>
+          <div *ngIf="product.id" class="table-column-value">
+            {{ product.packingType }}
+          </div>
+        </td>
+        <td>
+          <div *ngIf="product.id" class="table-column-value">
+            {{ product.quantity }}
+          </div>
+        </td>
+        <td>
+          <div *ngIf="product.id" class="table-column-value">
+            R$ {{ product.price }}
+          </div>
+        </td>
+        <td>
+          <div *ngIf="product.id" class="table-column-value">
+            {{ product.unitMeasurement }}
+          </div>
+        </td>
+        <td>
+          <div *ngIf="product.id" class="table-column-value">
+            {{ product.batchNumber }}
+          </div>
+        </td>
+        <td>
+          <div>
+            <button *ngIf="product.id" type="button" pButton pRipple pTooltip="Visualizar" tooltipPosition="bottom"
+              showDelay="1000" hideDelay="300" icon="pi pi-eye" [rounded]="true" text="true" severity="secondary"
+              (click)="viewProduct(product)">
+            </button>
+          </div>
+          <div>
+            <p-button *ngIf="!product.id" (onClick)="navigateToCadastro(product.rfidTag)" label="Cadastrar "
+              pTooltip="Cadastrar Produto" tooltipPosition="bottom" showDelay="1000" hideDelay="300">
+            </p-button>
+          </div>
+        </td>
+
       </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="8">Nenhum produto lido.</td>
+        <div class="details-loading-overlay" *ngIf="loading">
+          <span class="loading-spinner"></span>
+        </div>
       </tr>
     </ng-template>
   </p-table>
@@ -171,9 +179,9 @@
       <li *ngIf="selectedProduct.imageUrl">
         <b></b><br>
         <img [src]="selectedProduct.imageUrl" style="max-width: 60%; height: auto;"
-        (error)="selectedImageUrl='assets/images/default-image.png'" alt="Imagem indisponível">
-    </li>
-   
+          (error)="selectedImageUrl='assets/images/default-image.png'" alt="Imagem indisponível">
+      </li>
+
 
       <li><b>RFID: </b>{{ selectedProduct.rfidTag }}</li>
       <li><b>Nome: </b>{{ selectedProduct.name }}</li>
@@ -199,14 +207,14 @@
   </div>
 </p-dialog>
 <p-dialog header="Visualização da Imagem" [(visible)]="visibleImageDialog" [modal]="true" [draggable]="false"
-[resizable]="false" [style]="{ width: '30vw' }" (onHide)="closeImageModal()">
+  [resizable]="false" [style]="{ width: '30vw' }" (onHide)="closeImageModal()">
 
-<div *ngIf="selectedImageUrl">
-<img [src]="selectedImageUrl" style="width: 100%; height: auto;"
-(error)="selectedImageUrl='assets/images/default-image.png'" alt="Imagem indisponível">
-</div>
+  <div *ngIf="selectedImageUrl">
+    <img [src]="selectedImageUrl" style="width: 100%; height: auto;"
+      (error)="selectedImageUrl='assets/images/default-image.png'" alt="Imagem indisponível">
+  </div>
 
-<div class="confirmDialogButton">
-<p-button label="Fechar" (onClick)="closeImageModal()"></p-button>
-</div>
+  <div class="confirmDialogButton">
+    <p-button label="Fechar" (onClick)="closeImageModal()"></p-button>
+  </div>
 </p-dialog>

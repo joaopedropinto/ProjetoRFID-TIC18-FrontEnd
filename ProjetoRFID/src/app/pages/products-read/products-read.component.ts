@@ -15,9 +15,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ModalDetailingComponent } from '../../shared/modal-detailing/modal-detailing.component';
 import { CommonModule } from '@angular/common';
 import { Product } from '../../models/product.model';
-import { Dialog, DialogModule } from 'primeng/dialog';
+import { DialogModule } from 'primeng/dialog';
 import { Router } from '@angular/router';
-import { formatDate } from '@angular/common';
 import { Message } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
 import { Category } from '../../models/category.model';
@@ -26,9 +25,12 @@ import { CategoryService } from '../../services/category/category.service';
 import { SupplierService } from '../../services/supplier/supplier.service';
 import { Packaging } from '../../models/packaging.model';
 import { PackagingService } from '../../services/packaging/packaging.service';
-import { Dropdown, DropdownModule } from 'primeng/dropdown';
+import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
-
+import { InputNumberModule } from 'primeng/inputnumber';
+import {InputSwitchModule} from 'primeng/inputswitch';
+import { DividerModule } from 'primeng/divider';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
   selector: 'app-products-read',
@@ -50,15 +52,21 @@ import { FormsModule } from '@angular/forms';
     MessagesModule, 
     DropdownModule,
     FormsModule,
+    InputNumberModule,
+    InputSwitchModule,
+    DividerModule,
+    MultiSelectModule,
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './products-read.component.html',
   styleUrls: ['./products-read.component.css']
 })
 export class ProductsReadComponent implements OnInit {
+  checked: boolean = false;
+  readingTime: number | null = null;
   messages: Message[] = [];
   NonProductTags: string[] = [];
-  History: string[] = []; // Alterado de String[] para string[]
+  History: string[] = []; 
   visibleDialog: boolean = false;
   visibleImageDialog: boolean = false;
   selectedImageUrl: string | null = null;
@@ -74,15 +82,18 @@ export class ProductsReadComponent implements OnInit {
   loading: boolean = false;
   orderedColumn: string | null = null;
   isSorted: boolean | null = null;
-  selectedCategory!: Category;
-  categories: Category[] = []; // Adicione esta linha
-  allCategoriesOption: Category = { id: undefined, name: 'Todas as Categorias' }; // Adicione esta linha
-
+  selectedCategorys!: Category[];
+  categories: Category[] = [];
+  allCategoriesOption: Category = { id: undefined, name: 'Todas as Categorias' };
+  
   selectedProductCategory!: Category;
   selectedProductSupplier!: Supplier;
   selectedProductDueDate!: string;
   selectedProductPackaging!: Packaging;
   selectedProductManuFacDate!: string;
+
+  saveReadingButtonLoading: boolean = false;
+  newReadingButtonDisabled: boolean = false;
 
   constructor(
     private productsService: ReadProductsService,
@@ -93,27 +104,15 @@ export class ProductsReadComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     this.categoryService.getCategories().subscribe(categories => {
       this.categories = categories;
-      this.categories.unshift(this.allCategoriesOption); // Adiciona a opção "Todas as Categorias" no início
+      // this.categories.unshift(this.allCategoriesOption);
     });
 
-    this.productsService.getProductsByTagRfids().subscribe(response => {
-      this.products = response.products;
-
-      for(let product of this.products) {
-        this.packagingService.getPackagingById(product.idPackaging).subscribe(packaging => {
-          product.packingType = packaging.name;
-        });
-      }
-
-      this.initialValue = [...this.products];
-    });
-    this.selectedCategory = this.allCategoriesOption;
+    this.selectedCategorys = this.categories;
+    // this.selectedCategory = this.allCategoriesOption;
 
   }
-  
   
   viewProduct(product: Product) {
     this.selectedProduct = product;
@@ -136,9 +135,6 @@ export class ProductsReadComponent implements OnInit {
         console.log(this.selectedProduct!.imageUrl);
       });
     }
-    
-    
-
 
     this.selectedProductDueDate = new Date(this.selectedProduct.dueDate).toLocaleDateString('pt-BR');
     this.selectedProductManuFacDate = new Date(this.selectedProduct.manufacDate).toLocaleDateString('pt-BR', {
@@ -150,6 +146,8 @@ export class ProductsReadComponent implements OnInit {
     this.visibleDialog = true;
   }
   async saveHistory() {
+    this.saveReadingButtonLoading = true;
+    this.newReadingButtonDisabled = true;
     this.History = [];
     this.NonProductTags = [];
   
@@ -158,20 +156,18 @@ export class ProductsReadComponent implements OnInit {
     if ('error' in verify) {
       console.log(verify.error);  
     } else {
-      
-    
       this.History = verify.products?.map(item => item.rfidTag) || [];
       this.NonProductTags = verify.notFoundResponses?.map(item => item.rfidTag) || [];
     }
-    if (this.selectedCategory?.id && this.selectedCategory.id !== undefined) {
+    if (this.selectedCategorys.length > 0) {
       this.History = this.History.filter(tag => {
         const product = this.products.find(p => p.rfidTag === tag);
-        return product?.idCategory === this.selectedCategory.id;
+        return this.selectedCategorys.filter(category => product?.category === category);
       });
   
       this.NonProductTags = this.NonProductTags.filter(tag => {
         const product = this.products.find(p => p.rfidTag === tag);
-        return product?.idCategory !== this.selectedCategory.id;
+        return this.selectedCategorys.filter(category => product?.category === category);
       });
     }
     /*Permite ou não o salvamento do historico juntamente com a menssagem do porque não,
@@ -182,6 +178,8 @@ export class ProductsReadComponent implements OnInit {
     if (this.NonProductTags.length === 0 && this.History.length > 0) {
       this.enviarReadout(this.History);
     }
+    this.saveReadingButtonLoading = false;
+    this.newReadingButtonDisabled = false;
   }
   
   closeModal() {
@@ -203,30 +201,35 @@ export class ProductsReadComponent implements OnInit {
     );
   }
   
-  
   closeImageModal(): void {
     this.visibleImageDialog = false;  // Fecha o modal
          // Limpa a URL da imagem
   }
   
-  recarregarPagina() {
+  realizarLeiutura() {
     this.loading = true;
-  
-    const delay = 500;
-    setTimeout(() => {
-      const currentUrl = this.router.url;
-      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate([currentUrl]);
-        this.loading = false;
-      });
-    }, delay);
+
+    if (this.checked === true) {
+      this.loadProductsByReadingTime();
+      return;
+    }
+
+    this.productsService.getProductsByTagRfids().subscribe(response => {
+      this.products = response.products;
+
+      for(let product of this.products) {
+        this.packagingService.getPackagingById(product.idPackaging).subscribe(packaging => {
+          product.packingType = packaging.name;
+        });
+      }
+
+      this.loading = false;
+      this.initialValue = [...this.products];
+    });
   }
 
   navigateToCadastro(rfidTag: string) {
     this.router.navigate(['produtos/cadastrar'], { queryParams: { tag: rfidTag } });
-
-
-    console.log(rfidTag);
   }
 
   enviarReadout(tag_list: string[]) {
@@ -316,13 +319,39 @@ export class ProductsReadComponent implements OnInit {
     return "pi pi-sort";
   }
   filterProductsByCategory(): void {
-    if (this.selectedCategory?.id) {
-      const categoryId = this.selectedCategory.id;
-      this.products = this.initialValue.filter(product => product.idCategory === categoryId);
+    if (this.selectedCategorys.length > 0) {
+      this.products = this.initialValue.filter(product => {
+        return this.selectedCategorys.some(category => category.id === product.idCategory);
+      })
     } else {
       this.products = [...this.initialValue]; // Exibe todos os produtos
     }
   }
 
-}
+  loadProductsByReadingTime(): void {
+    if (this.readingTime !== null) {
+      this.productsService.getProductsByTagRfidsByTime(this.readingTime * 1000).subscribe({
+        next: (response) => {
+         this.products = response.products;
 
+         for(let product of this.products) {
+          this.packagingService.getPackagingById(product.idPackaging).subscribe(packaging => {
+            product.packingType = packaging.name;
+          });
+          }
+
+          this.initialValue = [...this.products];
+          this.loading = false;
+        },
+        error: (err) => {
+          this.loading = false;
+        },
+        complete: () => {
+         this.loading = false;
+        },
+      });
+    } else {
+      this.loading = false;
+    }
+  }
+}

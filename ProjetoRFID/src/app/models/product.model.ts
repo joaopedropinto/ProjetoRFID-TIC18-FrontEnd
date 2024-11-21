@@ -1,3 +1,5 @@
+import { Category } from "./category.model";
+
 export interface Product {
     id?: string;
     idCategory: string;
@@ -6,6 +8,7 @@ export interface Product {
     name: string;
     rfidTag?: string;
     description?: string;
+    category?: Category;
     weight: number;
     manufacDate: Date;
     dueDate: Date;
