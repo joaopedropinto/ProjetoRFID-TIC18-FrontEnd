@@ -20,11 +20,11 @@
             (onChange)="filterProductsByCategory()">
           </p-dropdown>
 
-          <p-inputNumber 
-          placeholder="Tempo de leitura" 
+          <p-inputNumber
+          *ngIf="checked" 
+          placeholder="Leitura em 1 - 65 segundos" 
           [min]="1000" 
           [step]="1000"
-          [showButtons]="true" 
           mode="decimal" 
           [(ngModel)]="readingTime">
         </p-inputNumber>

@@ -98,9 +98,6 @@ export class ProductsReadComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
-   
-
     this.categoryService.getCategories().subscribe(categories => {
       this.categories = categories;
       this.categories.unshift(this.allCategoriesOption); // Adiciona a opção "Todas as Categorias" no início
@@ -343,6 +340,7 @@ export class ProductsReadComponent implements OnInit {
       this.productsService.getProductsByTagRfidsByTime(this.readingTime).subscribe({
         next: (response) => {
          this.products = response.products;
+        //  this.initialValue = [...this.products];
          this.loading = false;
         },
         error: (err) => {
