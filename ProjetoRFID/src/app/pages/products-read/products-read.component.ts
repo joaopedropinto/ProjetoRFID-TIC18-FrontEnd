@@ -342,22 +342,17 @@ export class ProductsReadComponent implements OnInit {
     if (this.readingTime !== null) {
       this.productsService.getProductsByTagRfidsByTime(this.readingTime).subscribe({
         next: (response) => {
-          console.log(this.readingTime);
-          console.log("leiturapassando ok", response);
-          this.products = response.products;
+         this.products = response.products;
          this.loading = false;
         },
         error: (err) => {
-          console.error("Erro ao carregar produtos por tempo:", err);
           this.loading = false;
         },
         complete: () => {
-          console.log("Leitura concluída.");
-          this.loading = false;
+         this.loading = false;
         },
       });
     } else {
-      console.warn("O parâmetro readingTime está nulo.");
       this.loading = false;
     }
   }
