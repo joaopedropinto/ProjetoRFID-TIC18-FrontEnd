@@ -15,9 +15,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ModalDetailingComponent } from '../../shared/modal-detailing/modal-detailing.component';
 import { CommonModule } from '@angular/common';
 import { Product } from '../../models/product.model';
-import { Dialog, DialogModule } from 'primeng/dialog';
+import { DialogModule } from 'primeng/dialog';
 import { Router } from '@angular/router';
-import { formatDate } from '@angular/common';
 import { Message } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
 import { Category } from '../../models/category.model';
@@ -26,11 +25,12 @@ import { CategoryService } from '../../services/category/category.service';
 import { SupplierService } from '../../services/supplier/supplier.service';
 import { Packaging } from '../../models/packaging.model';
 import { PackagingService } from '../../services/packaging/packaging.service';
-import { Dropdown, DropdownModule } from 'primeng/dropdown';
+import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
 import {InputSwitchModule} from 'primeng/inputswitch';
 import { DividerModule } from 'primeng/divider';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
   selector: 'app-products-read',
@@ -54,7 +54,8 @@ import { DividerModule } from 'primeng/divider';
     FormsModule,
     InputNumberModule,
     InputSwitchModule,
-    DividerModule
+    DividerModule,
+    MultiSelectModule,
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './products-read.component.html',
@@ -82,8 +83,8 @@ export class ProductsReadComponent implements OnInit {
   orderedColumn: string | null = null;
   isSorted: boolean | null = null;
   selectedCategory!: Category;
-  categories: Category[] = []; // Adicione esta linha
-  allCategoriesOption: Category = { id: undefined, name: 'Todas as Categorias' }; // Adicione esta linha
+  categories: Category[] = [];
+  allCategoriesOption: Category = { id: undefined, name: 'Todas as Categorias' };
   
   selectedProductCategory!: Category;
   selectedProductSupplier!: Supplier;
@@ -102,13 +103,12 @@ export class ProductsReadComponent implements OnInit {
   ngOnInit(): void {
     this.categoryService.getCategories().subscribe(categories => {
       this.categories = categories;
-      this.categories.unshift(this.allCategoriesOption); // Adiciona a opção "Todas as Categorias" no início
+      this.categories.unshift(this.allCategoriesOption);
     });
 
     this.selectedCategory = this.allCategoriesOption;
 
   }
-  
   
   viewProduct(product: Product) {
     this.selectedProduct = product;
@@ -194,7 +194,6 @@ export class ProductsReadComponent implements OnInit {
       
     );
   }
-  
   
   closeImageModal(): void {
     this.visibleImageDialog = false;  // Fecha o modal
