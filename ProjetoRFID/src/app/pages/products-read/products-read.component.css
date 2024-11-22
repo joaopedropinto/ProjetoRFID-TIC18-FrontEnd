@@ -23,7 +23,13 @@ div.lateral-buttons {
 .switch-leitura-continua {
   display: flex;
   column-gap: 20px;
-} 
+}
+
+.readingTimeInput {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+}
 
 .botoes-leitura {
   display: flex;

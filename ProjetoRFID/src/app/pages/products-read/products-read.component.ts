@@ -64,6 +64,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 export class ProductsReadComponent implements OnInit {
   checked: boolean = false;
   readingTime: number | null = null;
+  readingTimeError: boolean = false;
   messages: Message[] = [];
   NonProductTags: string[] = [];
   History: string[] = []; 
@@ -106,12 +107,9 @@ export class ProductsReadComponent implements OnInit {
   ngOnInit(): void {
     this.categoryService.getCategories().subscribe(categories => {
       this.categories = categories;
-      // this.categories.unshift(this.allCategoriesOption);
     });
 
     this.selectedCategorys = this.categories;
-    // this.selectedCategory = this.allCategoriesOption;
-
   }
   
   viewProduct(product: Product) {
@@ -330,6 +328,7 @@ export class ProductsReadComponent implements OnInit {
 
   loadProductsByReadingTime(): void {
     if (this.readingTime !== null) {
+      this.readingTimeError = false;
       this.productsService.getProductsByTagRfidsByTime(this.readingTime * 1000).subscribe({
         next: (response) => {
          this.products = response.products;
@@ -352,6 +351,7 @@ export class ProductsReadComponent implements OnInit {
       });
     } else {
       this.loading = false;
+      this.readingTimeError = true;
     }
   }
 }

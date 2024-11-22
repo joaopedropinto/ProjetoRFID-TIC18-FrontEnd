@@ -13,9 +13,12 @@
             <span class="switch-label">Leitura contínua</span>
             <p-inputSwitch [(ngModel)]="checked" [style]="{ width: '45px', height: '22px' }"></p-inputSwitch>
           </div>
-          <p-inputNumber *ngIf="checked" placeholder="Leitura em 1 - 65 segundos" [min]="1" [max]="65"
-            mode="decimal" [(ngModel)]="readingTime">
-          </p-inputNumber>
+          <div class="readingTimeInput" *ngIf="checked">
+            <p-inputNumber placeholder="Leitura em 1 - 65 segundos" [min]="1" [max]="65"
+              mode="decimal" [(ngModel)]="readingTime" class="{{ readingTimeError && !readingTime ? 'ng-invalid ng-dirty' : '' }}">
+            </p-inputNumber>
+            <small class="p-error" *ngIf="readingTimeError && !readingTime">* Digite o tempo de leitura em segundos</small>
+          </div>
         </div>
         <div class="botoes-leitura">
           <p-button severity="secondary" (onClick)="realizarLeiutura()" [disabled]="newReadingButtonDisabled">
