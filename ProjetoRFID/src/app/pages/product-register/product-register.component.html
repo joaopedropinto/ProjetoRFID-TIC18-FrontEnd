@@ -16,7 +16,7 @@
                     icon="pi pi-barcode" 
                     [loading]="getFromReadingButtonLoading" 
                     (onClick)="setTagFieldValueByReading()"
-                    [disabled]="productForm.get('tag')?.value"/>
+                    [disabled]="!!productForm.get('tag')?.value"/>
             </div>
             <div class="row">
                 <div class="inputFloatLabel">
