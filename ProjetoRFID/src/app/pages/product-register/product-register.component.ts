@@ -247,8 +247,9 @@ export class ProductRegisterComponent implements OnInit {
               summary: 'Múltiplas tags',
               detail: 'Leia somente uma tag para cadastrar a partir da leitura.'
             });
-            this.getFromReadingButtonLoading = false;
         }
+
+        this.getFromReadingButtonLoading = false;
       },
       error: (error) => {
         this.messageService.add({
